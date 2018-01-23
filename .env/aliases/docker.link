@@ -1,0 +1,17 @@
+# Docker aliases
+COMPOSE='docker-compose'
+DOCKER='docker'
+alias dcu='$COMPOSE up'
+alias dcb='$COMPOSE build'
+alias dcd='$COMPOSE down'
+alias db='$DOCKER build .'
+alias dl='$DOCKER pull'
+alias dps='$DOCKER ps'
+alias de='$DOCKER exec'
+
+dsa() { docker stop $(docker ps -a -q); }
+dra() { docker rm $(docker ps -a -q); }
+drai() { docker rmi --force $(docker images -q); }
+alias dsa=dsa
+alias dra=dra
+alias drai=drai
