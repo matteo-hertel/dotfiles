@@ -1,0 +1,8 @@
+[submodule ".vim/bundle/nerdtree"]
+	path = ./.vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+	ignore = dirty
+[submodule ".vim/bundle/vim-jsbeautify"]
+	path = .vim/bundle/vim-jsbeautify
+	url = https://github.com/maksimr/vim-jsbeautify.git
+	ignore = dirty

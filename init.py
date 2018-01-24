@@ -14,12 +14,30 @@ def mkdir_p(path):
         else:
             raise
 
-mkdir_p(DIST);
+def symlink_force(target, link_name):
+    try:
+        print "Creating", target
+        os.symlink(target, link_name)
+    except OSError, e:
+        if e.errno == errno.EEXIST:
+            os.remove(link_name)
+            os.symlink(target, link_name)
+            print "Created", target
+
+        else:
+            raise e
+def process_link(name, root):
+    if name.endswith(".link"):
+           symlink_root = root.replace(ROOT, DIST)
+           mkdir_p(symlink_root)
+           symlink_force(os.path.join(root, name), os.path.join(symlink_root, name.replace(".link", "")))
+ 
+mkdir_p(DIST)
 
 for root, dirs, files in os.walk(ROOT):
-    for file in files:
-        if file.endswith(".link"):
-             symlink_root = root.replace(ROOT, DIST);
-             mkdir_p(symlink_root);
-             os.symlink(os.path.join(root, file), os.path.join(symlink_root, file.replace(".link", "")));
-             print "Created", os.path.join(symlink_root, file.replace(".link", ""))
+   if(root == ROOT):
+      for dir in dirs:
+         process_link(dir, root)
+   for file in files:
+        process_link(file, root)
+
