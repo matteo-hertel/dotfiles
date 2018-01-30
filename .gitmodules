@@ -6,3 +6,6 @@
 	path = .vim/bundle/vim-jsbeautify
 	url = https://github.com/maksimr/vim-jsbeautify.git
 	ignore = dirty
+[submodule "/Users/matteohertel/mhdev/dotfiles/.vim.link/bundle/vim-prettier"]
+	path = /Users/matteohertel/mhdev/dotfiles/.vim.link/bundle/vim-prettier
+	url = https://github.com/prettier/vim-prettier
