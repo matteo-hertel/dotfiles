@@ -1,0 +1,3 @@
+https://github.com/scrooloose/nerdtree.git
+https://github.com/maksimr/vim-jsbeautify.git
+https://github.com/heavenshell/vim-prettier
