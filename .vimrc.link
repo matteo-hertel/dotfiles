@@ -15,3 +15,5 @@ autocmd BufWritePost *.js,*.jsx call prettier#run(1)
 "misc
 set backspace=indent,eol,start
 
+"Custom Mapping
+inoremap jj <Esc>
