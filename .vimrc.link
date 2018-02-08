@@ -10,7 +10,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 let NERDTreeShowHidden=1
 
 "Prettier
-autocmd BufWritePost *.js,*.jsx call prettier#run(1)
+autocmd BufWritePost *.js,*.jsx,*.ts call prettier#run(1)
 
 "misc
 set backspace=indent,eol,start
