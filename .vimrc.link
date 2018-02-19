@@ -27,7 +27,7 @@ let NERDTreeShowHidden=1
                " Highlight currently open buffer in NERDTree
                autocmd BufEnter * call SyncTree()
 "Prettier
-autocmd BufWritePost *.js,*.jsx,*.ts call prettier#run(1)
+autocmd BufWritePost *.js,*.jsx,*.ts,*.vue call prettier#run(1)
 
 "misc
 set backspace=indent,eol,start
