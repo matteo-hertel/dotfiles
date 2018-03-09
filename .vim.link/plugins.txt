@@ -2,3 +2,4 @@ https://github.com/scrooloose/nerdtree.git
 https://github.com/maksimr/vim-jsbeautify.git
 https://github.com/heavenshell/vim-prettier
 https://github.com/kien/ctrlp.vim.git
+https://github.com/fatih/vim-go.git
