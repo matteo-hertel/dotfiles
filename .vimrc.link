@@ -130,11 +130,13 @@ inoremap jj <Esc>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>z :wq<CR>
-nnoremap <Leader>th :set hlsearch!<CR>
 nmap <leader>bb :Buffer<cr>
 nmap <C-P> :GFiles<CR>
 nmap <C-I> :Tags<CR>
 nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+nmap <Leader>th :set hlsearch!<CR>
+nmap <Leader>m :marks<CR>
+nmap <Leader>r :reg<CR>
 
 " Movement
 nnoremap J 6j
