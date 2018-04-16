@@ -24,10 +24,15 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-surround'
+"requires different colour schema https://github.com/arcticicestudio/nord-iterm2
+Plugin 'arcticicestudio/nord-vim'
+Plugin 'vimwiki/vimwiki'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+colorscheme nord
 set number
 set shell=/bin/zsh\ -l
 syntax on
