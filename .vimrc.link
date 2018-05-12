@@ -25,6 +25,8 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-speeddating'
+Plugin 'mileszs/ack.vim'
 "requires different colour schema https://github.com/arcticicestudio/nord-iterm2
 Plugin 'arcticicestudio/nord-vim'
 Plugin 'vimwiki/vimwiki'
@@ -109,6 +111,11 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 set laststatus=2
 
+"Ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+cnoreabbrev Ack Ack!
 
 " Ale
 "let g:ale_python_flake8_args="flake8"
@@ -166,6 +173,7 @@ nmap <Leader>th :set hlsearch!<CR>
 nmap <Leader>m :marks<CR>
 nmap <Leader>r :reg<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
+nnoremap <Leader>a :Ack!<Space>
 
 " Movement
 nnoremap J 6j
