@@ -100,7 +100,7 @@ endfunction
                " Highlight currently open buffer in NERDTree
                autocmd BufEnter * call SyncTree()
 "Prettier
-autocmd BufWritePost *.js,*.jsx,*.ts,*.vue call prettier#run(1)
+autocmd BufWritePost *.js,*.jsx,*.ts,*.vue,*.scss call prettier#run(1)
 
 " vim-airline
 let g:airline_powerline_fonts = 1
@@ -180,6 +180,8 @@ nnoremap <Leader>v :vs<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>z :wq<CR>
+
+nnoremap <Leader>nt :terminal ++curwin<CR>
 
 vmap <Leader>y "+y
 vmap <Leader>d "+d
