@@ -56,7 +56,12 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 bindkey -v
-export KEYTIMEOUT=1
+
+bindkey -M viins 'jj' vi-cmd-mode
+bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search      # start typing + [Up-Arrow]
+bindkey "${terminfo[kcud1]}" down-line-or-beginning-search    # start typing + [Down-Arrow]
+
+#export KEYTIMEOUT=1
 source ~/.env/env.sh
 source ~/.env/loader.sh
 
