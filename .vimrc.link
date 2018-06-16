@@ -7,30 +7,30 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Language
-Plugin 'pangloss/vim-javascript'
 Plugin 'fatih/vim-go'
+Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
 
 " Misc
-Plugin 'scrooloose/nerdtree'
-Plugin 'maksimr/vim-jsbeautify'
-Plugin 'heavenshell/vim-prettier'
-Plugin 'w0rp/ale'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'vim-airline/vim-airline'
-Plugin 'junegunn/goyo.vim'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'heavenshell/vim-prettier'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-speeddating'
+Plugin 'junegunn/goyo.vim'
+Plugin 'maksimr/vim-jsbeautify'
 Plugin 'mileszs/ack.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-speeddating'
+Plugin 'tpope/vim-surround'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vimwiki/vimwiki'
+Plugin 'w0rp/ale'
 "requires different colour schema https://github.com/arcticicestudio/nord-iterm2
 Plugin 'arcticicestudio/nord-vim'
-Plugin 'vimwiki/vimwiki'
-Plugin 'tpope/vim-fugitive'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
