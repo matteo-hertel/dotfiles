@@ -15,12 +15,11 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'heavenshell/vim-prettier'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/goyo.vim'
-Plugin 'maksimr/vim-jsbeautify'
 Plugin 'mileszs/ack.vim'
+Plugin 'prettier/vim-prettier'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-speeddating'
@@ -100,7 +99,9 @@ endfunction
                " Highlight currently open buffer in NERDTree
                autocmd BufEnter * call SyncTree()
 "Prettier
-autocmd BufWritePost *.js,*.jsx,*.ts,*.vue,*.scss call prettier#run(1)
+let g:prettier#autoformat = 0
+
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue Prettier
 
 " vim-airline
 let g:airline_powerline_fonts = 1
