@@ -22,6 +22,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'prettier/vim-prettier'
 Plugin 'rhysd/clever-f.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-surround'
@@ -182,8 +183,6 @@ nnoremap <Leader>v :vs<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>z :wq<CR>
-
-nnoremap <Leader>nt :terminal ++curwin<CR>
 
 vmap <Leader>y "+y
 vmap <Leader>d "+d
