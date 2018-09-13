@@ -29,6 +29,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vimwiki/vimwiki'
+Plugin 'RRethy/vim-illuminate'
 Plugin 'w0rp/ale'
 "requires different colour schema https://github.com/arcticicestudio/nord-iterm2
 Plugin 'arcticicestudio/nord-vim'
