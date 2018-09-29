@@ -32,6 +32,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vimwiki/vimwiki'
 Plugin 'w0rp/ale'
 "requires different colour schema https://github.com/arcticicestudio/nord-iterm2
+Plugin 'cocopon/iceberg.vim'
 Plugin 'arcticicestudio/nord-vim'
 
 call vundle#end()            " required
