@@ -8,8 +8,8 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Language
 Plugin 'fatih/vim-go'
-Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'sheerun/vim-polyglot'
 
 " Misc
 Plugin 'RRethy/vim-illuminate'
@@ -31,8 +31,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vimwiki/vimwiki'
 Plugin 'w0rp/ale'
-"requires different colour scheme https://github.com/aseom/dotfiles/blob/master/osx/iterm2/iceberg.itermcolors
-Plugin 'cocopon/iceberg.vim'
+"
+"requires different colour scheme https://github.com/arcticicestudio/nord-iterm2/blob/develop/src/xml/Nord.itermcolors
 Plugin 'arcticicestudio/nord-vim'
 
 call vundle#end()            " required
