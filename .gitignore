@@ -1,3 +1,4 @@
 bundle
 .netrwhist
 env.custom.sh.link
+.vim.link/view
