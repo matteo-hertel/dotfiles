@@ -29,7 +29,6 @@ Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-surround'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'vimwiki/vimwiki'
 Plugin 'w0rp/ale'
 "
 "requires different colour scheme https://github.com/arcticicestudio/nord-iterm2/blob/develop/src/xml/Nord.itermcolors
@@ -201,6 +200,8 @@ nmap <Leader>m :marks<CR>
 nmap <Leader>r :reg<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
+
+nnoremap <Leader>ww <C-W>w 
 
 " Movement
 nnoremap J 6j
