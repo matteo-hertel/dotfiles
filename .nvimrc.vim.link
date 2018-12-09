@@ -5,18 +5,20 @@ Plug 'sheerun/vim-polyglot'
 "" Misc
 Plug 'Valloric/YouCompleteMe' , {'do':'./install.py --go-completer --ts-completer --rust-complete'}
 Plug 'airblade/vim-gitgutter'
+Plug 'christoomey/vim-sort-motion'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'leafgarland/typescript-vim'
 Plug 'mileszs/ack.vim'
 Plug 'prettier/vim-prettier'
-Plug 'tpope/vim-commentary'
 Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-"
+
 "requires different colour scheme https://github.com/arcticicestudio/nord-iterm2/blob/develop/src/xml/Nord.itermcolors
 Plug 'arcticicestudio/nord-vim'
 let g:deoplete#enable_at_startup = 1
