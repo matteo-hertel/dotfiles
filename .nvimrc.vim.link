@@ -150,6 +150,8 @@ let g:vim_markdown_folding_disabled = 1
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_flow = 1
 
+"Go
+let g:go_doc_keywordprg_enabled = 0
 
 "misc
 set backspace=indent,eol,start
@@ -181,8 +183,6 @@ nmap <Leader>m :marks<CR>
 nmap <Leader>r :reg<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
-
-nnoremap <Leader>ww <C-W>w 
 
 " Movement
 nnoremap J 6j
