@@ -1,0 +1,17 @@
+TERM="xterm-256color"
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_user dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs date time vi_mode)
+POWERLEVEL9K_DATE_FORMAT=%D{%d/%m/%y}
+
+POWERLEVEL9K_MODE='nerdfont-complete'
+
+emoji() {
+    echo -n "🐉 "
+}
+POWERLEVEL9K_CUSTOM_USER="emoji"
+POWERLEVEL9K_CUSTOM_USER_BACKGROUND="blue"
+
+# Prompt settings
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
