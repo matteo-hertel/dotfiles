@@ -6,6 +6,8 @@ Plug 'sheerun/vim-polyglot'
 Plug 'Valloric/YouCompleteMe' , {'do':'./install.py --go-completer --ts-completer --rust-complete'}
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm i'  }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
@@ -18,7 +20,6 @@ Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-Plug 'christoomey/vim-tmux-navigator'
 
 "requires different colour scheme https://cocopon.github.io/iceberg.vim/#macosTerminalApp
 Plug 'arcticicestudio/nord-vim'
