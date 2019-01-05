@@ -13,6 +13,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'mileszs/ack.vim'
 Plug 'prettier/vim-prettier'
+Plug 'rafi/awesome-vim-colorschemes'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -21,15 +22,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
 
-"requires different colour scheme https://cocopon.github.io/iceberg.vim/#macosTerminalApp
-Plug 'arcticicestudio/nord-vim'
-let g:deoplete#enable_at_startup = 1
-
-
 call plug#end()
 filetype plugin indent on    " required
 
 colorscheme nord
+
 set relativenumber
 set nu rnu
 set shell=/bin/zsh\ -l
@@ -124,6 +121,14 @@ if executable('ag')
 endif
 cnoreabbrev Ack Ack!
 
+" FZF
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+let g:fzf_action = {
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+let g:fzf_layout = { 'down': '~40%' }
+
+
 " Ale
 "let g:ale_python_flake8_args="flake8"
 let g:ale_linters = {
@@ -177,7 +182,8 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-nmap <C-P> :GFiles<CR>
+nmap <C-P> :Files<CR>
+nmap <C-G> :GFiles<CR>
 nmap <C-I> :Tags<CR>
 nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 nmap <Leader>th :set hlsearch!<CR>
