@@ -3,5 +3,8 @@ cd "$(dirname "$0")"
 for f in $(pwd)/aliases/*; do
    source $f
 done
+for f in $(pwd)/tmux/*; do
+   source $f
+done
 
 cd - > /dev/null
