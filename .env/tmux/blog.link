@@ -1,18 +1,19 @@
-blog(){
-  NAME=blog
-  echo $NAME
-  tmux has-session -t $NAME
+twosplit(){
+  tmux has-session -t $WORKSPACE_SESSION_NAME
   if [ $? != 0 ]
   then
-    tmux new-session -d -s $NAME -n nvim
-    tmux send-keys -t $NAME:0 "cd ~/mhdev/blog;nvim" C-m 
-    tmux splitw -t $NAME:0 -h -p 35
-    tmux selectp -t $NAME:0
+    tmux new-session -d -s $WORKSPACE_SESSION_NAME -n nvim
+    tmux send-keys -t $WORKSPACE_SESSION_NAME:0 "cd $WORKSPACE_PATH;nvim" C-m 
+    tmux splitw -t $WORKSPACE_SESSION_NAME:0 -h -p 35
+    tmux selectp -t $WORKSPACE_SESSION_NAME:0
   fi
   if [ -z $TMUX ]
   then
-    tmux attach -t $NAME
+    tmux attach -t $WORKSPACE_SESSION_NAME
   fi
-    tmux switch -t $NAME
+    tmux switch -t $WORKSPACE_SESSION_NAME
 }
-alias blog=blog
+
+alias slimer="WORKSPACE_SESSION_NAME=slimer;WORKSPACE_PATH=~/mhdev/code/blog/slimer;twosplit"
+alias editblog="WORKSPACE_SESSION_NAME=blogeditro;WORKSPACE_PATH=~/mhdev/code/blog/blog;twosplit"
+alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
