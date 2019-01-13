@@ -1,0 +1,12 @@
+# Kubernetes aliases
+enableDnd(){
+defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean true
+defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturbDate -date "`date -u +\"%Y-%m-%d %H:%M:%S +0000\"`"
+killall NotificationCenter
+}
+disableDnd(){
+defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
+killall NotificationCenter
+}
+alias dndoff=disableDnd;
+alias dndon=enableDnd;
