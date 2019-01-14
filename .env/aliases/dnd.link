@@ -3,10 +3,12 @@ enableDnd(){
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean true
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturbDate -date "`date -u +\"%Y-%m-%d %H:%M:%S +0000\"`"
 killall NotificationCenter
+curl -I https://maker.ifttt.com/trigger/enable_dnd/with/key/$IFTT_WEBHOOK_KEY
 }
 disableDnd(){
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
 killall NotificationCenter
+curl -I https://maker.ifttt.com/trigger/disable_dnd/with/key/$IFTT_WEBHOOK_KEY
 }
 alias dndoff=disableDnd;
 alias dndon=enableDnd;
