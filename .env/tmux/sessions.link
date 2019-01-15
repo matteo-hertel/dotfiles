@@ -17,3 +17,4 @@ twosplit(){
 alias slimer="WORKSPACE_SESSION_NAME=slimer;WORKSPACE_PATH=~/mhdev/code/blog/slimer;twosplit"
 alias editblog="WORKSPACE_SESSION_NAME=blogeditro;WORKSPACE_PATH=~/mhdev/code/blog/blog;twosplit"
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
+alias notes="WORKSPACE_SESSION_NAME=notes;WORKSPACE_PATH=~/mhdev/notes;twosplit"
