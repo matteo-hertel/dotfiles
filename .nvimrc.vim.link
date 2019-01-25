@@ -118,7 +118,7 @@ nmap <leader>gh :Gbrowse<CR>
 
 "Ack
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep --ignore node_modules'
 endif
 cnoreabbrev Ack Ack!
 
