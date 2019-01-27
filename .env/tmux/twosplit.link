@@ -4,8 +4,9 @@ twosplit(){
   then
     tmux new-session -d -s $WORKSPACE_SESSION_NAME -n nvim
     tmux send-keys -t $WORKSPACE_SESSION_NAME:0 "cd $WORKSPACE_PATH;nvim" C-m 
-    tmux splitw -t $WORKSPACE_SESSION_NAME:0 -h -p 35
+    tmux splitw -t $WORKSPACE_SESSION_NAME:0 -h -p 35 
     tmux selectp -t $WORKSPACE_SESSION_NAME:0
+    tmux send-keys -t $WORKSPACE_SESSION_NAME:0.1 "cd $WORKSPACE_PATH" C-m 
   fi
   if [ -z $TMUX ]
   then
