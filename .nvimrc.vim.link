@@ -200,6 +200,14 @@ nnoremap H 6h
 nnoremap L 6l
 
 " Buffers
+function! CloseAllBuffersButCurrent()
+  let curr = bufnr("%")
+  let last = bufnr("$")
+
+  if curr > 1    | silent! execute "1,".(curr-1)."bd"     | endif
+  if curr < last | silent! execute (curr+1).",".last."bd" | endif
+endfunction
+
 set hidden
 nmap <leader>bb :Buffer<cr>
 nmap <leader>T :enew<CR>
@@ -207,3 +215,4 @@ nmap <leader>l :bnext<CR>
 nmap <leader>h :bprevious<CR>
 nmap <leader>bl :ls<CR>
 nmap <leader>bd :bd<CR>
+nmap <Leader>bc :call CloseAllBuffersButCurrent()<CR>
