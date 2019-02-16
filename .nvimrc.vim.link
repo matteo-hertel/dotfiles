@@ -124,11 +124,17 @@ cnoreabbrev Ack Ack!
 
 " FZF
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+
 let g:fzf_action = {
+  \ 'ctrl-q': 'wall | bdelete',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 let g:fzf_layout = { 'down': '~40%' }
 
+command! FZFMulti call fzf#run(fzf#wrap({
+            \'source': 'ag -l',
+            \'options': ['--multi'],
+            \}))
 
 " Ale
 "let g:ale_python_flake8_args="flake8"
