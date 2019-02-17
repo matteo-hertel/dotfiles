@@ -19,6 +19,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-surround'
+Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
@@ -131,10 +132,6 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 let g:fzf_layout = { 'down': '~40%' }
 
-command! FZFMulti call fzf#run(fzf#wrap({
-            \'source': 'ag -l',
-            \'options': ['--multi'],
-            \}))
 
 " Ale
 "let g:ale_python_flake8_args="flake8"
