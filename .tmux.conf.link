@@ -6,7 +6,7 @@ bind ` send-prefix
 # New window
 unbind '"'
 unbind %
-bind '"' split-window -c "#{pane_current_path}"
+bind s split-window -c "#{pane_current_path}"
 bind v split-window -h -c "#{pane_current_path}"
 bind c new-window -c "#{pane_current_path}"
 # Easy Config Reloads
@@ -37,6 +37,11 @@ bind -n C-l run "($is_vim && tmux send-keys C-l) || \
 
 bind-key -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
 
+
+bind-key J resize-pane -D 5
+bind-key K resize-pane -U 5
+bind-key H resize-pane -L 5
+bind-key L resize-pane -R 5
 #mouse mode for panes
 set -g mouse on
 
