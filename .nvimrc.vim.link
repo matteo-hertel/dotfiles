@@ -3,7 +3,6 @@ call plug#begin()
 Plug 'fatih/vim-go'
 Plug 'sheerun/vim-polyglot'
 "" Misc
-" Plug 'Valloric/YouCompleteMe' , {'do':'./install.py --go-completer --ts-completer --rust-complete'}
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
