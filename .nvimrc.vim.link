@@ -23,7 +23,7 @@ Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-
+Plug 'schickling/vim-bufonly'
 
 call plug#end()
 filetype plugin indent on    " required
@@ -52,7 +52,7 @@ let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 "AutoClose NerdTree if last file is closed
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
 "Check if NERDTree is open or active
@@ -211,14 +211,6 @@ nnoremap H 6h
 nnoremap L 6l
 
 " Buffers
-function! CloseAllBuffersButCurrent()
-  let curr = bufnr("%")
-  let last = bufnr("$")
-
-  if curr > 1    | silent! execute "1,".(curr-1)."bd"     | endif
-  if curr < last | silent! execute (curr+1).",".last."bd" | endif
-endfunction
-
 set hidden
 nmap <leader>bb :Buffer<cr>
 nmap <leader>T :enew<CR>
@@ -226,4 +218,4 @@ nmap <leader>l :bnext<CR>
 nmap <leader>h :bprevious<CR>
 nmap <leader>bl :ls<CR>
 nmap <leader>bd :bd<CR>
-nmap <Leader>bc :call CloseAllBuffersButCurrent()<CR>
+nmap <Leader>bc :BufOnly<cr>
