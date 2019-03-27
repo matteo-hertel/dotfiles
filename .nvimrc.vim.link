@@ -1,8 +1,8 @@
 call plug#begin()
-"" Language
+" Language
 Plug 'fatih/vim-go'
 Plug 'sheerun/vim-polyglot'
-"" Misc
+" Misc
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
@@ -14,8 +14,10 @@ Plug 'mileszs/ack.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'nvie/vim-flake8'
 Plug 'prettier/vim-prettier'
-Plug 'rafi/awesome-vim-colorschemes'
+Plug 'rakr/vim-one'
+Plug 'schickling/vim-bufonly'
 Plug 'scrooloose/nerdtree'
+Plug 'tell-k/vim-autopep8'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -23,36 +25,47 @@ Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-Plug 'schickling/vim-bufonly'
 
 call plug#end()
-filetype plugin indent on    " required
+filetype plugin indent on
 
-colorscheme nord
-
+"Misc settings
+syntax on
 set relativenumber
 set nu rnu
-set shell=/bin/zsh\ -l
-syntax on
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
 set expandtab
-set backspace=indent,eol,start
 set noswapfile
 set nocursorline
 set nocursorcolumn
-set background=dark
 set smartcase
 set lazyredraw
+set shell=/bin/zsh\ -l
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set backspace=indent,eol,start
+set background=dark
+set foldmethod=syntax
+set foldlevel=1
+set foldclose=all
 let mapleader = ' '
+
+"Theme
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+colorscheme one
+let g:one_allow_italics = 1
+
+call one#highlight('vimLineComment', '292c34', '5c6370', 'italic')
 
 "Nerdtree"
 let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"AutoClose NerdTree if last file is closed
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
 "Check if NERDTree is open or active
@@ -102,7 +115,13 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 
 "Flake8
 autocmd BufWritePost *.py call Flake8()
+
+" Autopep8
+let g:autopep8_on_save = 1
+let g:autopep8_disable_show_diff=1
+
 " vim-airline
+let g:airline_theme='one'
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
@@ -168,11 +187,14 @@ let g:javascript_plugin_flow = 1
 "Go
 let g:go_doc_keywordprg_enabled = 0
 
-"misc
-set backspace=indent,eol,start
-
 "Custom Mapping
 inoremap jj <Esc>
+
+" Folds
+nmap <leader>f zo
+nmap <leader>F zc
+nmap <leader>fa zR
+nmap <leader>FA zM
 
 " Coc
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -188,11 +210,6 @@ nnoremap <Leader>q :q<CR>
 nnoremap <Leader>z :wq<CR>
 
 vmap <Leader>y "+y
-
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
 nmap <C-P> :Files<CR>
 nmap <C-G> :GFiles<CR>

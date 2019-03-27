@@ -9,6 +9,7 @@ unbind %
 bind s split-window -c "#{pane_current_path}"
 bind v split-window -h -c "#{pane_current_path}"
 bind c new-window -c "#{pane_current_path}"
+
 # Easy Config Reloads
 bind r source-file ~/.tmux.conf
 
@@ -42,8 +43,9 @@ bind-key J resize-pane -D 5
 bind-key K resize-pane -U 5
 bind-key H resize-pane -L 5
 bind-key L resize-pane -R 5
+
 #mouse mode for panes
-set -g mouse on
+#set -g mouse on
 
 #misc
 set -g set-titles on
@@ -118,3 +120,8 @@ set -g message-command-fg black
 # Mode
 set -g mode-bg colour39
 set -g mode-fg colour232
+
+# Add truecolor support
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+# Default terminal is 256 colors
+set -g default-terminal "screen-256color"
