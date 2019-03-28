@@ -25,6 +25,8 @@ Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
+Plug 'metakirby5/codi.vim'
+
 
 call plug#end()
 filetype plugin indent on
@@ -47,7 +49,6 @@ set backspace=indent,eol,start
 set background=dark
 set foldmethod=syntax
 set foldlevel=1
-set foldclose=all
 let mapleader = ' '
 
 "Theme
@@ -191,10 +192,8 @@ let g:go_doc_keywordprg_enabled = 0
 inoremap jj <Esc>
 
 " Folds
-nmap <leader>f zo
+nmap <leader>f zO
 nmap <leader>F zc
-nmap <leader>fa zR
-nmap <leader>FA zM
 
 " Coc
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -220,6 +219,7 @@ nmap <Leader>m :marks<CR>
 nmap <Leader>r :reg<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
+nnoremap <Leader>js :enew <bar>:Codi javascript<CR>
 
 " Movement
 nnoremap J 6j
