@@ -4,12 +4,15 @@ defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationc
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturbDate -date "`date -u +\"%Y-%m-%d %H:%M:%S +0000\"`"
 killall NotificationCenter
 slack snooze start 30 &> /dev/null
+slack status edit --text="Focusing" --emoji=":coding:" &> /dev/null
+slack reminder add "Take a break, too much focus!" $(date -v +30M "+%s") &> /dev/null
 echo 'DND Enabled: Mac notifications and Slack have been muted!'
 }
 disableDnd(){
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
 killall NotificationCenter
 slack snooze end &> /dev/null
+slack status clear &> /dev/null
 echo 'DND Disabled'
 }
 alias dndoff=disableDnd;
