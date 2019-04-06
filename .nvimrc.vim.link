@@ -3,6 +3,7 @@ call plug#begin()
 Plug 'fatih/vim-go'
 Plug 'sheerun/vim-polyglot'
 " Misc
+Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
@@ -27,7 +28,6 @@ Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-Plug 'Yggdroot/indentLine'
 
 "Plugin Testing Area
 
@@ -236,9 +236,6 @@ nmap <silent> <leader>lf <Plug>(coc-references)
 
 " Remap for rename current word
 nmap <leader>lr <Plug>(coc-rename)
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
 
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
