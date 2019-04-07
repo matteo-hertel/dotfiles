@@ -216,6 +216,7 @@ nmap <leader>gh :Gbrowse<CR>
 
 " Coc
 " Better display for messages
+" mostly from https://kimpers.com/vim-intelligent-autocompletion/
 set cmdheight=2
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
