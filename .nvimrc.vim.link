@@ -9,7 +9,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm i'  }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
 Plug 'leafgarland/typescript-vim'
+Plug 'metakirby5/codi.vim'
 Plug 'mileszs/ack.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'nvie/vim-flake8'
@@ -25,7 +27,6 @@ Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
-Plug 'metakirby5/codi.vim'
 
 
 call plug#end()
@@ -216,7 +217,6 @@ nmap <C-I> :Tags<CR>
 nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 nmap <Leader>th :set hlsearch!<CR>
 nmap <Leader>m :marks<CR>
-nmap <Leader>r :reg<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
 nnoremap <Leader>js :enew <bar>:Codi javascript<CR>
