@@ -28,6 +28,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
 
+"Plugin Testing Area
 
 call plug#end()
 filetype plugin indent on
@@ -133,14 +134,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 set laststatus=2
 
-" Fugitive
-nmap <leader>gb :Gblame<CR>
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gd :Gdiff<CR>
-nmap <leader>gc :Gcommit<CR>
-nmap <leader>gp :Gpush<CR>
-nmap <leader>gl :Gpull<CR>
-nmap <leader>gh :Gbrowse<CR>
 
 "Ack
 if executable('ag')
@@ -152,10 +145,31 @@ cnoreabbrev Ack Ack!
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
 let g:fzf_action = {
-  \ 'ctrl-q': 'wall | bdelete',
-  \ 'ctrl-x': 'split',
+  \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 let g:fzf_layout = { 'down': '~40%' }
+"
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 
 " Ale
@@ -189,6 +203,16 @@ let g:javascript_plugin_flow = 1
 "Go
 let g:go_doc_keywordprg_enabled = 0
 
+" Fugitive
+nmap <leader>gw :Gwrite<CR>
+nmap <leader>gb :Gblame<CR>
+nmap <leader>gs :Gstatus<CR>
+nmap <leader>gd :Gdiff<CR>
+nmap <leader>gc :Gcommit<CR>
+nmap <leader>gp :Gpush<CR>
+nmap <leader>gl :Gpull<CR>
+nmap <leader>gh :Gbrowse<CR>
+"
 "Custom Mapping
 inoremap jj <Esc>
 
@@ -211,15 +235,14 @@ nnoremap <Leader>z :wq<CR>
 
 vmap <Leader>y "+y
 
-nmap <C-P> :Files<CR>
-nmap <C-G> :GFiles<CR>
-nmap <C-I> :Tags<CR>
-nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-nmap <Leader>th :set hlsearch!<CR>
-nmap <Leader>m :marks<CR>
+" nmap <C-P> :Files<CR>
+nmap <C-G> :Files<CR>
+nmap <Leader>m :Lines<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
 nnoremap <Leader>js :enew <bar>:Codi javascript<CR>
+nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+nmap <Leader>th :set hlsearch!<CR>
 
 " Movement
 nnoremap J 6j
@@ -229,10 +252,10 @@ nnoremap L 6l
 
 " Buffers
 set hidden
-nmap <leader>bb :Buffer<cr>
+nmap <leader>bb :Buffers<cr>
 nmap <leader>T :enew<CR>
 nmap <leader>l :bnext<CR>
 nmap <leader>h :bprevious<CR>
-nmap <leader>bl :ls<CR>
-nmap <leader>bd :bd<CR>
+" nmap <leader>bl :ls<CR>
+" nmap <leader>bd :bd<CR>
 nmap <Leader>bc :BufOnly<cr>
