@@ -16,7 +16,7 @@ Plug 'mileszs/ack.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'nvie/vim-flake8'
 Plug 'prettier/vim-prettier'
-Plug 'rakr/vim-one'
+Plug 'joshdick/onedark.vim'
 Plug 'schickling/vim-bufonly'
 Plug 'scrooloose/nerdtree'
 Plug 'tell-k/vim-autopep8'
@@ -60,10 +60,10 @@ if (has("nvim"))
   if (has("termguicolors"))
     set termguicolors
   endif
-colorscheme one
-let g:one_allow_italics = 1
 
-call one#highlight('vimLineComment', '292c34', '5c6370', 'italic')
+let g:onedark_allow_italics = 1
+let g:onedark_hide_endofbuffer=1
+colorscheme onedark
 
 "Nerdtree"
 let NERDTreeShowHidden=1
@@ -124,7 +124,7 @@ let g:autopep8_on_save = 1
 let g:autopep8_disable_show_diff=1
 
 " vim-airline
-let g:airline_theme='one'
+let g:airline_theme='onedark'
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
@@ -237,7 +237,7 @@ vmap <Leader>y "+y
 
 " nmap <C-P> :Files<CR>
 nmap <C-G> :Files<CR>
-nmap <Leader>m :Lines<CR>
+nmap <Leader>m :BLines<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
 nnoremap <Leader>js :enew <bar>:Codi javascript<CR>

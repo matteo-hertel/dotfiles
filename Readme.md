@@ -12,6 +12,7 @@ There are a few bits not covered by the autoinstaller:
 - [powerlevel9k](https://github.com/bhilburn/powerlevel9k)
 - [Patched Fonts](https://nerdfonts.com/)
 - [Iceberg Theme](https://cocopon.github.io/iceberg.vim/#macosTerminalApp)
+- [OneDark Theme](https://github.com/sonph/onehalf/blob/master/iterm/OneHalfDark.itermcolors)
 
 ## Installation
 
