@@ -140,13 +140,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 set laststatus=2
 
-
-"Ack
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep --ignore node_modules'
-endif
-cnoreabbrev Ack Ack!
-
 " FZF
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
