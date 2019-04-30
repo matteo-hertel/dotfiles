@@ -29,6 +29,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
 
 "Plugin Testing Area
+Plug 'wikitopian/hardmode'
 
 call plug#end()
 filetype plugin indent on
@@ -65,7 +66,12 @@ let g:onedark_allow_italics = 1
 let g:onedark_hide_endofbuffer=1
 colorscheme onedark
 
-"Nerdtree"
+"============ Plugins ================== 
+
+"HardMode
+autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
+
+"Nerdtree
 let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -257,8 +263,7 @@ nnoremap <Leader>z :wq<CR>
 
 vmap <Leader>y "+y
 
-" nmap <C-P> :Files<CR>
-nmap <C-G> :Files<CR>
+nmap ; :Files<CR>
 nmap <Leader>m :BLines<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
@@ -274,10 +279,8 @@ nnoremap L 6l
 
 " Buffers
 set hidden
-nmap ; :Buffers<cr>
+nmap ' :Buffers<cr>
 nmap <leader>T :enew<CR>
 nmap <leader>l :bnext<CR>
 nmap <leader>h :bprevious<CR>
-" nmap <leader>bl :ls<CR>
-" nmap <leader>bd :bd<CR>
 nmap <Leader>bc :BufOnly<cr>
