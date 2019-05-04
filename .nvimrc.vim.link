@@ -35,6 +35,7 @@ call plug#end()
 filetype plugin indent on
 
 "Misc settings
+" syntax highlighting
 syntax on
 "more characters will be sent to the screen for redrawing
 set ttyfast
@@ -45,7 +46,6 @@ set ttimeoutlen=50
 set backspace=indent,eol,start
 
 set shell=/bin/zsh\ -l
-set background=dark
 
 set relativenumber
 set nu rnu
@@ -58,9 +58,9 @@ set lazyredraw
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set foldmethod=syntax
 set conceallevel=0
 set foldlevel=1
+set foldmethod=syntax
 let mapleader = ' '
 
 "Theme
@@ -73,6 +73,7 @@ if (has("nvim"))
 
 let g:onedark_allow_italics = 1
 let g:onedark_hide_endofbuffer=1
+set background=dark
 colorscheme onedark
 
 "============ Plugins ================== 
