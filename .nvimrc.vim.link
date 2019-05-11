@@ -35,7 +35,7 @@ call plug#end()
 filetype plugin indent on
 
 "Misc settings
-" syntax highlighting
+"syntax highlighting
 syntax on
 "more characters will be sent to the screen for redrawing
 set ttyfast
@@ -44,16 +44,14 @@ set ttimeout
 set ttimeoutlen=50
 "make backspace behave properly in insert mode
 set backspace=indent,eol,start
-
+" set running shell
 set shell=/bin/zsh\ -l
 
-set relativenumber
 set nu rnu
 set expandtab
 set noswapfile
 set nocursorline
 set nocursorcolumn
-set smartcase
 set lazyredraw
 set tabstop=2
 set shiftwidth=2
@@ -61,6 +59,8 @@ set softtabstop=2
 set conceallevel=0
 set foldlevel=1
 set foldmethod=syntax
+
+"Set leader
 let mapleader = ' '
 
 "Theme
@@ -295,7 +295,6 @@ xnoremap <leader>k :m-2<cr>gv=gv
 xnoremap <leader>j :m'>+<cr>gv=gv
 
 " Buffers
-set hidden
 nmap ; :Buffers<cr>
 nmap <leader>T :enew<CR>
 nmap <leader>l :bnext<CR>
