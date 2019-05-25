@@ -36,6 +36,17 @@ filetype plugin indent on
 
 "Misc settings
 syntax on
+"more characters will be sent to the screen for redrawing
+set ttyfast
+"time waited for key press(es) to complete. It makes for a faster key response
+set ttimeout
+set ttimeoutlen=50
+"make backspace behave properly in insert mode
+set backspace=indent,eol,start
+
+set shell=/bin/zsh\ -l
+set background=dark
+
 set relativenumber
 set nu rnu
 set expandtab
@@ -44,13 +55,11 @@ set nocursorline
 set nocursorcolumn
 set smartcase
 set lazyredraw
-set shell=/bin/zsh\ -l
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set backspace=indent,eol,start
-set background=dark
 set foldmethod=syntax
+set conceallevel=0
 set foldlevel=1
 let mapleader = ' '
 
@@ -71,7 +80,6 @@ colorscheme onedark
 let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
 
 "Check if NERDTree is open or active
  function! IsNERDTreeOpen()        
@@ -272,6 +280,12 @@ nnoremap J 6j
 nnoremap K 6k
 nnoremap H 6h
 nnoremap L 6l
+
+"Move Lines
+nnoremap <leader>k :m-2<cr>==
+nnoremap <leader>j :m+<cr>==
+xnoremap <leader>k :m-2<cr>gv=gv
+xnoremap <leader>j :m'>+<cr>gv=gv
 
 " Buffers
 set hidden
