@@ -46,6 +46,27 @@ set ttimeoutlen=50
 set backspace=indent,eol,start
 " set running shell
 set shell=/bin/zsh\ -l
+"display incomplete commands
+set showcmd
+"a better menu in command mode
+set wildmenu
+set wildmode=longest:full,full
+"hide buffers instead of closing them even if they contain unwritten changes
+set hidden
+"show relative numbers
+set relativenumber
+"new splits will be at the bottom or to the right side of the screen
+set splitbelow
+set splitright
+"always set autoindenting on
+set autoindent
+"incremental search
+set incsearch
+"highlight search
+set hlsearch
+"searches are case insensitive unless they contain at least one capital letter
+set ignorecase
+set smartcase
 
 set nu rnu
 set expandtab
