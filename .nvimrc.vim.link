@@ -171,12 +171,7 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" Enable per-command history.
-" CTRL-N and CTRL-P will be automatically bound to next-history and
-" previous-history instead of down and up. If you don't like the change,
-" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-
 
 " Ale
 let g:ale_linters = {
@@ -218,22 +213,46 @@ nmap <leader>gc :Gcommit<CR>
 nmap <leader>gp :Gpush<CR>
 nmap <leader>gl :Gpull<CR>
 nmap <leader>gh :Gbrowse<CR>
-"
-"Custom Mapping
-inoremap jj <Esc>
-
-" Folds
-nmap <leader>f zO
-nmap <leader>F zc
 
 " Coc
+" Better display for messages
+set cmdheight=2
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-
 " always show signcolumns
 set signcolumn=yes
 
-" === Coc.nvim === "
+" Use `lp` and `ln` for navigate diagnostics
+nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> <leader>ld <Plug>(coc-definition)
+nmap <silent> <leader>lt <Plug>(coc-type-definition)
+nmap <silent> <leader>li <Plug>(coc-implementation)
+nmap <silent> <leader>lf <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>lr <Plug>(coc-rename)
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -248,13 +267,9 @@ inoremap <silent><expr> <TAB>
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" Remap keys for gotos
-nmap <silent> <leader>dd <Plug>(coc-definition)
-nmap <silent> <leader>dr <Plug>(coc-references)
-nmap <silent> <leader>dj <Plug>(coc-implementation)
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+"
+"========Custom Mapping======== 
+inoremap jj <Esc>
 
 "split buffers
 nnoremap <Leader>s :sv<CR>
@@ -267,7 +282,7 @@ nnoremap <Leader>z :wq<CR>
 
 vmap <Leader>y "+y
 
-nmap ; :Files<CR>
+nmap <Leader>f  :Files<CR>
 nmap <Leader>m :BLines<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>a :Ack!<Space>
@@ -289,7 +304,7 @@ xnoremap <leader>j :m'>+<cr>gv=gv
 
 " Buffers
 set hidden
-nmap ' :Buffers<cr>
+nmap ; :Buffers<cr>
 nmap <leader>T :enew<CR>
 nmap <leader>l :bnext<CR>
 nmap <leader>h :bprevious<CR>
