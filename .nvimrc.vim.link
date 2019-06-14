@@ -67,19 +67,21 @@ set hlsearch
 "searches are case insensitive unless they contain at least one capital letter
 set ignorecase
 set smartcase
+" don't create a swap file
+set noswapfile
+" dont's highlight current line and column
+set nocursorline
+set nocursorcolumn
+"Fold all the code based on the syntax
+set foldlevel=1
+set foldmethod=syntax
 
 set nu rnu
 set expandtab
-set noswapfile
-set nocursorline
-set nocursorcolumn
 set lazyredraw
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set conceallevel=0
-set foldlevel=1
-set foldmethod=syntax
 
 "Set leader
 let mapleader = ' '
