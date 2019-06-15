@@ -55,6 +55,7 @@ set wildmode=longest:full,full
 set hidden
 "show relative numbers
 set relativenumber
+set nu rnu
 "new splits will be at the bottom or to the right side of the screen
 set splitbelow
 set splitright
@@ -75,10 +76,11 @@ set nocursorcolumn
 "Fold all the code based on the syntax
 set foldlevel=1
 set foldmethod=syntax
-
-set nu rnu
-set expandtab
+"buffer screen updates instead of updating all the time
 set lazyredraw
+"convert tab to spaces
+set expandtab
+" two spaces by default
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
