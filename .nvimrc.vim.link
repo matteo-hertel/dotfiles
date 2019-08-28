@@ -24,7 +24,7 @@ Plug 'tpope/vim-surround'
 Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'zxqfl/tabnine-vim'
+" Plug 'zxqfl/tabnine-vim'
 
 "Plugin Testing Area
 
@@ -42,7 +42,7 @@ set ttimeoutlen=50
 "make backspace behave properly in insert mode
 set backspace=indent,eol,start
 " set running shell
-set shell=/bin/zsh\ -l
+set shell=/bin/zsh
 "display incomplete commands
 set showcmd
 "a better menu in command mode
@@ -81,8 +81,6 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-" share the clipboard  with the system 
-set clipboard^=unnamed
 
 "prevent error in crontab
 autocmd filetype crontab setlocal nobackup nowritebackup
@@ -291,15 +289,12 @@ map K 6k
 map H 6h
 map L 6l
 
-"Move Lines
-nnoremap <leader>k :m-2<cr>==
-nnoremap <leader>j :m+<cr>==
-xnoremap <leader>k :m-2<cr>gv=gv
-xnoremap <leader>j :m'>+<cr>gv=gv
+" Clipboard functionality (paste from system)
+vnoremap  <leader>y "+y
+nnoremap  <leader>y "+y
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
 
 " Buffers
 nmap ; :Buffers<cr>
-nmap <leader>T :enew<CR>
-nmap <leader>l :bnext<CR>
-nmap <leader>h :bprevious<CR>
 nmap <Leader>bc :BufOnly<cr>
