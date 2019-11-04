@@ -165,7 +165,7 @@ let g:airline#extensions#tabline#show_buffers = 1
 set laststatus=2
 
 " FZF
-let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob "!.git/*"'
 
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
@@ -279,7 +279,7 @@ nnoremap <Leader>z :wq<CR>
 nmap <Leader>f  :Files<CR>
 nmap <Leader>m :BLines<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
-nnoremap <Leader>a :Ag<Space>
+nnoremap <Leader>a :Rg<Space>
 nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 nmap <Leader>th :set hlsearch!<CR>
 
