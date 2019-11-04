@@ -213,7 +213,7 @@ nmap <leader>gl :Gpull<CR>
 nmap <leader>gh :Gbrowse<CR>
 
 "indentLine
-autocmd FileType markdown let g:indentLine_enabled=0
+let g:indentLine_fileTypeExclude = ['markdown']
 
 " Coc
 " Better display for messages
