@@ -73,8 +73,6 @@ set nocursorcolumn
 "Fold all the code based on the syntax
 set foldlevel=1
 set foldmethod=syntax
-"buffer screen updates instead of updating all the time
-set lazyredraw
 "convert tab to spaces
 set expandtab
 " two spaces by default
@@ -213,7 +211,7 @@ nmap <leader>gl :Gpull<CR>
 nmap <leader>gh :Gbrowse<CR>
 
 "indentLine
-let g:indentLine_fileTypeExclude = ['markdown']
+let g:indentLine_fileTypeExclude = ['markdown', 'md']
 
 " Coc
 " Better display for messages
