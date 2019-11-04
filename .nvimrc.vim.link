@@ -24,7 +24,7 @@ Plug 'tpope/vim-surround'
 Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'zxqfl/tabnine-vim'
+Plug 'zxqfl/tabnine-vim'
 
 "Plugin Testing Area
 
