@@ -212,6 +212,9 @@ nmap <leader>gp :Gpush<CR>
 nmap <leader>gl :Gpull<CR>
 nmap <leader>gh :Gbrowse<CR>
 
+"indentLine
+autocmd FileType markdown let g:indentLine_enabled=0
+
 " Coc
 " Better display for messages
 " mostly from https://kimpers.com/vim-intelligent-autocompletion/
@@ -263,7 +266,6 @@ inoremap <silent><expr> <TAB>
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-"
 "========Custom Mapping======== 
 inoremap jj <Esc>
 
