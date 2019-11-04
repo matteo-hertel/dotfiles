@@ -13,7 +13,10 @@ There are a few bits not covered by the autoinstaller:
 - [Patched Fonts](https://nerdfonts.com/)
 - [Iceberg Theme](https://cocopon.github.io/iceberg.vim/#macosTerminalApp)
 - [OneDark Theme](https://github.com/sonph/onehalf/blob/master/iterm/OneHalfDark.itermcolors)
+- [Diff So Fancy](https://github.com/so-fancy/diff-so-fancy)
+- [Bat](https://github.com/sharkdp/bat)
+- [ripgrep](https://github.com/BurntSushi/ripgrep)
 
 ## Installation
 
-Once all the pre-requisites are installed, clone this repo anywhere and run `phython install.py` (Python2.7), boot neovim and run `:PLugInstall` after that you're golden
+Once all the pre-requisites are installed, clone this repo anywhere and run `phython install.py` (Python2.7), boot neovim and run `:PlugInstall` after that you're golden
