@@ -29,6 +29,7 @@ Plug 'zxqfl/tabnine-vim'
 "Plugin Testing Area
 
 call plug#end()
+
 filetype plugin indent on
 
 "Misc settings
@@ -82,6 +83,8 @@ set softtabstop=2
 
 "prevent error in crontab
 autocmd filetype crontab setlocal nobackup nowritebackup
+"prevent folding in makdown
+autocmd FileType markdown set conceallevel=0
 
 "Set leader
 let mapleader = ' '
@@ -134,7 +137,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
    endif
  endfunction
 
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" Call NERDTreeFind if NERDTree is active, current window contains a modifiable
 " file, and we're not in vimdiff
    function! SyncTree()
      if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
@@ -190,13 +193,6 @@ let g:fzf_colors =
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-
-let g:vim_markdown_folding_disabled = 1
-
-"Js
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_flow = 1
-
 "Go
 let g:go_doc_keywordprg_enabled = 0
 
@@ -210,8 +206,6 @@ nmap <leader>gp :Gpush<CR>
 nmap <leader>gl :Gpull<CR>
 nmap <leader>gh :Gbrowse<CR>
 
-"indentLine
-let g:indentLine_fileTypeExclude = ['markdown', 'md']
 
 " Coc
 " Better display for messages
