@@ -172,7 +172,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob "!.git/*"'
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'down': '~30%' }
 "
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
@@ -222,13 +222,13 @@ nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
 nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> <leader>ld <Plug>(coc-definition)
-nmap <silent> <leader>lt <Plug>(coc-type-definition)
+nmap <silent> <leader>d <Plug>(coc-definition)
+nmap <silent> <leadjr>lt <Plug>(coc-type-definition)
 nmap <silent> <leader>li <Plug>(coc-implementation)
 nmap <silent> <leader>lf <Plug>(coc-references)
 
 " Remap for rename current word
-nmap <leader>lr <Plug>(coc-rename)
+nmap <leader>r <Plug>(coc-rename)
 
 " Use D for show documentation in preview window
 nnoremap <silent> D :call <SID>show_documentation()<CR>
@@ -237,7 +237,7 @@ function! s:show_documentation()
   if &filetype == 'vim'
     execute 'h '.expand('<cword>')
   else
-    call CocAction('doHover')
+    call CocActionAsync('doHover')
   endif
 endfunction
 
