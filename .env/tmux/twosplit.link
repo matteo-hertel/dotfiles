@@ -1,3 +1,16 @@
+singlesplit(){
+  tmux has-session -t $WORKSPACE_SESSION_NAME
+  if [ $? != 0 ]
+  then
+    tmux new-session -d -s $WORKSPACE_SESSION_NAME 
+    tmux send-keys -t $WORKSPACE_SESSION_NAME:0 "$COMMAND" C-m 
+  fi
+  if [ -z $TMUX ]
+  then
+    tmux attach -t $WORKSPACE_SESSION_NAME
+  fi
+    tmux switch -t $WORKSPACE_SESSION_NAME
+}
 twosplit(){
   tmux has-session -t $WORKSPACE_SESSION_NAME
   if [ $? != 0 ]
@@ -20,3 +33,4 @@ alias editblog="WORKSPACE_SESSION_NAME=blogeditro;WORKSPACE_PATH=~/mhdev/code/bl
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
 alias notes="WORKSPACE_SESSION_NAME=notes;WORKSPACE_PATH=~/mhdev/notes;twosplit"
 alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplit"
+alias hn="WORKSPACE_SESSION_NAME=hn;COMMAND=./bin/hnterm;singlesplit"
