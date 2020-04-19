@@ -84,7 +84,7 @@ set softtabstop=2
 autocmd filetype crontab setlocal nobackup nowritebackup
 "prevent folding in makdown
 autocmd FileType markdown set conceallevel=0
-
+let g:indentLine_fileTypeExclude = ['markdown']
 "Set leader
 let mapleader = ' '
 
