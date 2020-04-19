@@ -8,7 +8,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm i'  }
-Plug 'joshdick/onedark.vim'
+Plug 'arcticicestudio/nord-vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
@@ -96,10 +96,8 @@ if (has("nvim"))
     set termguicolors
   endif
 
-let g:onedark_allow_italics = 1
-let g:onedark_hide_endofbuffer=1
 set background=dark
-colorscheme onedark
+colorscheme nord
 
 "============ Plugins ================== 
 "Nerdtree
@@ -156,7 +154,6 @@ let g:autopep8_on_save = 1
 let g:autopep8_disable_show_diff=1
 
 " vim-airline
-let g:airline_theme='onedark'
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
