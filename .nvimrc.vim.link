@@ -9,10 +9,10 @@ Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm i'  }
 Plug 'arcticicestudio/nord-vim'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvie/vim-flake8'
 Plug 'prettier/vim-prettier'
 Plug 'schickling/vim-bufonly'
@@ -26,6 +26,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 "Plugin Testing Area
+Plug 'vuciv/vim-bujo'
+
 
 call plug#end()
 
@@ -169,7 +171,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob "!.git/*"'
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-let g:fzf_layout = { 'down': '~30%' }
+" let g:fzf_layout = { 'down': '~30%' }
 "
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =

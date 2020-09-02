@@ -5,7 +5,7 @@ defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationc
 killall NotificationCenter
 slack snooze start 30 &> /dev/null
 slack status edit --text="Focusing" --emoji=":coding:" &> /dev/null
-slack reminder add "Take a break, too much focus!" $(date -v +30M "+%s") &> /dev/null
+(sleep 1800 && disableDnd ...)&
 echo 'DND Enabled: Mac notifications and Slack have been muted!'
 }
 disableDnd(){
