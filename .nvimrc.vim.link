@@ -14,7 +14,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvie/vim-flake8'
-Plug 'prettier/vim-prettier'
 Plug 'schickling/vim-bufonly'
 Plug 'scrooloose/nerdtree'
 Plug 'tell-k/vim-autopep8'
@@ -166,6 +165,7 @@ let g:airline#extensions#tabline#show_buffers = 1
 set laststatus=2
 
 " FZF
+set rtp+=/usr/local/opt/fzf
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob "!.git/*"'
 
 let g:fzf_action = {
