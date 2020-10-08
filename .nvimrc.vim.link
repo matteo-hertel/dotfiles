@@ -1,8 +1,4 @@
 call plug#begin()
-" Language
-Plug 'fatih/vim-go'
-Plug 'sheerun/vim-polyglot'
-" Misc
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-sort-motion'
@@ -13,20 +9,15 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'nvie/vim-flake8'
 Plug 'schickling/vim-bufonly'
 Plug 'scrooloose/nerdtree'
-Plug 'tell-k/vim-autopep8'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 "Plugin Testing Area
-Plug 'vuciv/vim-bujo'
-
 
 call plug#end()
 
