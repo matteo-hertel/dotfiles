@@ -20,6 +20,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 "Plugin Testing Area
+Plug 'cocopon/iceberg.vim'
 
 call plug#end()
 
@@ -91,7 +92,7 @@ if (has("nvim"))
   endif
 
 set background=dark
-colorscheme nord
+colorscheme iceberg
 
 "============ Plugins ================== 
 "Nerdtree
