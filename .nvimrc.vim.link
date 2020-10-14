@@ -21,6 +21,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 "Plugin Testing Area
 Plug 'cocopon/iceberg.vim'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
