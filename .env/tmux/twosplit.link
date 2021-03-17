@@ -28,9 +28,7 @@ twosplit(){
     tmux switch -t $WORKSPACE_SESSION_NAME
 }
 
-alias slimer="WORKSPACE_SESSION_NAME=slimer;WORKSPACE_PATH=~/mhdev/code/blog/slimer;twosplit"
-alias editblog="WORKSPACE_SESSION_NAME=blogeditro;WORKSPACE_PATH=~/mhdev/code/blog/blog;twosplit"
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
-alias notes="WORKSPACE_SESSION_NAME=notes;WORKSPACE_PATH=~/mhdev/notes;twosplit"
 alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplit"
-alias hn="WORKSPACE_SESSION_NAME=hn;COMMAND=./bin/hnterm;singlesplit"
+alias pihole="WORKSPACE_SESSION_NAME=pihole;COMMAND='ssh pi@192.168.1.77';singlesplit"
+alias notes="WORKSPACE_SESSION_NAME=notes;COMMAND=nb;singlesplit"

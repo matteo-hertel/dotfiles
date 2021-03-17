@@ -15,7 +15,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
-plugins=(git colored-man colorize github pip python osx zsh-syntax-highlighting z)
+plugins=(git colored-man colorize github pip python osx zsh-syntax-highlighting yarn-autocompletions)
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -98,3 +98,19 @@ zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/mhdev/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/mhdev/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/mhdev/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/mhdev/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
