@@ -30,5 +30,5 @@ twosplit(){
 
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
 alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplit"
-alias pihole="WORKSPACE_SESSION_NAME=pihole;COMMAND='ssh pi@192.168.1.77';singlesplit"
+alias pihole="WORKSPACE_SESSION_NAME=pihole;COMMAND='ssh pi@192.168.0.43';singlesplit"
 alias notes="WORKSPACE_SESSION_NAME=notes;COMMAND=nb;singlesplit"
