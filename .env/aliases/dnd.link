@@ -13,6 +13,11 @@ enableDnd
 (sleep 1800 && disableDnd ...)&
 }
 
+clearSlack(){
+slack snooze end &> /dev/null
+slack status clear &> /dev/null
+}
+
 disableDnd(){
 defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
 killall NotificationCenter
@@ -20,6 +25,7 @@ slack snooze end &> /dev/null
 slack status clear &> /dev/null
 echo 'DND Disabled'
 }
+
 gettingMassive(){
 slack snooze start 60 &> /dev/null
 slack status edit --text="Getting Massive" --emoji=":gain-train:" &> /dev/null
