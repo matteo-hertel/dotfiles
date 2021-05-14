@@ -1,3 +1,2 @@
 # Misc aliases
-alias nativenode="/usr/local/bin/node"
-alias nativenpm="/usr/local/bin/npm"
+alias nnvim="VIMRUNTIME=$HOME/neovim/runtime $HOME/neovim/build/bin/nvim"
