@@ -39,7 +39,7 @@ set ttimeoutlen=50
 "make backspace behave properly in insert mode
 set backspace=indent,eol,start
 " set running shell
-set shell=/bin/zsh
+set shell=/usr/local/bin/zsh
 "display incomplete commands
 set showcmd
 "a better menu in command mode
