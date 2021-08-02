@@ -28,6 +28,11 @@ call plug#end()
 
 filetype plugin indent on
 
+"Troubleshooting
+" if fzf stops working randomly if probably down to nvm so run
+" npm install -g neovim
+"should be the firt this to do
+
 "Misc settings
 "syntax highlighting
 syntax on
