@@ -21,9 +21,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'cocopon/iceberg.vim'
 
-"Plugin Testing Area
-Plug 'metakirby5/codi.vim'
-
 call plug#end()
 
 filetype plugin indent on
