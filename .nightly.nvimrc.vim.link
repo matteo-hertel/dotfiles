@@ -1,4 +1,4 @@
-call plug#begin("~/neovim/plugged")
+call plug#begin("~/nvim/plugged")
 
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'

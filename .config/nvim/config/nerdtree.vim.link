@@ -1,0 +1,48 @@
+"Nerdtree
+let NERDTreeShowHidden=1
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+"Check if NERDTree is open or active
+ function! IsNERDTreeOpen()        
+   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+   endfunction
+
+" Pins NERDTree to the left hand side
+ augroup AuNERDTreeCmd
+ autocmd AuNERDTreeCmd FocusGained * call s:UpdateNERDTree()
+ augroup END
+
+ function s:UpdateNERDTree(...)
+   let stay = 0
+
+   if(exists("a:1"))
+     let stay = a:1
+   end
+
+   if exists("t:NERDTreeBufName")
+     let nr = bufwinnr(t:NERDTreeBufName)
+     if nr != -1
+       exe nr . "wincmd w"
+       exe substitute(mapcheck("R"), "<CR>", "", "")
+       if !stay
+         wincmd p
+       end
+     endif
+   endif
+ endfunction
+
+" Call NERDTreeFind if NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+   function! SyncTree()
+     if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+         NERDTreeFind
+             wincmd p
+               endif
+               endfunction
+
+               " Highlight currently open buffer in NERDTree
+               autocmd BufEnter * call SyncTree()
+
+
+nmap <Leader>n :NERDTreeToggle<CR>

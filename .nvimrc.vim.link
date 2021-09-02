@@ -1,332 +1,39 @@
 call plug#begin()
 
-Plug 'Yggdroot/indentLine'
-Plug 'airblade/vim-gitgutter'
-Plug 'arcticicestudio/nord-vim'
-Plug 'christoomey/vim-sort-motion'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm i'  }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'schickling/vim-bufonly'
-Plug 'scrooloose/nerdtree'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'cocopon/iceberg.vim'
+if filereadable(expand('~/.config/nvim/config/plugins.vim'))
+    source ~/.config/nvim/config/plugins.vim
+end
 
 call plug#end()
 
-filetype plugin indent on
+if filereadable(expand('~/.config/nvim/config/misc.vim'))
+    source ~/.config/nvim/config/misc.vim
+end
 
-"Troubleshooting
-" if fzf stops working randomly if probably down to nvm so run
-" npm install -g neovim
-"should be the firt this to do
+if filereadable(expand('~/.config/nvim/config/theme.vim'))
+    source ~/.config/nvim/config/theme.vim
+end
 
-"Misc settings
-"syntax highlighting
-syntax on
-"more characters will be sent to the screen for redrawing
-set ttyfast
-"time waited for key press(es) to complete. It makes for a faster key response
-set ttimeout
-set ttimeoutlen=50
-"make backspace behave properly in insert mode
-set backspace=indent,eol,start
-" set running shell
-set shell=/usr/local/bin/zsh
-"display incomplete commands
-set showcmd
-"a better menu in command mode
-set wildmenu
-set wildmode=longest:full,full
-"hide buffers instead of closing them even if they contain unwritten changes
-set hidden
-"show relative numbers
-set relativenumber
-set nu rnu
-"new splits will be at the bottom or to the right side of the screen
-set splitbelow
-set splitright
-"always set autoindenting on
-set autoindent
-"incremental search
-set incsearch
-"highlight search
-set hlsearch
-"searches are case insensitive unless they contain at least one capital letter
-set ignorecase
-set smartcase
-" don't create a swap file
-set noswapfile
-" dont's highlight current line and column
-set nocursorline
-set nocursorcolumn
-"Fold all the code based on the syntax
-set foldlevel=1
-set foldmethod=syntax
-"convert tab to spaces
-set expandtab
-" two spaces by default
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+if filereadable(expand('~/.config/nvim/config/mapping.vim'))
+    source ~/.config/nvim/config/mapping.vim
+end
 
-" providers
-let g:loaded_python_provider = 0
-" let g:loaded_python3_provider = 0
-" let g:loaded_node_provider = 0
+if filereadable(expand('~/.config/nvim/config/fzf.vim'))
+    source ~/.config/nvim/config/fzf.vim
+end
 
-"prevent error in crontab
-autocmd filetype crontab setlocal nobackup nowritebackup
-"prevent folding in makdown
-autocmd FileType markdown set conceallevel=0
-let g:indentLine_fileTypeExclude = ['markdown']
-"Set leader
-let mapleader = ' '
+if filereadable(expand('~/.config/nvim/config/nerdtree.vim'))
+    source ~/.config/nvim/config/nerdtree.vim
+end
 
-"Theme
-if (has("nvim"))
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  if (has("termguicolors"))
-    set termguicolors
-  endif
+if filereadable(expand('~/.config/nvim/config/airline.vim'))
+    source ~/.config/nvim/config/airline.vim
+end
 
-set background=dark
-colorscheme iceberg
+if filereadable(expand('~/.config/nvim/config/fugitive.vim'))
+    source ~/.config/nvim/config/fugitive.vim
+end
 
-"============ Plugins ================== 
-"Nerdtree
-let NERDTreeShowHidden=1
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-"Check if NERDTree is open or active
- function! IsNERDTreeOpen()        
-   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-   endfunction
-
-" Pins NERDTree to the left hand side
- augroup AuNERDTreeCmd
- autocmd AuNERDTreeCmd FocusGained * call s:UpdateNERDTree()
- augroup END
-
- function s:UpdateNERDTree(...)
-   let stay = 0
-
-   if(exists("a:1"))
-     let stay = a:1
-   end
-
-   if exists("t:NERDTreeBufName")
-     let nr = bufwinnr(t:NERDTreeBufName)
-     if nr != -1
-       exe nr . "wincmd w"
-       exe substitute(mapcheck("R"), "<CR>", "", "")
-       if !stay
-         wincmd p
-       end
-     endif
-   endif
- endfunction
-
-" Call NERDTreeFind if NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-   function! SyncTree()
-     if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-         NERDTreeFind
-             wincmd p
-               endif
-               endfunction
-
-               " Highlight currently open buffer in NERDTree
-               autocmd BufEnter * call SyncTree()
-
-"Flake8
-autocmd BufWritePost *.py call Flake8()
-
-" Autopep8
-let g:autopep8_on_save = 1
-let g:autopep8_disable_show_diff=1
-
-" vim-airline
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-      let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 1
-set laststatus=2
-
-" FZF
-set rtp+=/usr/local/opt/fzf
-let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob "!.git/*"'
-
-let g:fzf_action = {
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-" let g:fzf_layout = { 'down': '~30%' }
-"
-" Customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-"Go
-let g:go_doc_keywordprg_enabled = 0
-
-" Fugitive
-nmap <leader>gw :Gwrite<CR>
-nmap <leader>gb :Gblame<CR>
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gd :Gdiff<CR>
-nmap <leader>gc :Gcommit<CR>
-nmap <leader>gp :Gpush<CR>
-nmap <leader>gl :Gpull<CR>
-nmap <leader>gh :Gbrowse<CR>
-
-
-"=========COC================== 
-set shortmess+=c
-
-" Do not shift text with sign column
-if has("patch-8.1.1564")
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
-
-" Code completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1] =~# '\s'
-endfunction
-
-" Key binding used to trigger completion
-inoremap <silent><expr> <C-Space> coc#refresh()
-
-" Confirm completion
-inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
-
-" Key binding for programming documentation
-nnoremap <silent> <leader>d :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim', 'help'], &filetype) >= 0)
-    execute'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Key bindings used to scroll pop ups content
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<CR>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<CR>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
-" Highlight symbol and references on cursor hold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Key binding used to format code
-nmap <leader>vf <Plug>(coc-format)
-
-" Key binding for code action (optimize imports, generate code, etc.)
-nmap <leader>va <Plug>(coc-codeaction)
-
-" Key binding used for symbol rename
-nmap <leader>r <Plug>(coc-codeaction)
-
-" Key binding used to go to definition
-nmap <leader>vd <Plug>(coc-definition)
-
-" Key binding used to go to type definition
-nmap <leader>vt <Plug>(coc-type-definition)
-
-" Key binding used to to to implementation
-nmap <leader>vi <Plug>(coc-implementation)
-
-" Key binding used to go to declaration
-nmap <leader>vr <Plug>(coc-declaration)
-
-" Key binding used to find usages
-nmap <leader>vu <Plug>(coc-references)
-
-" Key binding for quick fix
-nmap <leader>vq <Plug>(coc-fix-current)
-
-" Key binding used to show code errors, warnings, etc.
-nmap <leader>ve :CocList diagnostics<CR>
-
-" Key binding used to find symbol
-nmap <leader>vs :CocList -I symbols<CR>
-
-"========Custom Mapping======== 
-inoremap jj <Esc>
-
-"split buffers
-nnoremap <Leader>s :sv<CR>
-nnoremap <Leader>v :vs<CR>
-
-"save/exit/quit
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>z :wq<CR>
-
-nmap <Leader>f  :Files<CR>
-nmap <Leader>m :BLines<CR>
-nmap <Leader>n :NERDTreeToggle<CR>
-nnoremap <Leader>a :Rg<Space>
-nmap <Leader>c :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-nmap <Leader>th :set hlsearch!<CR>
-
-" Movement
-map J 6j
-map K 6k
-map H 6h
-map L 6l
-
-" Clipboard functionality (paste from system)
-vnoremap  <leader>y "+y
-nnoremap  <leader>y "+y
-nnoremap <leader>p "+p
-vnoremap <leader>p "+p
-
-" Buffers
-nmap ; :Buffers<cr>
-nmap <Leader>bc :BufOnly<cr>
-
-" Test plugin commands
+if filereadable(expand('~/.config/nvim/config/coc.vim'))
+    source ~/.config/nvim/config/coc.vim
+end
