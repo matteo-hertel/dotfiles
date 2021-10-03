@@ -6,6 +6,10 @@ end
 
 call plug#end()
 
+if filereadable(expand('~/.config/nvim/config/lsp.vim'))
+    source ~/.config/nvim/config/lsp.vim
+end
+
 if filereadable(expand('~/.config/nvim/config/misc.vim'))
     source ~/.config/nvim/config/misc.vim
 end
@@ -18,3 +22,10 @@ if filereadable(expand('~/.config/nvim/config/mapping.vim'))
     source ~/.config/nvim/config/mapping.vim
 end
 
+if filereadable(expand('~/.config/nvim/config/nerdtree.vim'))
+    source ~/.config/nvim/config/nerdtree.vim
+end
+
+if filereadable(expand('~/.config/nvim/config/telescope.vim'))
+    source ~/.config/nvim/config/telescope.vim
+end
