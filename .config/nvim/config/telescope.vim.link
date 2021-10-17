@@ -10,8 +10,15 @@ require('telescope').setup{
         ["<ESC>"]   = actions.close,
       },
     },
-  }
+  },
+  pickers = {
+              buffers = {
+                  ignore_current_buffer = true,
+                  sort_lastused = true,
+              },
+        },
 }
+
 EOF
 nnoremap <leader>f <cmd>Telescope find_files<cr>
 nnoremap <leader>a <cmd>Telescope live_grep<cr>
