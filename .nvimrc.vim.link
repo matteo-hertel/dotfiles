@@ -18,9 +18,9 @@ if filereadable(expand('~/.config/nvim/config/mapping.vim'))
     source ~/.config/nvim/config/mapping.vim
 end
 
-if filereadable(expand('~/.config/nvim/config/fzf.vim'))
-    source ~/.config/nvim/config/fzf.vim
-end
+"if filereadable(expand('~/.config/nvim/config/fzf.vim'))
+"     source ~/.config/nvim/config/fzf.vim
+" end
 
 if filereadable(expand('~/.config/nvim/config/nerdtree.vim'))
     source ~/.config/nvim/config/nerdtree.vim
@@ -36,4 +36,8 @@ end
 
 if filereadable(expand('~/.config/nvim/config/coc.vim'))
     source ~/.config/nvim/config/coc.vim
+end
+
+if filereadable(expand('~/.config/nvim/config/telescope.vim'))
+    source ~/.config/nvim/config/telescope.vim
 end
