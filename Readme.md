@@ -16,6 +16,7 @@ There are a few bits not covered by the autoinstaller:
 - [Diff So Fancy](https://github.com/so-fancy/diff-so-fancy)
 - [Bat](https://github.com/sharkdp/bat)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
+- [fzf](https://github.com/junegunn/fzf)
 
 ## Installation
 
