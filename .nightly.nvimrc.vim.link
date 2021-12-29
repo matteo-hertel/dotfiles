@@ -6,10 +6,6 @@ end
 
 call plug#end()
 
-if filereadable(expand('~/.config/nvim/config/lsp.vim'))
-    source ~/.config/nvim/config/lsp.vim
-end
-
 if filereadable(expand('~/.config/nvim/config/misc.vim'))
     source ~/.config/nvim/config/misc.vim
 end
@@ -29,3 +25,8 @@ end
 if filereadable(expand('~/.config/nvim/config/telescope.vim'))
     source ~/.config/nvim/config/telescope.vim
 end
+
+lua << EOF
+require ("user")
+EOF
+
