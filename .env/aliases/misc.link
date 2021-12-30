@@ -1,2 +1,2 @@
 # Misc aliases
-alias nnvim="VIMRUNTIME=$HOME/neovim/runtime $HOME/neovim/build/bin/nvim"
+alias nnvim="nvim -u ~/.nightly.nvimrc.vim"
