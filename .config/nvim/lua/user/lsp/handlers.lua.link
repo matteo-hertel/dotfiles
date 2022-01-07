@@ -4,6 +4,10 @@ if not status_ok then
 end
 
 local M = {}
+-- note: this setting is global and should be set only once
+vim.o.updatetime = 150
+-- Show diagnostic on hover
+vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
 M.setup = function()
     local signs = {
@@ -101,7 +105,7 @@ M.on_attach = function(client, bufnr)
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
 end
-
+ 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 
