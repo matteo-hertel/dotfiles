@@ -4,6 +4,7 @@ if not status_ok then
 end
 
 local M = {}
+
 -- note: this setting is global and should be set only once
 vim.o.updatetime = 150
 -- Show diagnostic on hover
