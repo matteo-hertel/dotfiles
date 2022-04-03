@@ -116,6 +116,9 @@ unset __conda_setup
 # Load homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Misc
+zstyle ':completion:*:*' ignored-patterns '*ORIG_HEAD'
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export NVM_DIR="$HOME/.nvm"
