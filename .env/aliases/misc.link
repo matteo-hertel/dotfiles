@@ -1,2 +1,3 @@
 # Misc aliases
 alias nnvim="nvim -u ~/.nightly.nvimrc.vim"
+alias backupNvimConfig="mv ~/.config/nvim ~/.config/$(date +%Y-%m-%dnvimbackup)"
