@@ -1,0 +1,39 @@
+{
+    "tsserver.enable": true,
+    "tsserver.log": "normal",
+    "tsserver.npm": "nativenpm",
+    "tsserver.trace.server": "verbose",
+    // TS / JS testing
+    "tsserver.implicitProjectConfig.checkJs": true,
+    "javascript.suggestionActions.enabled": false,
+    "typescript.suggestionActions.enabled": false,
+    "javascript.validate.enable": false,
+    "typescript.validate.enable": false,
+    "suggest.echodocSupport": true,
+    "suggest.maxCompleteItemCount": 20,
+    "suggest.enablePreview": true,
+    // Python
+    "python.pythonPath": "python3",
+    "coc.preferences.formatOnSaveFiletypes": [
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "json",
+        "javascriptreact",
+        "css",
+        "graphql",
+        "css",
+        "rust",
+        "markdown",
+        "python"
+    ],
+    "eslint.filetypes": [
+        "javascript",
+        "typescript",
+        "typescriptreact",
+        "javascriptreact"
+    ],
+    "diagnostic.errorSign": "✘",
+    "diagnostic.warningSign": "▲",
+    "diagnostic.infoSign": "•"
+}
