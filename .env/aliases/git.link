@@ -1,3 +1,5 @@
 alias gprn="git branch --merged master | grep -v '^[ *]*master$' | xargs git branch -d"
 alias gtco="gt branch create -a -m"
 alias gtcmgs="gt commit create -a -m"
+alias gtup="gt branch up"
+alias gtdown="gt branch down"
