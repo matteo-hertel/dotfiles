@@ -3,3 +3,14 @@ alias gtco="gt branch create -a -m"
 alias gtcmgs="gt commit create -a -m"
 alias gtup="gt branch up"
 alias gtdown="gt branch down"
+
+#commits
+alias gfeat='function _gcfeat(){ gcmsg "$(feat($1):$2))"};_gcfeat'
+# alias gfix="function _gcfix(){ gcmsg `fix($1):$2)`};_gcfix"
+# alias gdocs="function _gcdocs(){ gcmsg `docs($1):$2)`};_gcdocs"
+# alias gstyle="function _gcstyle(){ gcmsg `style($1):$2)`};_gcstyle"
+# alias grefactor="function _gcrefactor(){ gcmsg `refactor($1):$2)`};_gcrefactor"
+# alias gperf="function _gcperf(){ gcmsg `perf($1):$2)`};_gcperf"
+# alias gtest="function _gctest(){ gcmsg `test($1):$2)`};_gctest"
+# alias gbuild="function _gcbuild(){ gcmsg `build($1):$2)`};_gcbuild"
+# alias gci="function _gcci(){ gcmsg `ci($1):$2)`};_gcci"
