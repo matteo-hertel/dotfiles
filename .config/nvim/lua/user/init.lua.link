@@ -180,7 +180,16 @@ local config = {
         autocmd bufwritepost plugins.lua source <afile> | PackerSync
       augroup end
     ]]
-        vim.filetype.add({extension = {["link"] = "lua"}})
+        vim.filetype.add({
+            extension = {
+                link = function(path)
+                    if string.find(path, "lua") then
+                        return "lua"
+                    end
+                    return "sh"
+                end
+            }
+        })
     end
 }
 
