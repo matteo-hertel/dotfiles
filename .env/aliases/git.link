@@ -5,7 +5,7 @@ alias gtup="gt branch up"
 alias gtdown="gt branch down"
 
 #commits
-alias gfeat='function _gcfeat(){ gcmsg "$(feat($1):$2))"};_gcfeat'
+alias gfeat='function _gcfeat(){ gcmsg "feat($1):$2"};_gcfeat'
 # alias gfix="function _gcfix(){ gcmsg `fix($1):$2)`};_gcfix"
 # alias gdocs="function _gcdocs(){ gcmsg `docs($1):$2)`};_gcdocs"
 # alias gstyle="function _gcstyle(){ gcmsg `style($1):$2)`};_gcstyle"
