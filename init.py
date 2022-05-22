@@ -8,7 +8,7 @@ DIST= HOME
 def mkdir_p(path):
     try:
         os.makedirs(path)
-    except OSError as exc:  # Python >2.5
+    except OSError as exc:
         if exc.errno == errno.EEXIST and os.path.isdir(path):
             pass
         else:
@@ -16,13 +16,13 @@ def mkdir_p(path):
 
 def symlink_force(target, link_name):
     try:
-        print "Creating", target
+        print("Creating", target)
         os.symlink(target, link_name)
-    except OSError, e:
+    except OSError as e:
         if e.errno == errno.EEXIST:
             os.remove(link_name)
             os.symlink(target, link_name)
-            print "Created", target
+            print ("Created", target)
 
         else:
             raise e
