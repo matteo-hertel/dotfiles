@@ -1,2 +1,187 @@
-require "user.cmp"
-require "user.lsp"
+local config = {
+    options = {
+        opt = {
+            clipboard = "",
+            mouse = "",
+            conceallevel = 2, -- enable conceal
+            foldenable = false,
+            foldexpr = "nvim_treesitter#foldexpr()", -- set Treesitter based folding
+            foldmethod = "expr",
+            linebreak = true, -- linebreak soft wrap at words
+            list = true, -- show whitespace characters
+            listchars = {
+                tab = "│→",
+                extends = "⟩",
+                precedes = "⟨",
+                trail = "·",
+                nbsp = "␣"
+            },
+            shortmess = vim.opt.shortmess + {I = true},
+            showbreak = "↪ ",
+            wrap = true -- soft wrap lines 
+
+        }
+    },
+
+    enabled = {
+        bufferline = true,
+        neo_tree = true,
+        lualine = true,
+        gitsigns = true,
+        colorizer = true,
+        toggle_term = true,
+        comment = true,
+        symbols_outline = true,
+        indent_blankline = true,
+        dashboard = true,
+        which_key = true,
+        neoscroll = true,
+        ts_rainbow = true
+    },
+    -- Configure plugins
+    plugins = {
+        -- Add plugins, the packer syntax without the "use"
+        init = function(plugins)
+            local my_plugins = {
+                {"alexghergh/nvim-tmux-navigation"}, {
+                    "ray-x/lsp_signature.nvim",
+                    event = "bufread",
+                    config = function()
+                        require("lsp_signature").setup()
+                    end
+                }
+            }
+            plugins["windwp/nvim-autopair"] = nil
+            plugins["windwp/nvim-ts-autotag"] = nil
+            plugins["stevearc/aerial.nvim"] = nil
+            plugins["mrjones2014/smart-splits.nvim"] = nil
+            plugins["declancm/cinnamon.nvim"] = nil
+            plugins["akinsho/bufferline.nvim"] = nil
+            plugins["Shatur/neovim-session-manager"] = nil
+            return vim.tbl_deep_extend("force", plugins, my_plugins)
+        end,
+        ["neo-tree"] = {
+            open_on_setup = true,
+            window = {width = 40},
+            filesystem = {
+                filtered_items = {
+                    hide_dotfiles = false,
+                    hide_gitignored = false,
+                    hide_by_name = {".DS_Store", "thumbs.db"}
+                }
+            }
+        },
+        telescope = {pickers = {buffers = {sort_lastused = true}}},
+        -- null-ls configuration
+        ["null-ls"] = function(config)
+            local null_ls = require "null-ls"
+            local formatting = null_ls.builtins.formatting
+            local diagnostics = null_ls.builtins.diagnostics
+            -- Check supported formatters and linters
+            -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+            -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+            config.sources = {
+                -- Formatters
+                formatting.prettier.with({prefer_local = "node_modules/.bin"}),
+                formatting.lua_format, -- Linters
+                diagnostics.eslint.with({prefer_local = "node_modules/.bin"}),
+                diagnostics.luacheck
+            }
+            -- set up null-ls's on_attach function
+            config.on_attach = function(client)
+                -- NOTE: You can remove this on attach function to disable format on save
+                if client.resolved_capabilities.document_formatting then
+                    vim.api.nvim_create_autocmd("BufWritePre", {
+                        desc = "Auto format before save",
+                        pattern = "<buffer>",
+                        callback = vim.lsp.buf.formatting_sync
+                    })
+                end
+            end
+            return config
+
+        end
+    },
+    -- Add paths for including more VS Code style snippets in luasnip
+    luasnip = {vscode_snippet_paths = {}},
+    -- Modify which-key registration
+    ["which-key"] = {
+        -- Add bindings to the normal mode <leader> mappings
+        register_n_leader = {
+            ["a"] = {"<cmd>Telescope live_grep<CR>", "Find Files"},
+            ["q"] = {"<cmd>q<CR>", "Close"},
+            ["z"] = {"<cmd>wq<CR>", "Save and close"},
+            ["y"] = {'"+y', "Copy to system clipboard"},
+            ["p"] = {'"+p', "Paste from system clipboard"},
+            ["gc"] = {
+                "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
+                "Toggle Comments"
+            }
+        }
+    },
+    cmp = {
+        source_priority = {
+            nvim_lsp = 1000,
+            luasnip = 750,
+            buffer = 500,
+            path = 250
+        }
+    },
+    lsp = {
+        -- on_attach adds a default binding to K, I use that for moving up 6 lines
+        -- so I need to delete the binding and update the over doc to gi
+        on_attach = function()
+            vim.keymap.set("n", "gi", vim.lsp.buf.hover,
+                           {desc = "Hover symbol details", buffer = 0})
+            vim.keymap.del("n", "K", {buffer = 0})
+        end,
+        ["server-settings"] = {
+            sumneko_lua = {
+                Lua = {
+                    diagnostics = {
+                        -- Get the language server to recognize the `vim` global
+                        globals = {'vim'}
+                    }
+                }
+            }
+        }
+    },
+
+    -- This function is run last
+    -- good place to configure mappings and vim options
+    polish = function()
+        local opts = {noremap = true, silent = true}
+        local map = vim.keymap.set
+        -- Set key bindings
+        map("n", "K", "6k", opts)
+        map("n", "J", "6j", opts)
+        map("n", "H", "6h", opts)
+        map("n", "L", "6l", opts)
+        map("n", ";", "<cmd>Telescope buffers<CR>", opts)
+        map("n", "}", "<cmd>BufferLineCycleNext<cr>", opts)
+        map("n", "{", "<cmd>BufferLineCyclePrev<cr>", opts)
+        map("n", "<C-h>",
+            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
+            opts)
+        map("n", "<C-j>",
+            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
+            opts)
+        map("n", "<C-k>",
+            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
+            opts)
+        map("n", "<C-l>",
+            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
+            opts)
+
+        -- Set autocomman"<cmd>s
+        vim.cmd [[
+      augroup packer_"<cmd>onf
+        autocmd!
+        autocmd bufwritepost plugins.lua source <afile> | PackerSync
+      augroup end
+    ]]
+        vim.filetype.add({extension = {["link"] = "lua"}})
+    end
+}
+
+return config
