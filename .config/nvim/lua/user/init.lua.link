@@ -18,11 +18,9 @@ local config = {
             },
             shortmess = vim.opt.shortmess + {I = true},
             showbreak = "↪ ",
-            wrap = true -- soft wrap lines 
-
+            wrap = true -- soft wrap line
         }
     },
-
     enabled = {
         bufferline = true,
         neo_tree = true,
@@ -43,7 +41,8 @@ local config = {
         -- Add plugins, the packer syntax without the "use"
         init = function(plugins)
             local my_plugins = {
-                {"alexghergh/nvim-tmux-navigation"}, {
+                {"alexghergh/nvim-tmux-navigation"}, {"machakann/vim-sandwich"},
+                {
                     "ray-x/lsp_signature.nvim",
                     event = "bufread",
                     config = function()
@@ -51,13 +50,14 @@ local config = {
                     end
                 }
             }
-            plugins["windwp/nvim-autopair"] = nil
-            plugins["windwp/nvim-ts-autotag"] = nil
-            plugins["stevearc/aerial.nvim"] = nil
-            plugins["mrjones2014/smart-splits.nvim"] = nil
-            plugins["declancm/cinnamon.nvim"] = nil
-            plugins["akinsho/bufferline.nvim"] = nil
-            plugins["Shatur/neovim-session-manager"] = nil
+            plugins["windwp/nvim-autopairs"] = {disable = true}
+            plugins["windwp/nvim-ts-autotag"] = {disable = true}
+            plugins["stevearc/aerial.nvim"] = {disable = true}
+            plugins["mrjones2014/smart-splits.nvim"] = {disable = true}
+            plugins["declancm/cinnamon.nvim"] = {disable = true}
+            plugins["akinsho/bufferline.nvim"] = {disable = true}
+            plugins["Shatur/neovim-session-manager"] = {disable = true}
+
             return vim.tbl_deep_extend("force", plugins, my_plugins)
         end,
         ["neo-tree"] = {
@@ -144,17 +144,7 @@ local config = {
             vim.keymap.set("n", "gi", vim.lsp.buf.hover,
                            {desc = "Hover symbol details", buffer = 0})
             vim.keymap.del("n", "K", {buffer = 0})
-        end,
-        ["server-settings"] = {
-            sumneko_lua = {
-                Lua = {
-                    diagnostics = {
-                        -- Get the language server to recognize the `vim` global
-                        globals = {'vim'}
-                    }
-                }
-            }
-        }
+        end
     },
 
     -- This function is run last
