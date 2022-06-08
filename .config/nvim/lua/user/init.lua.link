@@ -117,12 +117,37 @@ local config = {
     -- Modify which-key registration
     ["which-key"] = {
         -- Add bindings to the normal mode <leader> mappings
+        register_mappings = {
+            [""] = {
+                [";"] = {"<cmd>Telescope buffers<CR>", "Find Buffers"},
+                ["K"] = {"6k", 'Move 6 lines up'},
+                ["J"] = {"6j", 'Move 6 lines down'},
+                ["H"] = {"6h", 'Move 6 char left'},
+                ["L"] = {"6l", 'Move 6 char right'},
+                ["<C-h>"] = {
+                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
+                    "Move to tmux pane Left"
+                },
+                ["<C-j>"] = {
+                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
+                    "Move to tmux pane Down"
+                },
+                ["<C-k>"] = {
+                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
+                    "Move to tmux pane Up"
+                },
+                ["<C-l>"] = {
+                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
+                    "Move to tmux pane Right"
+                }
+
+            },
+            v = {['<leader>'] = {["y"] = {'"+y', "Copy to system clipboard"}}}
+        },
         register_n_leader = {
             ["a"] = {"<cmd>Telescope live_grep<CR>", "Find Files"},
             ["q"] = {"<cmd>q<CR>", "Close"},
             ["z"] = {"<cmd>wq<CR>", "Save and close"},
-            ["y"] = {'"+y', "Copy to system clipboard"},
-            ["p"] = {'"+p', "Paste from system clipboard"},
             ["gc"] = {
                 "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
                 "Toggle Comments"
@@ -153,25 +178,6 @@ local config = {
         local opts = {noremap = true, silent = true}
         local map = vim.keymap.set
         -- Set key bindings
-        map("n", "K", "6k", opts)
-        map("n", "J", "6j", opts)
-        map("n", "H", "6h", opts)
-        map("n", "L", "6l", opts)
-        map("n", ";", "<cmd>Telescope buffers<CR>", opts)
-        map("n", "}", "<cmd>BufferLineCycleNext<cr>", opts)
-        map("n", "{", "<cmd>BufferLineCyclePrev<cr>", opts)
-        map("n", "<C-h>",
-            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
-            opts)
-        map("n", "<C-j>",
-            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
-            opts)
-        map("n", "<C-k>",
-            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
-            opts)
-        map("n", "<C-l>",
-            "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
-            opts)
 
         -- Set autocomman"<cmd>s
         vim.cmd [[
