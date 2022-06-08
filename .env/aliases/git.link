@@ -1,6 +1,5 @@
 alias gprn="git branch --merged master | grep -v '^[ *]*master$' | xargs git branch -d"
-alias gtco="gt branch create -a -m"
-alias gtcmgs="gt commit create -a -m"
+
 alias gtup="gt branch up"
 alias gtdown="gt branch down"
 
@@ -9,3 +8,6 @@ alias gfeat='function _gcfeat(){ gcmsg "feat($1):$2"};_gcfeat'
 alias gfix='function _gcfix(){ gcmsg "fix($1):$2"};_gcfix'
 alias gdocs='function _gcdocs(){ gcmsg "docs($1):$2"};_gcdocs'
 alias gchore='function _gcchore(){ gcmsg "chore($1):$2"};_gcchore'
+alias gtco='function _gcchore(){ gcmsg "chore($1):$2"};_gcchore'
+alias gtco='function _gtco(){ gt branch create -a -m "$2" $1};_gtco'
+alias gtmgs='function _gtmsg(){ gt commit create -a -m $1};_gtmsg'
