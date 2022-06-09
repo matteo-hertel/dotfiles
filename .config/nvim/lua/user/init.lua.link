@@ -3,8 +3,6 @@ local config = {
         opt = {
             clipboard = "",
             mouse = "",
-            conceallevel = 2, -- enable conceal
-            foldenable = false,
             foldexpr = "nvim_treesitter#foldexpr()", -- set Treesitter based folding
             foldmethod = "expr",
             linebreak = true, -- linebreak soft wrap at words
@@ -41,7 +39,8 @@ local config = {
         -- Add plugins, the packer syntax without the "use"
         init = function(plugins)
             local my_plugins = {
-                {"alexghergh/nvim-tmux-navigation"}, {"machakann/vim-sandwich"},
+                {"alexghergh/nvim-tmux-navigation"},
+                -- {"machakann/vim-sandwich"},
                 {
                     "ray-x/lsp_signature.nvim",
                     event = "bufread",
