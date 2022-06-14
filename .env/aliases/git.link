@@ -1,4 +1,4 @@
-alias gprn="git branch --merged master | grep -v '^[ *]*master$' | xargs git branch -d"
+alias gnuke="git branch  | grep -v main | xargs git branch -"
 
 alias gtup="gt branch up"
 alias gtdown="gt branch down"
