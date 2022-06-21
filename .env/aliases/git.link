@@ -1,4 +1,4 @@
-alias gnuke="git branch  | grep -v main | xargs git branch -"
+alias gnuke="git branch  | grep -v main | xargs git branch -D"
 
 alias gtup="gt branch up"
 alias gtdown="gt branch down"
