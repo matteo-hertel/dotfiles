@@ -54,7 +54,8 @@ local config = {
             ["mrjones2014/smart-splits.nvim"] = {disable = true},
             ["declancm/cinnamon.nvim"] = {disable = true},
             ["akinsho/bufferline.nvim"] = {disable = true},
-            ["Shatur/neovim-session-manager"] = {disable = true}
+            ["Shatur/neovim-session-manager"] = {disable = true},
+            ["bufferline.nvim"] = {disable = true}
 
         },
         ["neo-tree"] = {
@@ -115,11 +116,7 @@ local config = {
         register_n_leader = {
             ["a"] = {"<cmd>Telescope live_grep<CR>", "Find Files"},
             ["q"] = {"<cmd>q<CR>", "Close"},
-            ["z"] = {"<cmd>wq<CR>", "Save and close"},
-            ["gc"] = {
-                "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
-                "Toggle Comments"
-            }
+            ["z"] = {"<cmd>wq<CR>", "Save and close"}
         }
     },
     cmp = {
@@ -165,12 +162,16 @@ local config = {
             ["<C-l>"] = {
                 "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
                 desc = "Move to tmux pane Right"
+            },
+            ["gc"] = {
+                "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
+                desc = "Toggle Comments"
             }
 
         },
         v = {
             ['<leader>y'] = {'"+y', desc = "Copy to system clipboard"},
-            ["<leader>gc"] = {
+            ["gc"] = {
                 "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>",
                 desc = "Toggle comment line"
             }
