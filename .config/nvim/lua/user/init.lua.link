@@ -8,11 +8,11 @@ local config = {
             linebreak = true, -- linebreak soft wrap at words
             list = true, -- show whitespace characters
             listchars = {
-                tab = "│→",
                 extends = "⟩",
+                nbsp = "␣",
                 precedes = "⟨",
-                trail = "·",
-                nbsp = "␣"
+                tab = "│→",
+                trail = "·"
             },
             shortmess = vim.opt.shortmess + {I = true},
             showbreak = "↪ ",
@@ -21,27 +21,25 @@ local config = {
     },
     enabled = {
         bufferline = true,
-        neo_tree = true,
-        lualine = true,
-        gitsigns = true,
         colorizer = true,
-        toggle_term = true,
         comment = true,
-        symbols_outline = true,
-        indent_blankline = true,
         dashboard = true,
-        which_key = true,
+        gitsigns = true,
+        indent_blankline = true,
+        lualine = true,
+        neo_tree = true,
         neoscroll = true,
-        ts_rainbow = true
+        symbols_outline = true,
+        toggle_term = true,
+        ts_rainbow = true,
+        which_key = true
     },
     -- Configure plugins
     plugins = {
         -- Add plugins, the packer syntax without the "use"
         init = function(plugins)
             local my_plugins = {
-                {"alexghergh/nvim-tmux-navigation"},
-                -- {"machakann/vim-sandwich"},
-                {
+                {"alexghergh/nvim-tmux-navigation"}, {"ralismark/opsort.vim"}, {
                     "ray-x/lsp_signature.nvim",
                     event = "bufread",
                     config = function()
