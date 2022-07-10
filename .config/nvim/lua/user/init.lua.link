@@ -1,4 +1,5 @@
 local config = {
+    updater = {channel = "stable"},
     options = {
         opt = {
             clipboard = "",
@@ -37,26 +38,25 @@ local config = {
     -- Configure plugins
     plugins = {
         -- Add plugins, the packer syntax without the "use"
-        init = function(plugins)
-            local my_plugins = {
-                {"alexghergh/nvim-tmux-navigation"}, {"ralismark/opsort.vim"}, {
-                    "ray-x/lsp_signature.nvim",
-                    event = "bufread",
-                    config = function()
-                        require("lsp_signature").setup()
-                    end
-                }
-            }
-            plugins["windwp/nvim-autopairs"] = {disable = true}
-            plugins["windwp/nvim-ts-autotag"] = {disable = true}
-            plugins["stevearc/aerial.nvim"] = {disable = true}
-            plugins["mrjones2014/smart-splits.nvim"] = {disable = true}
-            plugins["declancm/cinnamon.nvim"] = {disable = true}
-            plugins["akinsho/bufferline.nvim"] = {disable = true}
-            plugins["Shatur/neovim-session-manager"] = {disable = true}
+        init = {
+            {"alexghergh/nvim-tmux-navigation"},
+            {"ralismark/opsort.vim"},
+            {
+                "ray-x/lsp_signature.nvim",
+                event = "bufread",
+                config = function()
+                    require("lsp_signature").setup()
+                end
+            },
+            ["windwp/nvim-autopairs"] = {disable = true},
+            ["windwp/nvim-ts-autotag"] = {disable = true},
+            ["stevearc/aerial.nvim"] = {disable = true},
+            ["mrjones2014/smart-splits.nvim"] = {disable = true},
+            ["declancm/cinnamon.nvim"] = {disable = true},
+            ["akinsho/bufferline.nvim"] = {disable = true},
+            ["Shatur/neovim-session-manager"] = {disable = true}
 
-            return vim.tbl_deep_extend("force", plugins, my_plugins)
-        end,
+        },
         ["neo-tree"] = {
             open_on_setup = true,
             window = {width = 40},
@@ -109,38 +109,9 @@ local config = {
 
         end
     },
-    -- Add paths for including more VS Code style snippets in luasnip
-    luasnip = {vscode_snippet_paths = {}},
     -- Modify which-key registration
     ["which-key"] = {
         -- Add bindings to the normal mode <leader> mappings
-        register_mappings = {
-            [""] = {
-                [";"] = {"<cmd>Telescope buffers<CR>", "Find Buffers"},
-                ["K"] = {"6k", 'Move 6 lines up'},
-                ["J"] = {"6j", 'Move 6 lines down'},
-                ["H"] = {"6h", 'Move 6 char left'},
-                ["L"] = {"6l", 'Move 6 char right'},
-                ["<C-h>"] = {
-                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
-                    "Move to tmux pane Left"
-                },
-                ["<C-j>"] = {
-                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
-                    "Move to tmux pane Down"
-                },
-                ["<C-k>"] = {
-                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
-                    "Move to tmux pane Up"
-                },
-                ["<C-l>"] = {
-                    "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
-                    "Move to tmux pane Right"
-                }
-
-            },
-            v = {['<leader>'] = {["y"] = {'"+y', "Copy to system clipboard"}}}
-        },
         register_n_leader = {
             ["a"] = {"<cmd>Telescope live_grep<CR>", "Find Files"},
             ["q"] = {"<cmd>q<CR>", "Close"},
@@ -160,31 +131,59 @@ local config = {
         }
     },
     lsp = {
-        -- on_attach adds a default binding to K, I use that for moving up 6 lines
-        -- so I need to delete the binding and update the over doc to gi
+        mappings = {
+            n = {
+                -- on_attach adds a default binding to K, I use that for moving up 6 lines
+                -- so I need to delete the binding and update the over doc to gi
+                ["K"] = false
+            }
+        },
         on_attach = function()
             vim.keymap.set("n", "gi", vim.lsp.buf.hover,
                            {desc = "Hover symbol details", buffer = 0})
-            vim.keymap.del("n", "K", {buffer = 0})
         end
     },
+    mappings = {
+        n = {
+            [";"] = {"<cmd>Telescope buffers<CR>", desc = "Find Buffers"},
+            ["K"] = {"6k", desc = 'Move 6 lines up'},
+            ["J"] = {"6j", desc = 'Move 6 lines down'},
+            ["H"] = {"6h", desc = 'Move 6 char left'},
+            ["L"] = {"6l", desc = 'Move 6 char right'},
+            ["<C-h>"] = {
+                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
+                desc = "Move to tmux pane Left"
+            },
+            ["<C-j>"] = {
+                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
+                desc = "Move to tmux pane Down"
+            },
+            ["<C-k>"] = {
+                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
+                desc = "Move to tmux pane Up"
+            },
+            ["<C-l>"] = {
+                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
+                desc = "Move to tmux pane Right"
+            }
 
+        },
+        v = {
+            ['<leader>y'] = {'"+y', desc = "Copy to system clipboard"},
+            ["<leader>gc"] = {
+                "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>",
+                desc = "Toggle comment line"
+            }
+        }
+
+    },
     -- This function is run last
     -- good place to configure mappings and vim options
     polish = function()
-        local opts = {noremap = true, silent = true}
-        local map = vim.keymap.set
-        -- Set key bindings
-
-        -- Set autocomman"<cmd>s
-        vim.cmd [[
-      augroup packer_"<cmd>onf
-        autocmd!
-        autocmd bufwritepost plugins.lua source <afile> | PackerSync
-      augroup end
-    ]]
         vim.filetype.add({
             extension = {
+                -- tried to use the pattern table but no dice with the config
+                --     ["~/%.config/**/*.lua.link"] = "lua" but no dice
                 link = function(path)
                     if string.find(path, "lua") then
                         return "lua"
