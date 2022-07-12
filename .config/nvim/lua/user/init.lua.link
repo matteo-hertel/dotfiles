@@ -143,10 +143,10 @@ local config = {
     mappings = {
         n = {
             [";"] = {"<cmd>Telescope buffers<CR>", desc = "Find Buffers"},
-            ["K"] = {"6k", desc = 'Move 6 lines up'},
-            ["J"] = {"6j", desc = 'Move 6 lines down'},
-            ["H"] = {"6h", desc = 'Move 6 char left'},
-            ["L"] = {"6l", desc = 'Move 6 char right'},
+            ["<S-k>"] = {"6k", desc = 'Move 6 lines up'},
+            ["<S-j>"] = {"6j", desc = 'Move 6 lines down'},
+            ["<S-h>"] = {"6h", desc = 'Move 6 char left'},
+            ["<S-l>"] = {"6l", desc = 'Move 6 char right'},
             ["<C-h>"] = {
                 "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
                 desc = "Move to tmux pane Left"
