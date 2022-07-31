@@ -40,6 +40,12 @@ local config = {
         -- Add plugins, the packer syntax without the "use"
         init = {
             {"alexghergh/nvim-tmux-navigation"},
+            {
+                "jinh0/eyeliner.nvim",
+                config = function()
+                    require'eyeliner'.setup {highlight_on_key = true}
+                end
+            },
             {"ralismark/opsort.vim"},
             {
                 "ray-x/lsp_signature.nvim",
@@ -192,6 +198,9 @@ local config = {
                 end
             }
         })
+        vim.api.nvim_set_hl(0, 'EyelinerPrimary', {fg = '#61afef'})
+        vim.api.nvim_set_hl(0, 'EyelinerSecondary', {fg = '#e5c07b'})
+
     end
 }
 
