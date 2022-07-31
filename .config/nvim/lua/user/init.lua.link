@@ -41,6 +41,15 @@ local config = {
         init = {
             {"alexghergh/nvim-tmux-navigation"},
             {
+                "kylechui/nvim-surround",
+                config = function()
+                    require("nvim-surround").setup({
+                        -- Configuration here, or leave empty to use defaults
+                    })
+                end
+
+            },
+            {
                 "jinh0/eyeliner.nvim",
                 config = function()
                     require'eyeliner'.setup {highlight_on_key = true}
