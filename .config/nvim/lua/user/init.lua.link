@@ -20,6 +20,7 @@ local config = {
             wrap = true -- soft wrap line
         }
     },
+
     enabled = {
         bufferline = true,
         colorizer = true,
@@ -40,25 +41,10 @@ local config = {
         -- Add plugins, the packer syntax without the "use"
         init = {
             {"alexghergh/nvim-tmux-navigation"},
-            {
-                "kylechui/nvim-surround",
-                config = function()
-                    require("nvim-surround").setup({
-                        -- Configuration here, or leave empty to use defaults
-                    })
-                end
-
-            },
-            {
-                "jinh0/eyeliner.nvim",
-                config = function()
-                    require'eyeliner'.setup {highlight_on_key = true}
-                end
-            },
             {"ralismark/opsort.vim"},
             {
                 "ray-x/lsp_signature.nvim",
-                event = "bufread",
+                event = "BufRead",
                 config = function()
                     require("lsp_signature").setup()
                 end
@@ -152,7 +138,21 @@ local config = {
         on_attach = function()
             vim.keymap.set("n", "gi", vim.lsp.buf.hover,
                            {desc = "Hover symbol details", buffer = 0})
-        end
+        end,
+        ["server-settings"] = {
+            sumneko_lua = {
+                settings = {
+                    Lua = {
+                        runtime = {version = 'LuaJIT'},
+                        diagnostics = {
+                            -- Get the language server to recognize the `vim` global
+                            globals = {'vim'}
+                        }
+                    }
+                }
+            }
+        }
+
     },
     mappings = {
         n = {
@@ -192,8 +192,8 @@ local config = {
         }
 
     },
+    -- 
     -- This function is run last
-    -- good place to configure mappings and vim options
     polish = function()
         vim.filetype.add({
             extension = {
@@ -207,9 +207,6 @@ local config = {
                 end
             }
         })
-        vim.api.nvim_set_hl(0, 'EyelinerPrimary', {fg = '#61afef'})
-        vim.api.nvim_set_hl(0, 'EyelinerSecondary', {fg = '#e5c07b'})
-
     end
 }
 
