@@ -1,5 +1,8 @@
 local config = {
     updater = {channel = "stable"},
+
+    -- Set colorscheme to use
+    colorscheme = "tundra",
     options = {
         opt = {
             clipboard = "",
@@ -41,6 +44,7 @@ local config = {
         -- Add plugins, the packer syntax without the "use"
         init = {
             {"alexghergh/nvim-tmux-navigation"},
+            {"sam4llis/nvim-tundra"},
             {"ralismark/opsort.vim"},
             {
                 "ray-x/lsp_signature.nvim",
@@ -110,15 +114,6 @@ local config = {
 
         end
     },
-    -- Modify which-key registration
-    ["which-key"] = {
-        -- Add bindings to the normal mode <leader> mappings
-        register_n_leader = {
-            ["a"] = {"<cmd>Telescope live_grep<CR>", "Find Files"},
-            ["q"] = {"<cmd>q<CR>", "Close"},
-            ["z"] = {"<cmd>wq<CR>", "Save and close"}
-        }
-    },
     cmp = {
         source_priority = {
             nvim_lsp = 1000,
@@ -156,6 +151,11 @@ local config = {
     },
     mappings = {
         n = {
+            ["<leader>a"] = {
+                "<cmd>Telescope live_grep<CR>",
+                desc = "Find Words"
+            },
+            ["<leader>q"] = {"<cmd>q!<CR>", desc = "Close"},
             [";"] = {"<cmd>Telescope buffers<CR>", desc = "Find Buffers"},
             ["<S-k>"] = {"6k", desc = 'Move 6 lines up'},
             ["<S-j>"] = {"6j", desc = 'Move 6 lines down'},
