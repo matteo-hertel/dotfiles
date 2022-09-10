@@ -53,6 +53,14 @@ local config = {
                     require("lsp_signature").setup()
                 end
             },
+            {
+                'echasnovski/mini.nvim',
+                branch = 'stable',
+                config = function()
+                    require('mini.ai').setup()
+                    require('mini.surround').setup()
+                end
+            },
             ["windwp/nvim-autopairs"] = {disable = true},
             ["windwp/nvim-ts-autotag"] = {disable = true},
             ["stevearc/aerial.nvim"] = {disable = true},
