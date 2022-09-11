@@ -46,6 +46,7 @@ local config = {
             {"alexghergh/nvim-tmux-navigation"},
             {"sam4llis/nvim-tundra"},
             {"ralismark/opsort.vim"},
+            {"ellisonleao/glow.nvim"},
             {
                 "ray-x/lsp_signature.nvim",
                 event = "BufRead",
