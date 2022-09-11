@@ -62,6 +62,10 @@ local config = {
                     require('mini.surround').setup()
                 end
             },
+            {
+                "cseickel/diagnostic-window.nvim",
+                requires = {"MunifTanjim/nui.nvim"}
+            },
             ["windwp/nvim-autopairs"] = {disable = true},
             ["windwp/nvim-ts-autotag"] = {disable = true},
             ["stevearc/aerial.nvim"] = {disable = true},
@@ -165,6 +169,7 @@ local config = {
                 desc = "Find Words"
             },
             ["<leader>q"] = {"<cmd>q!<CR>", desc = "Close"},
+            ["<leader>wq"] = {"<cmd>wq!<CR>", desc = "Save and Close"},
             [";"] = {"<cmd>Telescope buffers<CR>", desc = "Find Buffers"},
             ["<S-k>"] = {"6k", desc = 'Move 6 lines up'},
             ["<S-j>"] = {"6j", desc = 'Move 6 lines down'},
