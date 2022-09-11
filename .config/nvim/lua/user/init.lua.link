@@ -1,6 +1,5 @@
 local config = {
     updater = {channel = "stable"},
-
     -- Set colorscheme to use
     colorscheme = "tundra",
     options = {
@@ -23,7 +22,6 @@ local config = {
             wrap = true -- soft wrap line
         }
     },
-
     enabled = {
         bufferline = true,
         colorizer = true,
@@ -65,6 +63,10 @@ local config = {
             {
                 "cseickel/diagnostic-window.nvim",
                 requires = {"MunifTanjim/nui.nvim"}
+            },
+            {
+                "folke/trouble.nvim",
+                config = function() require("trouble").setup {} end
             },
             ["windwp/nvim-autopairs"] = {disable = true},
             ["windwp/nvim-ts-autotag"] = {disable = true},
@@ -194,6 +196,14 @@ local config = {
             ["gc"] = {
                 "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
                 desc = "Toggle Comments"
+            },
+            ["<leader>lt"] = {
+                "<cmd>TroubleToggle<cr>",
+                desc = "Toggle diagnostics"
+            },
+            ["<leader>lq"] = {
+                "<cmd>TroubleToggle quickfix<cr>",
+                desc = "Toggle quickfix"
             }
 
         },
