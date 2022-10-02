@@ -1,237 +1,251 @@
 local config = {
-    updater = {channel = "stable"},
-    -- Set colorscheme to use
-    colorscheme = "tundra",
-    options = {
-        opt = {
-            clipboard = "",
-            mouse = "",
-            foldexpr = "nvim_treesitter#foldexpr()", -- set Treesitter based folding
-            foldmethod = "expr",
-            linebreak = true, -- linebreak soft wrap at words
-            list = true, -- show whitespace characters
-            listchars = {
-                extends = "⟩",
-                nbsp = "␣",
-                precedes = "⟨",
-                tab = "│→",
-                trail = "·"
-            },
-            shortmess = vim.opt.shortmess + {I = true},
-            showbreak = "↪ ",
-            wrap = true -- soft wrap line
-        }
-    },
-    enabled = {
-        bufferline = true,
-        colorizer = true,
-        comment = true,
-        dashboard = true,
-        gitsigns = true,
-        indent_blankline = true,
-        lualine = true,
-        neo_tree = true,
-        neoscroll = true,
-        symbols_outline = true,
-        toggle_term = true,
-        ts_rainbow = true,
-        which_key = true
-    },
-    -- Configure plugins
-    plugins = {
-        -- Add plugins, the packer syntax without the "use"
-        init = {
-            {"alexghergh/nvim-tmux-navigation"},
-            {"sam4llis/nvim-tundra"},
-            {"ralismark/opsort.vim"},
-            {"ellisonleao/glow.nvim"},
-            {
-                "ray-x/lsp_signature.nvim",
-                event = "BufRead",
-                config = function()
-                    require("lsp_signature").setup()
-                end
-            },
-            {
-                'echasnovski/mini.nvim',
-                branch = 'stable',
-                config = function()
-                    require('mini.ai').setup()
-                    require('mini.surround').setup()
-                end
-            },
-            {
-                "cseickel/diagnostic-window.nvim",
-                requires = {"MunifTanjim/nui.nvim"}
-            },
-            {
-                "folke/trouble.nvim",
-                config = function() require("trouble").setup {} end
-            },
-            ["windwp/nvim-autopairs"] = {disable = true},
-            ["windwp/nvim-ts-autotag"] = {disable = true},
-            ["stevearc/aerial.nvim"] = {disable = true},
-            ["mrjones2014/smart-splits.nvim"] = {disable = true},
-            ["declancm/cinnamon.nvim"] = {disable = true},
-            ["akinsho/bufferline.nvim"] = {disable = true},
-            ["Shatur/neovim-session-manager"] = {disable = true}
-
-        },
-        ["neo-tree"] = {
-            open_on_setup = true,
-            window = {width = 40},
-            filesystem = {
-                filtered_items = {
-                    hide_dotfiles = false,
-                    hide_gitignored = false,
-                    hide_by_name = {".DS_Store", "thumbs.db"}
-                }
-            }
-        },
-        telescope = {
-            pickers = {
-                buffers = {sort_lastused = true},
-                mappings = {
-                    i = {
-                        ["<C-n>"] = require("telescope.actions").cycle_history_next,
-                        ["<C-p>"] = require("telescope.actions").cycle_history_prev
-                    }
-                }
-            }
-        },
-        -- null-ls configuration
-        ["null-ls"] = function(config)
-            local null_ls = require "null-ls"
-            local formatting = null_ls.builtins.formatting
-            local diagnostics = null_ls.builtins.diagnostics
-            -- Check supported formatters and linters
-            -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-            -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-            config.sources = {
-                -- Formatters
-                formatting.prettier.with({prefer_local = "node_modules/.bin"}),
-                formatting.lua_format, -- Linters
-                diagnostics.eslint.with({prefer_local = "node_modules/.bin"}),
-                diagnostics.luacheck
-            }
-            -- set up null-ls's on_attach function
-            config.on_attach = function(client)
-                -- NOTE: You can remove this on attach function to disable format on save
-                if client.resolved_capabilities.document_formatting then
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        desc = "Auto format before save",
-                        pattern = "<buffer>",
-                        callback = vim.lsp.buf.formatting_sync
-                    })
-                end
-            end
-            return config
-
-        end
-    },
-    cmp = {
-        source_priority = {
-            nvim_lsp = 1000,
-            luasnip = 750,
-            buffer = 500,
-            path = 250
-        }
-    },
-    lsp = {
-        mappings = {
-            n = {
-                -- on_attach adds a default binding to K, I use that for moving up 6 lines
-                -- so I need to delete the binding and update the over doc to gi
-                ["K"] = false
-            }
-        },
-        on_attach = function()
-            vim.keymap.set("n", "gi", vim.lsp.buf.hover,
-                           {desc = "Hover symbol details", buffer = 0})
-        end,
-        ["server-settings"] = {
-            sumneko_lua = {
-                settings = {
-                    Lua = {
-                        runtime = {version = 'LuaJIT'},
-                        diagnostics = {
-                            -- Get the language server to recognize the `vim` global
-                            globals = {'vim'}
-                        }
-                    }
-                }
-            }
-        }
-
-    },
-    mappings = {
-        n = {
-            ["<leader>a"] = {
-                "<cmd>Telescope live_grep<CR>",
-                desc = "Find Words"
-            },
-            ["<leader>q"] = {"<cmd>q!<CR>", desc = "Close"},
-            ["<leader>wq"] = {"<cmd>wq!<CR>", desc = "Save and Close"},
-            [";"] = {"<cmd>Telescope buffers<CR>", desc = "Find Buffers"},
-            ["<S-k>"] = {"6k", desc = 'Move 6 lines up'},
-            ["<S-j>"] = {"6j", desc = 'Move 6 lines down'},
-            ["<S-h>"] = {"6h", desc = 'Move 6 char left'},
-            ["<S-l>"] = {"6l", desc = 'Move 6 char right'},
-            ["<C-h>"] = {
-                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
-                desc = "Move to tmux pane Left"
-            },
-            ["<C-j>"] = {
-                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
-                desc = "Move to tmux pane Down"
-            },
-            ["<C-k>"] = {
-                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
-                desc = "Move to tmux pane Up"
-            },
-            ["<C-l>"] = {
-                "<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
-                desc = "Move to tmux pane Right"
-            },
-            ["gc"] = {
-                "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
-                desc = "Toggle Comments"
-            },
-            ["<leader>lt"] = {
-                "<cmd>TroubleToggle<cr>",
-                desc = "Toggle diagnostics"
-            },
-            ["<leader>lq"] = {
-                "<cmd>TroubleToggle quickfix<cr>",
-                desc = "Toggle quickfix"
-            }
-
-        },
-        v = {
-            ['<leader>y'] = {'"+y', desc = "Copy to system clipboard"},
-            ["gc"] = {
-                "<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>",
-                desc = "Toggle comment line"
-            }
-        }
-
-    },
-    -- 
-    -- This function is run last
-    polish = function()
-        vim.filetype.add({
-            extension = {
-                -- tried to use the pattern table but no dice with the config
-                --     ["~/%.config/**/*.lua.link"] = "lua" but no dice
-                link = function(path)
-                    if string.find(path, "lua") then
-                        return "lua"
-                    end
-                    return "sh"
-                end
-            }
-        })
-    end
+	updater = {
+		remote = "origin", -- remote to use
+		channel = "nightly", -- "stable" or "nightly"
+		version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
+		branch = "main", -- branch name (NIGHTLY ONLY)
+		commit = nil, -- commit hash (NIGHTLY ONLY)
+		pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
+		skip_prompts = false, -- skip prompts about breaking changes
+		show_changelog = true, -- show the changelog after performing an update
+		auto_reload = false, -- automatically reload and sync packer after a successful update
+		auto_quit = false, -- automatically quit the current session after a successful update
+	},
+	-- Set colorscheme to use
+	colorscheme = "tundra",
+	options = {
+		opt = {
+			clipboard = "",
+			mouse = "",
+			-- foldexpr = "nvim_treesitter#foldexpr()", -- set Treesitter based folding
+			-- foldmethod = "expr",
+			linebreak = true, -- linebreak soft wrap at words
+			list = true, -- show whitespace characters
+			listchars = {
+				extends = "⟩",
+				nbsp = "␣",
+				precedes = "⟨",
+				tab = "│→",
+				trail = "·",
+			},
+			shortmess = vim.opt.shortmess + { I = true },
+			showbreak = "↪ ",
+			wrap = true, -- soft wrap line
+		},
+	},
+	-- Configure plugins
+	plugins = {
+		-- Add plugins, the packer syntax without the "use"
+		init = {
+			{ "alexghergh/nvim-tmux-navigation" },
+			{ "sam4llis/nvim-tundra" },
+			{ "ralismark/opsort.vim" },
+			{ "ellisonleao/glow.nvim" },
+			{
+				"ray-x/lsp_signature.nvim",
+				event = "BufRead",
+				config = function()
+					require("lsp_signature").setup()
+				end,
+			},
+			{
+				"epwalsh/obsidian.nvim",
+				requires = { "nvim-lua/plenary.nvim" },
+				config = function()
+					require("obsidian").setup({
+						dir = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main",
+						note_id_func = function(title)
+							-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+							local suffix = ""
+							if title ~= nil then
+								-- If title is given, transform it into valid file name.
+								suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+							else
+								-- If title is nil, just add 4 random uppercase letters to the suffix.
+								for _ in 1, 4 do
+									suffix = suffix .. string.char(math.random(65, 90))
+								end
+							end
+							return tostring(os.time()) .. "-" .. suffix
+						end,
+						completion = {
+							nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+						},
+					})
+				end,
+			},
+			{
+				"echasnovski/mini.nvim",
+				branch = "stable",
+				config = function()
+					require("mini.ai").setup()
+					require("mini.surround").setup()
+				end,
+			},
+			{
+				"cseickel/diagnostic-window.nvim",
+				requires = { "MunifTanjim/nui.nvim" },
+			},
+			{
+				"folke/trouble.nvim",
+				config = function()
+					require("trouble").setup({})
+				end,
+			},
+			["windwp/nvim-autopairs"] = { disable = true },
+			["windwp/nvim-ts-autotag"] = { disable = true },
+			["stevearc/aerial.nvim"] = { disable = true },
+			["mrjones2014/smart-splits.nvim"] = { disable = true },
+			["akinsho/bufferline.nvim"] = { disable = true },
+			["Shatur/neovim-session-manager"] = { disable = true },
+		},
+		["neo-tree"] = {
+			open_on_setup = true,
+			window = { width = 40 },
+			filesystem = {
+				filtered_items = {
+					hide_dotfiles = false,
+					hide_gitignored = false,
+					hide_by_name = { ".DS_Store", "thumbs.db" },
+				},
+			},
+		},
+		telescope = {
+			pickers = {
+				buffers = { sort_lastused = true },
+				mappings = {
+					i = {
+						["<C-n>"] = require("telescope.actions").cycle_history_next,
+						["<C-p>"] = require("telescope.actions").cycle_history_prev,
+					},
+				},
+			},
+		},
+		-- null-ls configuration
+		["null-ls"] = function(config)
+			local null_ls = require("null-ls")
+			local formatting = null_ls.builtins.formatting
+			local diagnostics = null_ls.builtins.diagnostics
+			-- Check supported formatters and linters
+			-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+			-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+			config.sources = {
+				-- Formatters
+				formatting.prettier.with({ prefer_local = "node_modules/.bin" }),
+				formatting.lua_format, -- Linters
+				diagnostics.eslint.with({ prefer_local = "node_modules/.bin" }),
+				diagnostics.luacheck,
+			}
+			return config
+		end,
+		-- use mason-lspconfig to configure LSP installations
+		["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
+			ensure_installed = { "sumneko_lua", "tsserver" },
+		},
+		-- use mason-null-ls to install and setup configure null-ls sources
+		["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
+			ensure_installed = { "stylua", "prettier" },
+		},
+	},
+	cmp = {
+		source_priority = {
+			nvim_lsp = 1000,
+			luasnip = 750,
+			buffer = 500,
+			path = 250,
+		},
+	},
+	lsp = {
+		mappings = {
+			n = {
+				-- on_attach adds a default binding to K, I use that for moving up 6 lines
+				-- so I need to delete the binding and update the over doc to gi
+				["K"] = false,
+			},
+		},
+		on_attach = function()
+			vim.keymap.set("n", "gi", vim.lsp.buf.hover, { desc = "Hover symbol details", buffer = 0 })
+		end,
+		["server-settings"] = {
+			sumneko_lua = {
+				settings = {
+					Lua = {
+						runtime = { version = "LuaJIT" },
+						diagnostics = {
+							-- Get the language server to recognize the `vim` global
+							globals = { "vim" },
+						},
+					},
+				},
+			},
+		},
+	},
+	mappings = {
+		n = {
+			["<leader>a"] = {
+				"<cmd>Telescope live_grep<CR>",
+				desc = "Find Words",
+			},
+			["<leader>q"] = { "<cmd>q!<CR>", desc = "Close" },
+			["<leader>wq"] = { "<cmd>wq!<CR>", desc = "Save and Close" },
+			[";"] = { "<cmd>Telescope buffers<CR>", desc = "Find Buffers" },
+			["<S-k>"] = { "6k", desc = "Move 6 lines up" },
+			["<S-j>"] = { "6j", desc = "Move 6 lines down" },
+			["<S-h>"] = { "6h", desc = "Move 6 char left" },
+			["<S-l>"] = { "6l", desc = "Move 6 char right" },
+			["<C-h>"] = {
+				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
+				desc = "Move to tmux pane Left",
+			},
+			["<C-j>"] = {
+				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
+				desc = "Move to tmux pane Down",
+			},
+			["<C-k>"] = {
+				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
+				desc = "Move to tmux pane Up",
+			},
+			["<C-l>"] = {
+				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
+				desc = "Move to tmux pane Right",
+			},
+			["gc"] = {
+				"<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
+				desc = "Toggle Comments",
+			},
+			["<leader>lt"] = {
+				"<cmd>TroubleToggle<cr>",
+				desc = "Toggle diagnostics",
+			},
+			["<leader>lq"] = {
+				"<cmd>TroubleToggle quickfix<cr>",
+				desc = "Toggle quickfix",
+			},
+		},
+		v = {
+			["<leader>y"] = { '"+y', desc = "Copy to system clipboard" },
+			["gc"] = {
+				"<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>",
+				desc = "Toggle comment line",
+			},
+		},
+	},
+	--
+	-- This function is run last
+	polish = function()
+		vim.filetype.add({
+			extension = {
+				-- tried to use the pattern table but no dice with the config
+				--     ["~/%.config/**/*.lua.link"] = "lua" but no dice
+				 link = function(path)
+				 	if string.find(path, "lua") then
+				 		return "lua"
+				 	end
+				 	return "sh"
+				 end,
+			},
+		})
+	end,
 }
 
 return config
