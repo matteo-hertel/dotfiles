@@ -1,17 +1,7 @@
 local config = {
 	updater = {
-		remote = "origin", -- remote to use
-		channel = "nightly", -- "stable" or "nightly"
-		version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
-		branch = "main", -- branch name (NIGHTLY ONLY)
-		commit = nil, -- commit hash (NIGHTLY ONLY)
-		pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
-		skip_prompts = false, -- skip prompts about breaking changes
-		show_changelog = true, -- show the changelog after performing an update
-		auto_reload = false, -- automatically reload and sync packer after a successful update
-		auto_quit = false, -- automatically quit the current session after a successful update
+		channel = "stable", -- "stable" or "nightly"
 	},
-	-- Set colorscheme to use
 	colorscheme = "tundra",
 	options = {
 		opt = {
@@ -92,6 +82,28 @@ local config = {
 					require("trouble").setup({})
 				end,
 			},
+			{
+				"zbirenbaum/copilot.lua",
+				event = { "VimEnter" },
+				after = "nvim-cmp",
+				config = function()
+					vim.defer_fn(function()
+						require("copilot").setup({
+							suggestion = { enabled = true, auto_trigger = true },
+						})
+					end, 100)
+				end,
+			},
+			{
+				"zbirenbaum/copilot-cmp",
+				after = { "copilot.lua" },
+				config = function()
+					require("copilot_cmp").setup({
+						method = "getCompletionsCycling",
+					})
+					astronvim.add_cmp_source({ name = "copilot", priority = 1000 })
+				end,
+			},
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
 			["stevearc/aerial.nvim"] = { disable = true },
@@ -149,7 +161,8 @@ local config = {
 	},
 	cmp = {
 		source_priority = {
-			nvim_lsp = 1000,
+			copilot = 1000,
+			nvim_lsp = 900,
 			luasnip = 750,
 			buffer = 500,
 			path = 250,
@@ -237,15 +250,14 @@ local config = {
 			extension = {
 				-- tried to use the pattern table but no dice with the config
 				--     ["~/%.config/**/*.lua.link"] = "lua" but no dice
-				 link = function(path)
-				 	if string.find(path, "lua") then
-				 		return "lua"
-				 	end
-				 	return "sh"
-				 end,
+				link = function(path)
+					if string.find(path, "lua") then
+						return "lua"
+					end
+					return "sh"
+				end,
 			},
 		})
 	end,
 }
-
 return config
