@@ -31,6 +31,7 @@ local config = {
 			{ "sam4llis/nvim-tundra" },
 			{ "ralismark/opsort.vim" },
 			{ "ellisonleao/glow.nvim" },
+			{ "almo7aya/openingh.nvim" },
 			{
 				"ray-x/lsp_signature.nvim",
 				event = "BufRead",
@@ -89,7 +90,8 @@ local config = {
 				config = function()
 					vim.defer_fn(function()
 						require("copilot").setup({
-							suggestion = { enabled = true, auto_trigger = true },
+							suggestion = { enabled = true, auto_trigger = false },
+							panel = { enabled = false, auto_trigger = false },
 						})
 					end, 100)
 				end,
@@ -136,19 +138,11 @@ local config = {
 		-- null-ls configuration
 		["null-ls"] = function(config)
 			local null_ls = require("null-ls")
-			local formatting = null_ls.builtins.formatting
-			local diagnostics = null_ls.builtins.diagnostics
-			-- Check supported formatters and linters
-			-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-			-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 			config.sources = {
-				-- Formatters
-				formatting.prettier.with({ prefer_local = "node_modules/.bin" }),
-				formatting.lua_format, -- Linters
-				diagnostics.eslint.with({ prefer_local = "node_modules/.bin" }),
-				diagnostics.luacheck,
+				-- Set a formatter that is manually installed
+				null_ls.builtins.formatting.prettier,
 			}
-			return config
+			return config -- return final config table to use in require("null-ls").setup(config)
 		end,
 		-- use mason-lspconfig to configure LSP installations
 		["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
@@ -156,7 +150,7 @@ local config = {
 		},
 		-- use mason-null-ls to install and setup configure null-ls sources
 		["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
-			ensure_installed = { "stylua", "prettier" },
+			ensure_installed = { "stylua", "prettier", "eslint_d" },
 		},
 	},
 	cmp = {
