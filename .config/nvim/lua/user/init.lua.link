@@ -106,6 +106,12 @@ local config = {
 					astronvim.add_cmp_source({ name = "copilot", priority = 1000 })
 				end,
 			},
+			{
+				"ggandor/leap.nvim",
+				config = function()
+					require("leap").add_default_mappings()
+				end,
+			},
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
 			["stevearc/aerial.nvim"] = { disable = true },
