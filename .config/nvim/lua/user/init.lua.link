@@ -90,7 +90,17 @@ local config = {
 				config = function()
 					vim.defer_fn(function()
 						require("copilot").setup({
-							suggestion = { enabled = true, auto_trigger = false },
+							suggestion = {
+								enabled = true,
+								auto_trigger = true,
+								debounce = 75,
+								keymap = {
+									accept = "kk",
+									dismiss = "xx",
+									prev = "{{",
+									next = "}}",
+								},
+							},
 							panel = { enabled = false, auto_trigger = false },
 						})
 					end, 100)
@@ -196,12 +206,15 @@ local config = {
 	mappings = {
 		n = {
 			["<leader>a"] = {
-				"<cmd>Telescope live_grep<CR>",
+				"<cmd>lua require('telescope.builtin').live_grep()<CR>",
 				desc = "Find Words",
 			},
 			["<leader>q"] = { "<cmd>q!<CR>", desc = "Close" },
 			["<leader>wq"] = { "<cmd>wq!<CR>", desc = "Save and Close" },
-			[";"] = { "<cmd>Telescope buffers<CR>", desc = "Find Buffers" },
+			[";"] = {
+				"<cmd>lua require('telescope.builtin').buffers()<CR>",
+				desc = "Find Buffers",
+			},
 			["<S-k>"] = { "6k", desc = "Move 6 lines up" },
 			["<S-j>"] = { "6j", desc = "Move 6 lines down" },
 			["<S-h>"] = { "6h", desc = "Move 6 char left" },
@@ -223,7 +236,7 @@ local config = {
 				desc = "Move to tmux pane Right",
 			},
 			["gc"] = {
-				"<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
+				"<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
 				desc = "Toggle Comments",
 			},
 			["<leader>lt"] = {
@@ -238,7 +251,7 @@ local config = {
 		v = {
 			["<leader>y"] = { '"+y', desc = "Copy to system clipboard" },
 			["gc"] = {
-				"<esc><cmd>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>",
+				"<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>",
 				desc = "Toggle comment line",
 			},
 		},
