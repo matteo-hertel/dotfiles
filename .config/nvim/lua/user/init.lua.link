@@ -27,7 +27,6 @@ local config = {
 	plugins = {
 		-- Add plugins, the packer syntax without the "use"
 		init = {
-			{ "alexghergh/nvim-tmux-navigation" },
 			{ "sam4llis/nvim-tundra" },
 			{ "ralismark/opsort.vim" },
 			{ "ellisonleao/glow.nvim" },
@@ -97,7 +96,6 @@ local config = {
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
 			["stevearc/aerial.nvim"] = { disable = true },
-			["mrjones2014/smart-splits.nvim"] = { disable = true },
 			["akinsho/bufferline.nvim"] = { disable = true },
 			["Shatur/neovim-session-manager"] = { disable = true },
 		},
@@ -192,19 +190,19 @@ local config = {
 			["<S-h>"] = { "6h", desc = "Move 6 char left" },
 			["<S-l>"] = { "6l", desc = "Move 6 char right" },
 			["<C-h>"] = {
-				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<CR>",
+				"<cmd>lua require('smart-splits').move_cursor_left()<CR>",
 				desc = "Move to tmux pane Left",
 			},
 			["<C-j>"] = {
-				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<CR>",
+				"<cmd>lua require('smart-splits').move_cursor_down()<CR>",
 				desc = "Move to tmux pane Down",
 			},
 			["<C-k>"] = {
-				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<CR>",
+				"<cmd>lua require('smart-splits').move_cursor_up()<CR>",
 				desc = "Move to tmux pane Up",
 			},
 			["<C-l>"] = {
-				"<cmd>lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<CR>",
+				"<cmd>lua require('smart-splits').move_cursor_right()<CR>",
 				desc = "Move to tmux pane Right",
 			},
 			["gc"] = {
