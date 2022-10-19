@@ -149,6 +149,10 @@ local config = {
 		},
 	},
 	lsp = {
+		formatting = {
+			format_on_save = true,
+			timeout_ms = 3200,
+		},
 		mappings = {
 			n = {
 				-- on_attach adds a default binding to K, I use that for moving up 6 lines
