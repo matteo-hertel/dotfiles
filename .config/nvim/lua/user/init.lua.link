@@ -39,6 +39,16 @@ local config = {
 				end,
 			},
 			{
+				"princejoogie/dir-telescope.nvim",
+				requires = { "nvim-telescope/telescope.nvim" },
+				config = function()
+					require("dir-telescope").setup({
+						hidden = true,
+						respect_gitignore = true,
+					})
+				end,
+			},
+			{
 				"echasnovski/mini.nvim",
 				branch = "stable",
 				config = function()
@@ -87,12 +97,6 @@ local config = {
 					astronvim.add_cmp_source({ name = "copilot", priority = 1000 })
 				end,
 			},
-			{
-				"ggandor/leap.nvim",
-				config = function()
-					require("leap").add_default_mappings()
-				end,
-			},
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
 			["stevearc/aerial.nvim"] = { disable = true },
@@ -111,6 +115,9 @@ local config = {
 			},
 		},
 		telescope = {
+			{ defaults = {
+				file_ignore_patterns = { ".git" },
+			} },
 			pickers = {
 				buffers = { sort_lastused = true },
 				mappings = {
@@ -182,6 +189,14 @@ local config = {
 			["<leader>a"] = {
 				"<cmd>lua require('telescope.builtin').live_grep()<CR>",
 				desc = "Find Words",
+			},
+			["<leader>fd"] = {
+				"<cmd>lua require('telescope').extensions.dir.find_files()<CR>",
+				desc = "Find file in directory",
+			},
+			["<leader>fa"] = {
+				"<cmd>lua require('telescope').extensions.dir.live_grep()<CR>",
+				desc = "Grep file in directory",
 			},
 			["<leader>q"] = { "<cmd>q!<CR>", desc = "Close" },
 			["<leader>wq"] = { "<cmd>wq!<CR>", desc = "Save and Close" },
