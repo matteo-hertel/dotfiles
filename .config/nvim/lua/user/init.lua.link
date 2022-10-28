@@ -236,6 +236,7 @@ local config = {
 				"<cmd>TroubleToggle quickfix<cr>",
 				desc = "Toggle quickfix",
 			},
+			["<F1>"] = "<esc>",
 		},
 		v = {
 			["<leader>y"] = { '"+y', desc = "Copy to system clipboard" },
