@@ -38,7 +38,7 @@ local alphaSettings = function(opts)
 					"",
 					"<space>lt - To toggle the diagnostics window",
 					"",
-					"<space>lq - To toggle the quickfix window",
+					"<space>ta - To toggle the aerial navigation window",
 				},
 				opts = { position = "center", hl = "Test" },
 			},

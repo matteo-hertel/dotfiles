@@ -27,6 +27,25 @@ local config = {
 	plugins = {
 		-- Add plugins, the packer syntax without the "use"
 		init = {
+			{
+				"nvim-treesitter/nvim-treesitter-context",
+				after = "nvim-treesitter",
+				config = function()
+					require("treesitter-context").setup({
+						enable = true,
+					})
+				end,
+			},
+			{
+				"AbdelrahmanDwedar/awesome-nvim-colorschemes",
+				config = function()
+					-- require("onedark")
+					-- 	.setup({
+					-- 		style = "deep",
+					-- 	})
+					-- 	.load()
+				end,
+			},
 			{ "sam4llis/nvim-tundra" },
 			{ "ralismark/opsort.vim" },
 			{ "ellisonleao/glow.nvim" },
@@ -99,7 +118,6 @@ local config = {
 			},
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
-			["stevearc/aerial.nvim"] = { disable = true },
 			["akinsho/bufferline.nvim"] = { disable = true },
 			["Shatur/neovim-session-manager"] = { disable = true },
 		},
@@ -158,7 +176,7 @@ local config = {
 	lsp = {
 		formatting = {
 			format_on_save = true,
-			timeout_ms = 3200,
+			timeout_ms = 10000,
 		},
 		mappings = {
 			n = {
@@ -235,6 +253,10 @@ local config = {
 			["<leader>lq"] = {
 				"<cmd>TroubleToggle quickfix<cr>",
 				desc = "Toggle quickfix",
+			},
+			["<leader>ta"] = {
+				"<cmd>AerialToggle<cr>",
+				desc = "Toggle aerial",
 			},
 			["<F1>"] = "<esc>",
 		},
