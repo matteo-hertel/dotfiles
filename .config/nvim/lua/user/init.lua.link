@@ -46,7 +46,23 @@ local config = {
 					-- 	.load()
 				end,
 			},
-			{ "sam4llis/nvim-tundra" },
+			{
+				"sam4llis/nvim-tundra",
+				config = function()
+					require("nvim-tundra").setup({
+						plugins = {
+							lsp = true,
+							treesitter = true,
+							nvimtree = true,
+							cmp = true,
+							context = true,
+							dbui = true,
+							gitsigns = true,
+							telescope = true,
+						},
+					})
+				end,
+			},
 			{ "ralismark/opsort.vim" },
 			{ "ellisonleao/glow.nvim" },
 			{ "almo7aya/openingh.nvim" },
