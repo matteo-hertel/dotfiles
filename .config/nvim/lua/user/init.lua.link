@@ -64,6 +64,7 @@ local config = {
 				end,
 			},
 			{ "ralismark/opsort.vim" },
+			{ "tamton-aquib/duck.nvim" },
 			{ "ellisonleao/glow.nvim" },
 			{ "almo7aya/openingh.nvim" },
 			{
@@ -231,6 +232,14 @@ local config = {
 			["<leader>fa"] = {
 				"<cmd>lua require('telescope').extensions.dir.live_grep()<CR>",
 				desc = "Grep file in directory",
+			},
+			["<leader>dn"] = {
+				"<cmd>lua require('duck').hatch()<CR>",
+				desc = "New duck",
+			},
+			["<leader>dk"] = {
+				"<cmd>lua require('duck').cook()<CR>",
+				desc = "Cook duck",
 			},
 			["<leader>q"] = { "<cmd>q!<CR>", desc = "Close" },
 			["<leader>wq"] = { "<cmd>wq!<CR>", desc = "Save and Close" },
