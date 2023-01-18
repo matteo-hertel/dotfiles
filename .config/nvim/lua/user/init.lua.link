@@ -1,6 +1,6 @@
 local config = {
 	updater = {
-		channel = "stable", -- "stable" or "nightly"
+		channel = "stable",
 	},
 	colorscheme = "tundra",
 	options = {
@@ -27,25 +27,6 @@ local config = {
 	plugins = {
 		-- Add plugins, the packer syntax without the "use"
 		init = {
-			{
-				"nvim-treesitter/nvim-treesitter-context",
-				after = "nvim-treesitter",
-				config = function()
-					require("treesitter-context").setup({
-						enable = true,
-					})
-				end,
-			},
-			{
-				"AbdelrahmanDwedar/awesome-nvim-colorschemes",
-				config = function()
-					-- require("onedark")
-					-- 	.setup({
-					-- 		style = "deep",
-					-- 	})
-					-- 	.load()
-				end,
-			},
 			{
 				"sam4llis/nvim-tundra",
 				config = function()
@@ -163,22 +144,13 @@ local config = {
 				},
 			},
 		},
-		-- null-ls configuration
-		["null-ls"] = function(config)
-			local null_ls = require("null-ls")
-			config.sources = {
-				-- Set a formatter that is manually installed
-				null_ls.builtins.formatting.prettier,
-			}
-			return config -- return final config table to use in require("null-ls").setup(config)
-		end,
 		-- use mason-lspconfig to configure LSP installations
 		["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-			ensure_installed = { "sumneko_lua", "tsserver" },
+			ensure_installed = { "sumneko_lua", "tsserver", "eslint" },
 		},
 		-- use mason-null-ls to install and setup configure null-ls sources
 		["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
-			ensure_installed = { "stylua", "prettier", "eslint_d" },
+			ensure_installed = { "stylua", "prettier" },
 		},
 	},
 	cmp = {
