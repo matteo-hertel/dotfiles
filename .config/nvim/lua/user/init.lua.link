@@ -269,15 +269,10 @@ local config = {
 	-- This function is run last
 	polish = function()
 		vim.filetype.add({
-			extension = {
-				-- tried to use the pattern table but no dice with the config
-				--     ["~/%.config/**/*.lua.link"] = "lua" but no dice
-				link = function(path)
-					if string.find(path, "lua") then
-						return "lua"
-					end
-					return "sh"
-				end,
+			pattern = {
+				[".*%.lua.link"] = "lua",
+				[".*%.sh.link"] = "sh",
+				[".*%.link"] = "sh",
 			},
 		})
 	end,
