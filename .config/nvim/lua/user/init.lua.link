@@ -85,33 +85,22 @@ local config = {
 			},
 			{
 				"zbirenbaum/copilot.lua",
-				event = { "VimEnter" },
-				after = "nvim-cmp",
+				cmd = "Copilot",
+				event = "InsertEnter",
 				config = function()
-					vim.defer_fn(function()
-						require("copilot").setup({
-							suggestion = {
-								enabled = true,
-								auto_trigger = true,
-								debounce = 75,
-								keymap = {
-									accept = "kk",
-									dismiss = "xx",
-								},
+					require("copilot").setup({
+						suggestion = {
+							enabled = true,
+							auto_trigger = true,
+							debounce = 75,
+							keymap = {
+								accept = "<C-CR>",
+								dismiss = "<C-x>",
+								next = "<C-n>",
 							},
-							panel = { enabled = false, auto_trigger = false },
-						})
-					end, 100)
-				end,
-			},
-			{
-				"zbirenbaum/copilot-cmp",
-				after = { "copilot.lua" },
-				config = function()
-					require("copilot_cmp").setup({
-						method = "getCompletionsCycling",
+						},
+						panel = { enabled = false, auto_trigger = false },
 					})
-					astronvim.add_cmp_source({ name = "copilot", priority = 1000 })
 				end,
 			},
 			["windwp/nvim-autopairs"] = { disable = true },
@@ -240,8 +229,10 @@ local config = {
 				desc = "Move to tmux pane Right",
 			},
 			["gc"] = {
-				"<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
-				desc = "Toggle Comments",
+				function()
+					require("Comment.api").toggle.linewise.current()
+				end,
+				desc = "Comment line",
 			},
 			["<leader>lt"] = {
 				"<cmd>TroubleToggle<cr>",
@@ -260,8 +251,10 @@ local config = {
 		v = {
 			["<leader>y"] = { '"+y', desc = "Copy to system clipboard" },
 			["gc"] = {
-				"<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>",
-				desc = "Toggle comment line",
+				function()
+					require("Comment.api").toggle.linewise(vim.fn.visualmode())
+				end,
+				desc = "Comment line",
 			},
 		},
 	},

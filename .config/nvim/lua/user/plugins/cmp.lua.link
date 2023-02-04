@@ -37,6 +37,10 @@ local sources = {
 }
 
 local cmpSettings = function(opts)
+	opts.mapping["<C-n>"] = nil
+	opts.completion = {
+		autocomplete = false,
+	}
 	opts.formatting = {
 		format = function(entry, vim_item)
 			vim_item.kind = icons[vim_item.kind]
