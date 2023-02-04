@@ -41,7 +41,22 @@ twosplit(){
     tmux switch -t $WORKSPACE_SESSION_NAME
 }
 
+twosplitNoEditor(){
+  tmux has-session -t $WORKSPACE_SESSION_NAME
+  if [ $? != 0 ]
+  then
+    tmux new-session -d -s $WORKSPACE_SESSION_NAME -n nvim
+    tmux send-keys -t $WORKSPACE_SESSION_NAME:0 "cd $WORKSPACE_PATH" C-m 
+    tmux splitw -t $WORKSPACE_SESSION_NAME:0 -h -p 35 
+    tmux selectp -t $WORKSPACE_SESSION_NAME:0
+    tmux send-keys -t $WORKSPACE_SESSION_NAME:0.1 "cd $WORKSPACE_PATH" C-m 
+  fi
+  if [ -z $TMUX ]
+  then
+    tmux attach -t $WORKSPACE_SESSION_NAME
+  fi
+    tmux switch -t $WORKSPACE_SESSION_NAME
+}
+
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
-alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplit"
-alias pihole="WORKSPACE_SESSION_NAME=pihole;COMMAND='ssh pi@192.168.0.43';singlesplit"
-alias notes="WORKSPACE_SESSION_NAME=notes;WORKSPACE_PATH=/Users/mhdev/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Main/;singlevim"
+alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplitNoEditor"
