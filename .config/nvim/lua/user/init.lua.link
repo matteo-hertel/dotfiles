@@ -103,11 +103,19 @@ local config = {
 					})
 				end,
 			},
+			{
+				"RishabhRD/popfix",
+			},
+			{ "RishabhRD/nvim-cheat.sh", after = "popfix" },
+			{
+				"windwp/nvim-spectre",
+			},
 			["windwp/nvim-autopairs"] = { disable = true },
 			["windwp/nvim-ts-autotag"] = { disable = true },
 			["akinsho/bufferline.nvim"] = { disable = true },
 			["Shatur/neovim-session-manager"] = { disable = true },
 		},
+
 		["neo-tree"] = {
 			open_on_setup = true,
 			window = { width = 40 },
@@ -245,6 +253,14 @@ local config = {
 			["<leader>ta"] = {
 				"<cmd>AerialToggle<cr>",
 				desc = "Toggle aerial",
+			},
+			["<leader>S"] = {
+				"<cmd>lua require('spectre').open()<CR>",
+				desc = "Open Spectre",
+			},
+			["<leader>sw"] = {
+				"<cmd>lua require('spectre').open_visual({select_word=true})<CR>",
+				desc = "Specre on current word",
 			},
 			["<F1>"] = "<esc>",
 		},
