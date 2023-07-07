@@ -40,7 +40,7 @@ local alphaSettings = function(opts)
 					"",
 					"<space>ta - To toggle the aerial navigation window",
 					"",
-					":Cheat - To query cheat.sh",
+					"<space>p - To paste withouth overriding clipboard",
 					"",
 				},
 				opts = { position = "center", hl = "Test" },
