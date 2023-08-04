@@ -10,7 +10,10 @@ local config = {
 			-- foldexpr = "nvim_treesitter#foldexpr()", -- set Treesitter based folding
 			-- foldmethod = "expr",
 			linebreak = true, -- linebreak soft wrap at words
-			list = true, -- show whitespace characters
+			list = true,     -- show whitespace characters
+			scrolloff = 999, -- keep cursor centered
+			colorcolumn = "80", -- show 80 character column
+			cursorline = true, -- highlight current line
 			listchars = {
 				extends = "⟩",
 				nbsp = "␣",
@@ -19,6 +22,7 @@ local config = {
 				trail = "·",
 			},
 			shortmess = vim.opt.shortmess + { I = true },
+			guicursor = "",
 			showbreak = "↪ ",
 			wrap = true, -- soft wrap line
 		},
@@ -136,9 +140,11 @@ local config = {
 			},
 		},
 		telescope = {
-			{ defaults = {
-				file_ignore_patterns = { ".git" },
-			} },
+			{
+				defaults = {
+					file_ignore_patterns = { ".git" },
+				},
+			},
 			pickers = {
 				buffers = { sort_lastused = true },
 				mappings = {
@@ -313,6 +319,7 @@ local config = {
 				[".*%.lua.link"] = "lua",
 				[".*%.sh.link"] = "sh",
 				[".*%.link"] = "sh",
+				["*%.mdx"] = "js",
 			},
 		})
 	end,
