@@ -302,6 +302,8 @@ local config = {
 			},
 		},
 		v = {
+			["J"] = { ":m '>+1<CR>gv=gv", desc = "Move line down" },
+			["K"] = { ":m '<-2<CR>gv=gv", desc = "Move line up" },
 			["<leader>y"] = { '"+y', desc = "Copy to system clipboard" },
 			["gc"] = {
 				function()
@@ -315,11 +317,10 @@ local config = {
 	-- This function is run last
 	polish = function()
 		vim.filetype.add({
+			extention = { mdx = "markdown" },
 			pattern = {
-				[".*%.lua.link"] = "lua",
-				[".*%.sh.link"] = "sh",
 				[".*%.link"] = "sh",
-				["*%.mdx"] = "js",
+				[".*%.lua.link"] = "lua",
 			},
 		})
 	end,
