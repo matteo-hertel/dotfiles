@@ -53,6 +53,15 @@ local config = {
 			{ "ellisonleao/glow.nvim" },
 			{ "almo7aya/openingh.nvim" },
 			{
+				"NStefan002/speedtyper.nvim",
+				branch = "main",
+				config = function()
+					require("speedtyper").setup({
+						-- your config
+					})
+				end,
+			},
+			{
 				"ray-x/lsp_signature.nvim",
 				event = "BufRead",
 				config = function()
@@ -286,11 +295,11 @@ local config = {
 				"<cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>",
 				desc = "Show Harpoon menu",
 			},
-			["<leader>n"] = {
+			["<C-n>"] = {
 				"<cmd>lua require('harpoon.ui').nav_next()<CR>",
 				desc = "Go to next Harpoon mark",
 			},
-			["<leader>p"] = {
+			["<C-p>"] = {
 				"<cmd>lua require('harpoon.ui').nav_prev()<CR>",
 				desc = "Go to prev Harpoon mark",
 			},
