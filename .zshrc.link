@@ -128,3 +128,10 @@ export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
 
 test -d "$HOME/.tea" && source <("$HOME/.tea/tea.xyz/v*/bin/tea" --magic --silent)
 export PATH=$PATH:$HOME/.maestro/bin
+
+# bun completions
+[ -s "/Users/mhdev/.bun/_bun" ] && source "/Users/mhdev/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

@@ -50,15 +50,11 @@ local config = {
 			},
 			{ "ralismark/opsort.vim" },
 			{ "tamton-aquib/duck.nvim" },
-			{ "ellisonleao/glow.nvim" },
-			{ "almo7aya/openingh.nvim" },
 			{
 				"NStefan002/speedtyper.nvim",
 				branch = "main",
 				config = function()
-					require("speedtyper").setup({
-						-- your config
-					})
+					require("speedtyper").setup({})
 				end,
 			},
 			{
