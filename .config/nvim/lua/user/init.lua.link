@@ -51,6 +51,14 @@ local config = {
 			{ "ralismark/opsort.vim" },
 			{ "tamton-aquib/duck.nvim" },
 			{
+				"bloznelis/before.nvim",
+				config = function()
+					require("before").setup({
+						history_size = 42,
+					})
+				end,
+			},
+			{
 				"NStefan002/speedtyper.nvim",
 				branch = "main",
 				config = function()
@@ -254,6 +262,14 @@ local config = {
 			["<C-l>"] = {
 				"<cmd>lua require('smart-splits').move_cursor_right()<CR>",
 				desc = "Move to tmux pane Right",
+			},
+			["<C-o>"] = {
+				"<cmd>lua require('before').jump_to_last_edit()<CR>",
+				desc = "Jump to last edit",
+			},
+			["<C-i>"] = {
+				"<cmd>lua require('before').jump_to_next_edit()<CR>",
+				desc = "Jump to last edit",
 			},
 			["gc"] = {
 				function()
