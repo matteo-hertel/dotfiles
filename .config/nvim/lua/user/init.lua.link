@@ -263,11 +263,11 @@ local config = {
 				"<cmd>lua require('smart-splits').move_cursor_right()<CR>",
 				desc = "Move to tmux pane Right",
 			},
-			["<C-o>"] = {
+			["<leader>o"] = {
 				"<cmd>lua require('before').jump_to_last_edit()<CR>",
 				desc = "Jump to last edit",
 			},
-			["<C-i>"] = {
+			["<leader>i"] = {
 				"<cmd>lua require('before').jump_to_next_edit()<CR>",
 				desc = "Jump to last edit",
 			},
