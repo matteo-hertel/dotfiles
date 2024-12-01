@@ -1,11 +1,11 @@
 #!/bin/bash
-CURRENT_DIR=$(pwd)
+CURRENT_DIR=$PWD
 cd "$(dirname "$0")"
-for f in $(pwd)/aliases/*; do
-   source $f
+for f in "$PWD"/aliases/*; do
+   source "$f"
 done
-for f in $(pwd)/tmux/*; do
-   source $f
+for f in "$PWD"/tmux/*; do
+   source "$f"
 done
 
-cd $CURRENT_DIR > /dev/null
+cd "$CURRENT_DIR" > /dev/null

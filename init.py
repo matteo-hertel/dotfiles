@@ -41,3 +41,4 @@ for root, dirs, files in os.walk(ROOT):
    for file in files:
         process_link(file, root)
 
+os.symlink(os.path.join(ROOT, '.config/nvim'), os.path.join(HOME, '.config/nvim'))
