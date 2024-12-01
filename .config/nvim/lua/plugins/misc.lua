@@ -6,6 +6,10 @@ return {
     event = "BufRead",
     config = function() require("lsp_signature").setup() end,
   },
+  { "package-info.nvim", enabled = false },
+  { "windwp/nvim-autopairs", enabled = false },
+  { "windwp/nvim-ts-autotag", enabled = false },
+  { "stevearc/resession.nvim", enabled = false },
 
   { "ralismark/opsort.vim" },
   { "tamton-aquib/duck.nvim" },
