@@ -1,5 +1,5 @@
-source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
-TERM="xterm-256color"
+source /opt/homebrew/opt/powerlevel10k/share/powerlevel10k/powerlevel10k.zsh-theme
+TERM="screen-256color"
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_user dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs date time vi_mode)
