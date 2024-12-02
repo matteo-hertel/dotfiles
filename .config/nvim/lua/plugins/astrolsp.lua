@@ -19,10 +19,6 @@ return {
       mappings = {
         n = {
           ["K"] = false,
-          ["gi"] = {
-            vim.lsp.buf.hover,
-            desc = "Hover simbol details",
-          },
         },
       },
     },

@@ -5,6 +5,10 @@ return {
   opts = {
     mappings = {
       n = {
+        ["gi"] = {
+          function() vim.lsp.buf.hover() end,
+          desc = "Hover simbol details",
+        },
         ["<leader>a"] = {
           "<cmd>lua require('telescope.builtin').live_grep()<CR>",
           desc = "Find Words",
