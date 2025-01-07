@@ -53,13 +53,9 @@ return {
           "<cmd>lua require('smart-splits').move_cursor_right()<CR>",
           desc = "Move to tmux pane Right",
         },
-        ["<leader>o"] = {
-          "<cmd>lua require('before').jump_to_last_edit()<CR>",
-          desc = "Jump to last edit",
-        },
-        ["<leader>i"] = {
-          "<cmd>lua require('before').jump_to_next_edit()<CR>",
-          desc = "Jump to last edit",
+        ["<Leader>n"] = {
+          "<cmd>Flote<CR>",
+          desc = "Per project note",
         },
         ["gc"] = {
           function() require("Comment.api").toggle.linewise.current() end,
@@ -76,10 +72,6 @@ return {
         ["<leader>ta"] = {
           "<cmd>AerialToggle<cr>",
           desc = "Toggle aerial",
-        },
-        ["<leader>S"] = {
-          "<cmd>lua require('spectre').open()<CR>",
-          desc = "Open Spectre",
         },
         ["<leader>sw"] = {
           "<cmd>lua require('spectre').open_visual({select_word=true})<CR>",
