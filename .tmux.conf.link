@@ -45,6 +45,7 @@ set -g mouse on
 set -g set-titles on
 set -g status-interval 1
 set -s escape-time 0
+set -s extended-keys on
 set-option -g history-limit 250000
 set-option -g focus-events on
 

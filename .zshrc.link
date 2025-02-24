@@ -14,7 +14,7 @@ source ~/.zshtheme
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
-plugins=(git colored-man-pages colorize github pip python macos yarn-autocompletions)
+plugins=(git colored-man-pages colorize github pip python macos yarn)
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -134,3 +134,4 @@ export PATH=$PATH:$HOME/.maestro/bin
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme

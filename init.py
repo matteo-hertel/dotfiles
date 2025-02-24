@@ -41,4 +41,7 @@ for root, dirs, files in os.walk(ROOT):
    for file in files:
         process_link(file, root)
 
-os.symlink(os.path.join(ROOT, '.config/nvim'), os.path.join(HOME, '.config/nvim'))
+try:
+    os.symlink(os.path.join(ROOT, '.config/nvim'), os.path.join(HOME, '.config/nvim'))
+except FileExistsError as e:
+            print ("Nvim config already linked ")
