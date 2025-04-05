@@ -54,8 +54,8 @@ return {
           desc = "Move to tmux pane Right",
         },
         ["<Leader>n"] = {
-          "<cmd>Flote<CR>",
-          desc = "Per project note",
+          "<cmd>Flote global<CR>",
+          desc = "Global note",
         },
         ["gc"] = {
           function() require("Comment.api").toggle.linewise.current() end,
