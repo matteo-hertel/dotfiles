@@ -229,3 +229,224 @@ gtreemerge() {
   done
   echo "Merge complete: Branch '${branch_to_keep}' merged into '${original_branch}', and all worktrees cleaned up."
 }
+
+
+# gtmux: Create git worktrees with tmux sessions (neovim + claude)
+#
+# Usage: gtmux branch1 branch2 ...
+#
+# This function does the following:
+#   1. Creates new branches from your current branch if they don't exist
+#   2. Creates worktrees for each specified branch under ~/work/code/<repo-name>-<branch>
+#   3. Runs yarn in each worktree
+#   4. Creates a tmux session with two splits: neovim (left) and claude (right)
+#
+# Example:
+#   gtmux feature-1 feature-2     # Creates two worktrees with tmux sessions
+gtmux() {
+  local branches=("$@")
+
+  # Ensure at least one branch name is provided.
+  if [[ ${#branches[@]} -eq 0 ]]; then
+    echo "Usage: gtmux branch1 branch2 ..."
+    return 1
+  fi
+
+  # Determine the current branch; exit if not in a git repository.
+  local current_branch
+  current_branch=$(git rev-parse --abbrev-ref HEAD) || {
+    echo "Error: Not a git repository."
+    return 1
+  }
+
+  # Determine repository root and name.
+  local repo_root repo_name
+  repo_root=$(git rev-parse --show-toplevel) || {
+    echo "Error: Cannot determine repository root."
+    return 1
+  }
+  repo_name=$(basename "$repo_root")
+
+  for branch in "${branches[@]}"; do
+    # If the branch does not exist, create it from the current branch.
+    if ! git show-ref --verify --quiet "refs/heads/${branch}"; then
+      echo "Branch '${branch}' does not exist. Creating it from '${current_branch}'..."
+      if ! git branch "${branch}" "${current_branch}"; then
+        echo "Error: Failed to create branch '${branch}'. Skipping."
+        continue
+      fi
+    fi
+
+    # Create worktree path.
+    local worktree_path="${HOME}/work/code/${repo_name}-${branch}"
+
+    # If the worktree directory already exists, skip creation.
+    if [[ -d "${worktree_path}" ]]; then
+      echo "Worktree for branch '${branch}' already exists at '${worktree_path}'. Skipping creation."
+    else
+      echo "Creating worktree for branch '${branch}' at '${worktree_path}'..."
+      if ! git worktree add "${worktree_path}" "${branch}"; then
+        echo "Error: Failed to create worktree for branch '${branch}'. Skipping."
+        continue
+      fi
+    fi
+
+    # Change to the worktree directory and run yarn
+    echo "Running yarn in '${worktree_path}'..."
+    if ! (cd "${worktree_path}" && yarn); then
+      echo "Warning: yarn failed in '${worktree_path}'."
+    fi
+
+    # Create tmux session with neovim and claude
+    local session_name="${repo_name}-${branch}"
+    echo "Creating tmux session '${session_name}' with neovim and claude..."
+    
+    # Kill existing session if it exists
+    tmux kill-session -t "${session_name}" 2>/dev/null || true
+    
+    # Create new session with neovim
+    tmux new-session -d -s "${session_name}" -c "${worktree_path}" 'nvim'
+    
+    # Split window vertically and run claude in the right pane
+    tmux split-window -h -t "${session_name}" -c "${worktree_path}" 'claude'
+    
+    # Select the left pane (neovim) by default
+    tmux select-pane -t "${session_name}:0.0"
+    
+    echo "Tmux session '${session_name}' created successfully."
+  done
+
+  echo "All worktrees and tmux sessions created successfully."
+}
+
+# gtmuxhere: Create tmux session in current directory
+#
+# Usage: gtmuxhere
+#
+# This function creates a tmux session in the current directory with the
+# naming convention: ${repo_name}-${branch}
+gtmuxhere() {
+  # Check if we're in a git repository
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Error: Not in a git repository."
+    return 1
+  fi
+
+  # Get repository name and current branch
+  local repo_name branch session_name
+  repo_name=$(basename "$(git rev-parse --show-toplevel)")
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  session_name="${repo_name}-${branch}"
+
+  echo "Creating tmux session '${session_name}' in current directory..."
+
+  # Kill existing session if it exists
+  tmux kill-session -t "${session_name}" 2>/dev/null || true
+
+  # Create new session with neovim
+  tmux new-session -d -s "${session_name}" -c "$(pwd)" 'nvim'
+
+  # Split window vertically and run claude in the right pane
+  tmux split-window -h -t "${session_name}" -c "$(pwd)" 'claude'
+
+  # Select the left pane (neovim) by default
+  tmux select-pane -t "${session_name}:0.0"
+
+  echo "Tmux session '${session_name}' created successfully."
+  echo "Attach with: tmux attach-session -t '${session_name}'"
+}
+
+# gtwremove: Interactive worktree removal
+#
+# Usage: gtwremove
+#
+# This function presents an interactive list of all worktrees and allows
+# you to select which ones to remove. It will:
+#   1. List all existing worktrees
+#   2. Present an interactive selection menu
+#   3. Remove selected worktrees and associated branches
+#   4. Kill associated tmux sessions if they exist
+gtwremove() {
+  # Get list of worktrees (excluding the main one)
+  local worktrees_raw
+  worktrees_raw=$(git worktree list --porcelain | grep -E '^worktree|^branch' | paste - - | grep -v 'bare\|detached' | tail -n +2)
+  
+  if [[ -z "$worktrees_raw" ]]; then
+    echo "No worktrees found to remove."
+    return 0
+  fi
+
+  # Parse worktrees into arrays
+  local worktree_paths=()
+  local worktree_branches=()
+  
+  while IFS=$'\t' read -r worktree_line branch_line; do
+    local path=$(echo "$worktree_line" | cut -d' ' -f2-)
+    local branch=$(echo "$branch_line" | cut -d' ' -f2- | sed 's/refs\/heads\///')
+    worktree_paths+=("$path")
+    worktree_branches+=("$branch")
+  done <<< "$worktrees_raw"
+
+  if [[ ${#worktree_paths[@]} -eq 0 ]]; then
+    echo "No worktrees found to remove."
+    return 0
+  fi
+
+  echo "Available worktrees:"
+  for i in "${!worktree_paths[@]}"; do
+    echo "  $((i+1)). ${worktree_branches[i]} (${worktree_paths[i]})"
+  done
+  echo
+
+  # Interactive selection
+  local selections
+  echo -n "Enter numbers to remove (space-separated, e.g., '1 3 5'): "
+  read -r selections
+
+  if [[ -z "$selections" ]]; then
+    echo "No selections made. Exiting."
+    return 0
+  fi
+
+  # Convert selections to array
+  local selected_indices=($selections)
+  local repo_name=$(basename "$(git rev-parse --show-toplevel)")
+
+  # Remove selected worktrees
+  for selection in "${selected_indices[@]}"; do
+    local index=$((selection - 1))
+    
+    if [[ $index -ge 0 && $index -lt ${#worktree_paths[@]} ]]; then
+      local path="${worktree_paths[index]}"
+      local branch="${worktree_branches[index]}"
+      local session_name="${repo_name}-${branch}"
+      
+      echo "Removing worktree: $branch ($path)"
+      
+      # Kill tmux session if it exists
+      if tmux has-session -t "$session_name" 2>/dev/null; then
+        echo "  Killing tmux session '$session_name'..."
+        tmux kill-session -t "$session_name"
+      fi
+      
+      # Remove worktree
+      if git worktree remove "$path" --force; then
+        echo "  Worktree removed successfully."
+        
+        # Delete the branch
+        if git branch -D "$branch"; then
+          echo "  Branch '$branch' deleted successfully."
+        else
+          echo "  Warning: Failed to delete branch '$branch'."
+        fi
+      else
+        echo "  Error: Failed to remove worktree."
+      fi
+    else
+      echo "Invalid selection: $selection (ignored)"
+    fi
+  done
+
+  echo "Worktree removal completed."
+} 
+

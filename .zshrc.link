@@ -2,11 +2,18 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 #
 # Path to your oh-my-zsh installation.
+
 export ZSH=$(echo ~)/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-source ~/.zshtheme
+
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  ZSH_THEME=""  # Disable Powerlevel10k for Cursor
+else
+  source ~/.zshtheme
+fi
+
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -134,4 +141,4 @@ export PATH=$PATH:$HOME/.maestro/bin
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+alias claude="/Users/matteohertel/.claude/local/claude"

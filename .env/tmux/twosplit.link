@@ -47,4 +47,3 @@ twosplitNoEditor(){
 }
 
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
-alias sandbox="WORKSPACE_SESSION_NAME=sandbox;WORKSPACE_PATH=~/mhdev/code/sandbox;twosplitNoEditor"

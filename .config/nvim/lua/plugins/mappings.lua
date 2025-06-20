@@ -96,6 +96,9 @@ return {
           desc = "Go to prev Harpoon mark",
         },
       },
+      i = {
+        ["<F1>"] = "<esc>",
+      },
       x = {
         ["<leader>p"] = {
           '"_dP',
