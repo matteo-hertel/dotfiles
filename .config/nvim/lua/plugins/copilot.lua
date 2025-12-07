@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
   "zbirenbaum/copilot.lua",
+  enabled = false, -- Disabled to prevent notification spam
   cmd = "Copilot",
   event = "InsertEnter",
   config = function()

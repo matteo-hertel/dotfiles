@@ -15,7 +15,7 @@ return {
   { "tamton-aquib/duck.nvim" },
   {
     "princejoogie/dir-telescope.nvim",
-    requires = { "nvim-telescope/telescope.nvim" },
+    dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
       require("dir-telescope").setup {
         hidden = true,
@@ -32,11 +32,11 @@ return {
   },
   {
     "cseickel/diagnostic-window.nvim",
-    requires = { "MunifTanjim/nui.nvim" },
+    dependencies = { "MunifTanjim/nui.nvim" },
   },
   {
     "ThePrimeagen/harpoon",
-    requires = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("harpoon").setup {}
       require("telescope").load_extension "harpoon"
@@ -66,29 +66,32 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    opts = {
-      defaults = {
-        vimgrep_arguments = {
-          "rg",
-          "--color=never",
-          "--no-heading",
-          "--with-filename",
-          "--line-number",
-          "--column",
-          "--smart-case",
-          "--hidden", -- This flag tells ripgrep to search hidden files and directories
+    opts = function(_, opts)
+      local actions = require "telescope.actions"
+      return vim.tbl_deep_extend("force", opts, {
+        defaults = {
+          vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            "--hidden", -- This flag tells ripgrep to search hidden files and directories
+          },
+          file_ignore_patterns = { ".git" },
+          mappings = {
+            i = {
+              ["<C-n>"] = actions.cycle_history_next,
+              ["<C-p>"] = actions.cycle_history_prev,
+            },
+          },
         },
-        file_ignore_patterns = { ".git" },
         pickers = {
           buffers = { sort_lastused = true },
         },
-        mappings = {
-          i = {
-            ["<C-n>"] = require("telescope.actions").cycle_history_next,
-            ["<C-p>"] = require("telescope.actions").cycle_history_prev,
-          },
-        },
-      },
-    },
+      })
+    end,
   },
 }

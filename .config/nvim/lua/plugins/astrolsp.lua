@@ -15,11 +15,11 @@ return {
         enabled = true, -- enable or disable format on save globally
       },
       timeout_ms = 1000, -- default format timeout
-      -- mappings to be set up on attaching of a language server
-      mappings = {
-        n = {
-          ["K"] = false,
-        },
+    },
+    -- mappings to be set up on attaching of a language server
+    mappings = {
+      n = {
+        ["K"] = false,
       },
     },
   },
