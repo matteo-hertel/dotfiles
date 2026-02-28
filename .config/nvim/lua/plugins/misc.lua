@@ -70,6 +70,13 @@ return {
       local actions = require "telescope.actions"
       return vim.tbl_deep_extend("force", opts, {
         defaults = {
+          layout_strategy = "horizontal",
+          layout_config = {
+            horizontal = {
+              prompt_position = "top",
+            },
+          },
+          sorting_strategy = "ascending",
           vimgrep_arguments = {
             "rg",
             "--color=never",
@@ -81,10 +88,13 @@ return {
             "--hidden", -- This flag tells ripgrep to search hidden files and directories
           },
           file_ignore_patterns = { ".git" },
+          path_display = { "truncate" }, -- Show full path, truncate from the left if too long
           mappings = {
             i = {
               ["<C-n>"] = actions.cycle_history_next,
               ["<C-p>"] = actions.cycle_history_prev,
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
             },
           },
         },
@@ -92,6 +102,11 @@ return {
           buffers = { sort_lastused = true },
         },
       })
+    end,
+    config = function(plugin, opts)
+      require("telescope").setup(opts)
+      -- Fix dark path colors in telescope results
+      vim.api.nvim_set_hl(0, "TelescopeResultsIdentifier", { fg = "#9CA3AF" })
     end,
   },
 }
