@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/mhdev/dotfiles/tools/colorsync/backup"
 	"github.com/mhdev/dotfiles/tools/colorsync/exporter"
 	"github.com/mhdev/dotfiles/tools/colorsync/preview"
 )
@@ -36,12 +36,6 @@ func runApply(args []string) error {
 
 	preview.Render(os.Stdout, theme)
 
-	reader := bufio.NewReader(os.Stdin)
-	if !confirm(reader, "Apply this theme? [y/n]: ") {
-		fmt.Println("Cancelled.")
-		return nil
-	}
-
 	targetSet := make(map[string]bool)
 	for _, t := range strings.Split(*targets, ",") {
 		targetSet[strings.TrimSpace(t)] = true
@@ -49,6 +43,9 @@ func runApply(args []string) error {
 
 	if targetSet["nvim"] {
 		path := exporter.NeovimDefaultPath(theme.Name)
+		if err := backup.SaveBackup(path); err != nil {
+			return fmt.Errorf("backup neovim: %w", err)
+		}
 		if err := exporter.ExportNeovim(theme, path); err != nil {
 			return fmt.Errorf("neovim: %w", err)
 		}
@@ -58,6 +55,9 @@ func runApply(args []string) error {
 
 	if targetSet["tmux"] {
 		path := exporter.TmuxDefaultPath()
+		if err := backup.SaveBackup(path); err != nil {
+			return fmt.Errorf("backup tmux: %w", err)
+		}
 		if err := exporter.ExportTmux(theme, path); err != nil {
 			return fmt.Errorf("tmux: %w", err)
 		}
@@ -68,6 +68,9 @@ func runApply(args []string) error {
 
 	if targetSet["iterm"] {
 		filePath := exporter.ItermDefaultPath(theme.Name)
+		if err := backup.SaveBackup(filePath); err != nil {
+			return fmt.Errorf("backup iterm: %w", err)
+		}
 		if err := exporter.ExportItermFile(theme, filePath); err != nil {
 			return fmt.Errorf("iterm file: %w", err)
 		}
