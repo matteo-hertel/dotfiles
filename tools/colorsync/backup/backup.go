@@ -11,8 +11,12 @@ import (
 type Manifest struct {
 	// Map of original file path -> backup info
 	Files map[string]FileBackup `json:"files"`
-	// The theme name that was previously active (if any)
-	PreviousTheme string `json:"previous_theme,omitempty"`
+	// Previous nvim colorscheme name (for sending to running instances on undo)
+	NvimPrevColorscheme string `json:"nvim_prev_colorscheme,omitempty"`
+	// Whether we added the source-file line to .tmux.conf
+	TmuxSourceAdded bool `json:"tmux_source_added,omitempty"`
+	// Path to the .tmux.conf we modified
+	TmuxConfPath string `json:"tmux_conf_path,omitempty"`
 }
 
 type FileBackup struct {
@@ -113,6 +117,26 @@ func Restore() ([]string, error) {
 	actions = append(actions, "Backup cleared")
 
 	return actions, nil
+}
+
+// SetNvimColorscheme records the previous nvim colorscheme for undo
+func SetNvimColorscheme(name string) error {
+	m := loadManifest()
+	m.NvimPrevColorscheme = name
+	return saveManifest(m)
+}
+
+// SetTmuxSourceAdded records that we added the source-file line
+func SetTmuxSourceAdded(confPath string) error {
+	m := loadManifest()
+	m.TmuxSourceAdded = true
+	m.TmuxConfPath = confPath
+	return saveManifest(m)
+}
+
+// GetManifest returns the current manifest (for undo logic)
+func GetManifest() *Manifest {
+	return loadManifest()
 }
 
 func loadManifest() *Manifest {

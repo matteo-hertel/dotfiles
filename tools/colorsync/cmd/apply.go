@@ -4,10 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/mhdev/dotfiles/tools/colorsync/backup"
 	"github.com/mhdev/dotfiles/tools/colorsync/exporter"
+	"github.com/mhdev/dotfiles/tools/colorsync/palette"
 	"github.com/mhdev/dotfiles/tools/colorsync/preview"
 )
 
@@ -42,44 +46,229 @@ func runApply(args []string) error {
 	}
 
 	if targetSet["nvim"] {
-		path := exporter.NeovimDefaultPath(theme.Name)
-		if err := backup.SaveBackup(path); err != nil {
-			return fmt.Errorf("backup neovim: %w", err)
-		}
-		if err := exporter.ExportNeovim(theme, path); err != nil {
+		if err := applyNeovim(theme); err != nil {
 			return fmt.Errorf("neovim: %w", err)
 		}
-		fmt.Printf("Neovim: wrote %s\n", path)
-		fmt.Printf("  Activate with: colorscheme %s\n", strings.ReplaceAll(theme.Name, "-", "_"))
 	}
 
 	if targetSet["tmux"] {
-		path := exporter.TmuxDefaultPath()
-		if err := backup.SaveBackup(path); err != nil {
-			return fmt.Errorf("backup tmux: %w", err)
-		}
-		if err := exporter.ExportTmux(theme, path); err != nil {
+		if err := applyTmux(theme); err != nil {
 			return fmt.Errorf("tmux: %w", err)
 		}
-		fmt.Printf("tmux: wrote %s\n", path)
-		fmt.Println("  Add to .tmux.conf: source-file ~/.tmux/theme.conf")
-		fmt.Println("  Reload with: tmux source-file ~/.tmux.conf")
 	}
 
 	if targetSet["iterm"] {
-		filePath := exporter.ItermDefaultPath(theme.Name)
-		if err := backup.SaveBackup(filePath); err != nil {
-			return fmt.Errorf("backup iterm: %w", err)
+		if err := applyIterm(theme); err != nil {
+			return fmt.Errorf("iterm: %w", err)
 		}
-		if err := exporter.ExportItermFile(theme, filePath); err != nil {
-			return fmt.Errorf("iterm file: %w", err)
-		}
-		fmt.Printf("iTerm: wrote %s\n", filePath)
-
-		// Live-update running terminal
-		exporter.WriteItermEscapes(os.Stdout, theme)
-		fmt.Println("iTerm: live colors updated")
 	}
+
+	fmt.Println("\nDone! All targets applied.")
+	return nil
+}
+
+// --- Neovim ---
+
+func applyNeovim(theme *palette.Theme) error {
+	// 1. Write the colorscheme lua file
+	path := exporter.NeovimDefaultPath(theme.Name)
+	if err := backup.SaveBackup(path); err != nil {
+		return fmt.Errorf("backup colorscheme: %w", err)
+	}
+	if err := exporter.ExportNeovim(theme, path); err != nil {
+		return err
+	}
+	fmt.Printf("Neovim: wrote %s\n", path)
+
+	// 2. Update astroui.lua to set the colorscheme
+	astroui := findAstroUI()
+	if astroui != "" {
+		prevColorscheme := readCurrentColorscheme(astroui)
+		if prevColorscheme != "" {
+			backup.SetNvimColorscheme(prevColorscheme)
+		}
+		if err := backup.SaveBackup(astroui); err != nil {
+			return fmt.Errorf("backup astroui: %w", err)
+		}
+		if err := updateAstroUI(astroui, theme.Name); err != nil {
+			fmt.Printf("Neovim: warning: could not update astroui.lua: %v\n", err)
+		} else {
+			fmt.Printf("Neovim: updated %s -> colorscheme = %q\n", astroui, theme.Name)
+		}
+	}
+
+	// 3. Send :colorscheme to running nvim instances
+	count := sendToRunningNvim(theme.Name)
+	if count > 0 {
+		fmt.Printf("Neovim: applied to %d running instance(s)\n", count)
+	}
+
+	return nil
+}
+
+func findAstroUI() string {
+	home, _ := os.UserHomeDir()
+	path := filepath.Join(home, ".config", "nvim", "lua", "plugins", "astroui.lua")
+	if _, err := os.Stat(path); err == nil {
+		return path
+	}
+	return ""
+}
+
+func readCurrentColorscheme(path string) string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	re := regexp.MustCompile(`colorscheme\s*=\s*"([^"]+)"`)
+	m := re.FindSubmatch(data)
+	if len(m) >= 2 {
+		return string(m[1])
+	}
+	return ""
+}
+
+func updateAstroUI(path, newScheme string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	re := regexp.MustCompile(`(colorscheme\s*=\s*)"[^"]+"`)
+	updated := re.ReplaceAll(data, []byte(fmt.Sprintf(`${1}"%s"`, newScheme)))
+	return os.WriteFile(path, updated, 0644)
+}
+
+func sendToRunningNvim(themeName string) int {
+	sockets := findNvimSockets()
+	count := 0
+	for _, sock := range sockets {
+		cmd := exec.Command("nvim", "--server", sock, "--remote-send",
+			fmt.Sprintf("<Cmd>colorscheme %s<CR>", themeName))
+		if err := cmd.Run(); err == nil {
+			count++
+		}
+	}
+	return count
+}
+
+func findNvimSockets() []string {
+	var sockets []string
+
+	tmpDirs := []string{"/tmp"}
+	if tmpdir := os.Getenv("TMPDIR"); tmpdir != "" {
+		tmpDirs = append(tmpDirs, tmpdir)
+	}
+
+	for _, dir := range tmpDirs {
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			continue
+		}
+		for _, e := range entries {
+			if !e.IsDir() || !strings.HasPrefix(e.Name(), "nvim") {
+				continue
+			}
+			sock := filepath.Join(dir, e.Name(), "0")
+			if info, err := os.Stat(sock); err == nil && info.Mode()&os.ModeSocket != 0 {
+				sockets = append(sockets, sock)
+			}
+		}
+	}
+
+	return sockets
+}
+
+// --- tmux ---
+
+func applyTmux(theme *palette.Theme) error {
+	// 1. Write theme.conf
+	path := exporter.TmuxDefaultPath()
+	if err := backup.SaveBackup(path); err != nil {
+		return fmt.Errorf("backup theme.conf: %w", err)
+	}
+	if err := exporter.ExportTmux(theme, path); err != nil {
+		return err
+	}
+	fmt.Printf("tmux: wrote %s\n", path)
+
+	// 2. Ensure source-file line in .tmux.conf
+	tmuxConf := findTmuxConf()
+	if tmuxConf != "" {
+		added, err := ensureTmuxSourceLine(tmuxConf, path)
+		if err != nil {
+			fmt.Printf("tmux: warning: could not update %s: %v\n", tmuxConf, err)
+		} else if added {
+			backup.SetTmuxSourceAdded(tmuxConf)
+			fmt.Printf("tmux: added source-file line to %s\n", tmuxConf)
+		}
+	}
+
+	// 3. Reload tmux live
+	if isTmuxRunning() {
+		cmd := exec.Command("tmux", "source-file", path)
+		if err := cmd.Run(); err != nil {
+			fmt.Printf("tmux: warning: live reload failed: %v\n", err)
+		} else {
+			fmt.Println("tmux: live reload applied")
+		}
+	}
+
+	return nil
+}
+
+func findTmuxConf() string {
+	home, _ := os.UserHomeDir()
+	path := filepath.Join(home, ".tmux.conf")
+	if _, err := os.Stat(path); err == nil {
+		return path
+	}
+	return ""
+}
+
+func ensureTmuxSourceLine(confPath, themePath string) (bool, error) {
+	data, err := os.ReadFile(confPath)
+	if err != nil {
+		return false, err
+	}
+
+	sourceLine := fmt.Sprintf("source-file %s", themePath)
+	if strings.Contains(string(data), sourceLine) {
+		return false, nil // already present
+	}
+
+	// Back up .tmux.conf before modifying
+	if err := backup.SaveBackup(confPath); err != nil {
+		return false, err
+	}
+
+	updated := string(data) + "\n# colorsync theme\n" + sourceLine + "\n"
+	if err := os.WriteFile(confPath, []byte(updated), 0644); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func isTmuxRunning() bool {
+	cmd := exec.Command("tmux", "list-sessions")
+	return cmd.Run() == nil
+}
+
+// --- iTerm ---
+
+func applyIterm(theme *palette.Theme) error {
+	// 1. Write .itermcolors file
+	filePath := exporter.ItermDefaultPath(theme.Name)
+	if err := backup.SaveBackup(filePath); err != nil {
+		return fmt.Errorf("backup iterm: %w", err)
+	}
+	if err := exporter.ExportItermFile(theme, filePath); err != nil {
+		return err
+	}
+	fmt.Printf("iTerm: wrote %s\n", filePath)
+
+	// 2. Live-update running terminal via escape sequences
+	exporter.WriteItermEscapes(os.Stdout, theme)
+	fmt.Println("iTerm: live colors updated")
 
 	return nil
 }
