@@ -18,19 +18,19 @@ import (
 func init() {
 	Register(Command{
 		Name: "apply",
-		Help: "Apply a theme to neovim, tmux, and iTerm",
+		Help: "Apply a theme to neovim, tmux, iTerm, and p10k",
 		Run:  runApply,
 	})
 }
 
 func runApply(args []string) error {
 	fs := flag.NewFlagSet("apply", flag.ExitOnError)
-	targets := fs.String("target", "nvim,tmux,iterm", "Comma-separated targets: nvim,tmux,iterm")
+	targets := fs.String("target", "nvim,tmux,iterm,p10k", "Comma-separated targets: nvim,tmux,iterm,p10k")
 	fs.Parse(args)
 
 	remaining := fs.Args()
 	if len(remaining) < 1 {
-		return fmt.Errorf("usage: colorsync apply <theme> [--target nvim,tmux,iterm]")
+		return fmt.Errorf("usage: colorsync apply <theme> [--target nvim,tmux,iterm,p10k]")
 	}
 
 	theme, err := resolveTheme(remaining[0])
@@ -65,6 +65,12 @@ func runApply(args []string) error {
 	if targetSet["iterm"] {
 		if err := applyIterm(theme); err != nil {
 			return fmt.Errorf("iterm: %w", err)
+		}
+	}
+
+	if targetSet["p10k"] {
+		if err := applyP10k(theme); err != nil {
+			return fmt.Errorf("p10k: %w", err)
 		}
 	}
 
@@ -281,5 +287,24 @@ func applyIterm(theme *palette.Theme) error {
 	exporter.WriteItermEscapes(os.Stdout, theme)
 	fmt.Println("iTerm: live colors updated")
 
+	return nil
+}
+
+// --- p10k ---
+
+func applyP10k(theme *palette.Theme) error {
+	path := exporter.P10kDefaultPath()
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		fmt.Println("p10k: skipped (no ~/.zshtheme found)")
+		return nil
+	}
+	if err := backup.SaveBackup(path); err != nil {
+		return fmt.Errorf("backup p10k: %w", err)
+	}
+	if err := exporter.ExportP10k(theme, path); err != nil {
+		return err
+	}
+	fmt.Printf("p10k: updated %s\n", path)
+	fmt.Println("  Reload with: source ~/.zshtheme")
 	return nil
 }
