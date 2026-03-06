@@ -205,27 +205,36 @@ func runAIGenerate(args []string) error {
 	}
 
 	reader := bufio.NewReader(os.Stdin)
-	var chosen *palette.Theme
+	var picks []int
 
 	if len(results) == 1 {
 		if confirm(reader, "Save? [y/n]: ") {
-			chosen = statuses[results[0]].theme
+			picks = []int{0}
 		}
 	} else {
-		answer := prompt(reader, fmt.Sprintf("Pick a theme [1-%d] or 0 to discard: ", len(results)))
-		pick, err := strconv.Atoi(strings.TrimSpace(answer))
-		if err != nil || pick < 0 || pick > len(results) {
-			fmt.Println("Invalid selection, discarding.")
-			return nil
-		}
-		if pick == 0 {
+		answer := prompt(reader, fmt.Sprintf("Pick themes [1-%d, comma-separated, 'all', or 0 to discard]: ", len(results)))
+		answer = strings.TrimSpace(answer)
+		if answer == "0" {
 			fmt.Println("Discarded.")
 			return nil
 		}
-		chosen = statuses[results[pick-1]].theme
+		if answer == "all" || answer == "a" {
+			for i := range results {
+				picks = append(picks, i)
+			}
+		} else {
+			for _, part := range strings.Split(answer, ",") {
+				n, err := strconv.Atoi(strings.TrimSpace(part))
+				if err != nil || n < 1 || n > len(results) {
+					fmt.Printf("Invalid selection %q, skipping.\n", strings.TrimSpace(part))
+					continue
+				}
+				picks = append(picks, n-1)
+			}
+		}
 	}
 
-	if chosen == nil {
+	if len(picks) == 0 {
 		return nil
 	}
 
@@ -233,11 +242,17 @@ func runAIGenerate(args []string) error {
 	if err := palette.EnsureDir(dir); err != nil {
 		return err
 	}
-	path := filepath.Join(dir, chosen.Name+".json")
-	if err := chosen.Save(path); err != nil {
-		return err
+	for _, p := range picks {
+		theme := statuses[results[p]].theme
+		if theme == nil || theme.Name == "" {
+			continue
+		}
+		path := filepath.Join(dir, theme.Name+".json")
+		if err := theme.Save(path); err != nil {
+			return err
+		}
+		fmt.Printf("Saved to %s\n", path)
 	}
-	fmt.Printf("Saved to %s\n", path)
 
 	return nil
 }
