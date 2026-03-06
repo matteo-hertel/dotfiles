@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"bufio"
-	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"github.com/mhdev/dotfiles/tools/colorsync/ollama"
 	"github.com/mhdev/dotfiles/tools/colorsync/palette"
 	"github.com/mhdev/dotfiles/tools/colorsync/preview"
 )
@@ -16,40 +16,36 @@ import (
 func init() {
 	Register(Command{
 		Name: "ai-generate",
-		Help: "Generate a theme from a natural language description using Apple Intelligence",
+		Help: "Generate a theme from a natural language description using Ollama",
 		Run:  runAIGenerate,
 	})
 }
 
 func runAIGenerate(args []string) error {
-	if len(args) == 0 {
-		return fmt.Errorf("usage: colorsync ai-generate <description>\n  example: colorsync ai-generate \"a warm dark theme inspired by autumn\"")
+	fs := flag.NewFlagSet("ai-generate", flag.ExitOnError)
+	model := fs.String("model", ollama.DefaultModel, "Ollama model to use")
+	url := fs.String("url", ollama.DefaultURL, "Ollama API URL")
+	fs.Parse(args)
+
+	remaining := fs.Args()
+	if len(remaining) == 0 {
+		return fmt.Errorf("usage: colorsync ai-generate [--model qwen3:32b] [--url http://localhost:11434] <description>\n  example: colorsync ai-generate \"a warm dark theme inspired by autumn\"")
 	}
 
-	description := strings.Join(args, " ")
-	fmt.Printf("Generating theme: %q\n", description)
+	description := strings.Join(remaining, " ")
+	fmt.Printf("Generating theme with %s: %q\n", *model, description)
+	fmt.Println("This may take a moment...")
 
-	bin, err := findAIBinary()
+	theme, err := ollama.Generate(*url, *model, description)
 	if err != nil {
 		return err
 	}
 
-	cmd := exec.Command(bin, description)
-	cmd.Stderr = os.Stderr
-	out, err := cmd.Output()
-	if err != nil {
-		return fmt.Errorf("colorsync-ai failed: %w", err)
-	}
-
-	var theme palette.Theme
-	if err := json.Unmarshal(out, &theme); err != nil {
-		return fmt.Errorf("parsing AI output: %w", err)
-	}
 	if theme.Name == "" {
-		return fmt.Errorf("AI generated a theme with an empty name")
+		return fmt.Errorf("model generated a theme with an empty name")
 	}
 
-	preview.Render(os.Stdout, &theme)
+	preview.Render(os.Stdout, theme)
 
 	reader := bufio.NewReader(os.Stdin)
 	if confirm(reader, "Save? [y/n]: ") {
@@ -65,22 +61,4 @@ func runAIGenerate(args []string) error {
 	}
 
 	return nil
-}
-
-func findAIBinary() (string, error) {
-	// Look adjacent to this binary first
-	self, err := os.Executable()
-	if err == nil {
-		adjacent := filepath.Join(filepath.Dir(self), "colorsync-ai")
-		if _, err := os.Stat(adjacent); err == nil {
-			return adjacent, nil
-		}
-	}
-
-	// Fall back to PATH
-	p, err := exec.LookPath("colorsync-ai")
-	if err != nil {
-		return "", fmt.Errorf("colorsync-ai not found; build it with: cd tools/colorsync-ai && swift build")
-	}
-	return p, nil
 }
