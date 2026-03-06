@@ -26,6 +26,10 @@ struct GeneratedTheme {
     var colors: [String]
 }
 
+func isValidHex(_ s: String) -> Bool {
+    s.count == 7 && s.first == "#" && s.dropFirst().allSatisfy(\.isHexDigit)
+}
+
 @main
 struct ColorsyncAI {
     static func main() async throws {
@@ -60,6 +64,15 @@ struct ColorsyncAI {
 
         let theme = response.content
 
+        // Validate all hex colors before outputting
+        let allColors = [theme.background, theme.foreground, theme.cursor] + theme.colors
+        for color in allColors {
+            guard isValidHex(color) else {
+                FileHandle.standardError.write(Data("Error: model produced invalid hex color: \(color)\n".utf8))
+                exit(3)
+            }
+        }
+
         // Build JSON matching Go's palette.Theme format
         let dict: [String: Any] = [
             "name": theme.name,
@@ -71,5 +84,6 @@ struct ColorsyncAI {
 
         let jsonData = try JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted, .sortedKeys])
         FileHandle.standardOutput.write(jsonData)
+        FileHandle.standardOutput.write(Data("\n".utf8))
     }
 }
