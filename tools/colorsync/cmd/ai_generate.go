@@ -45,6 +45,9 @@ func runAIGenerate(args []string) error {
 	if err := json.Unmarshal(out, &theme); err != nil {
 		return fmt.Errorf("parsing AI output: %w", err)
 	}
+	if theme.Name == "" {
+		return fmt.Errorf("AI generated a theme with an empty name")
+	}
 
 	preview.Render(os.Stdout, &theme)
 
