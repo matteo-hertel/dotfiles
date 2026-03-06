@@ -112,3 +112,6 @@ set-option -ga terminal-overrides ",xterm-256color:Tc"
 # Default terminal is 256 colors
 set -g default-terminal "screen-256color"
 
+
+# colorsync theme
+source-file /Users/mhdev/.tmux/theme.conf

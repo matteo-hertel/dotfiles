@@ -4,7 +4,7 @@ return {
   ---@type AstroUIOpts
   opts = {
     -- change colorscheme
-    colorscheme = "tundra",
+    colorscheme = "frozen-tundra",
     icons = {
       -- configure the loading of the lsp in the status line
       LSPLoading1 = "⠋",
