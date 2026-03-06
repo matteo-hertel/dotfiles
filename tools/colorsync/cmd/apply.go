@@ -208,14 +208,16 @@ func applyTmux(theme *palette.Theme) error {
 		}
 	}
 
-	// 3. Reload tmux live
+	// 3. Reload tmux live — source full .tmux.conf so theme.conf overrides
+	//    at the end take effect, then force a client refresh
 	if isTmuxRunning() {
-		cmd := exec.Command("tmux", "source-file", path)
-		if err := cmd.Run(); err != nil {
-			fmt.Printf("tmux: warning: live reload failed: %v\n", err)
+		if tmuxConf != "" {
+			exec.Command("tmux", "source-file", tmuxConf).Run()
 		} else {
-			fmt.Println("tmux: live reload applied")
+			exec.Command("tmux", "source-file", path).Run()
 		}
+		exec.Command("tmux", "refresh-client", "-S").Run()
+		fmt.Println("tmux: live reload applied")
 	}
 
 	return nil
@@ -272,6 +274,10 @@ func applyIterm(theme *palette.Theme) error {
 	fmt.Printf("iTerm: wrote %s\n", filePath)
 
 	// 2. Live-update running terminal via escape sequences
+	//    Enable tmux pass-through if inside tmux so escapes reach iTerm
+	if isTmuxRunning() {
+		exec.Command("tmux", "set", "-g", "allow-passthrough", "on").Run()
+	}
 	exporter.WriteItermEscapes(os.Stdout, theme)
 	fmt.Println("iTerm: live colors updated")
 
