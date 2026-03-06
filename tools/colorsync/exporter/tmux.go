@@ -59,11 +59,11 @@ set -g pane-border-style "fg=%s,bg=default"
 set -g pane-active-border-style "fg=%s,bg=default"
 
 # Pane number indicator
-set -g display-panes-colour %s
-set -g display-panes-active-colour %s
+set -g display-panes-colour "%s"
+set -g display-panes-active-colour "%s"
 
 # Clock mode
-set -g clock-mode-colour %s
+set -g clock-mode-colour "%s"
 set -g clock-mode-style 24
 
 # Message

@@ -73,8 +73,10 @@ func writeItermColor(w io.Writer, name, hex string) {
 }
 
 // WriteItermEscapes writes iTerm2 proprietary escape sequences for live terminal
-// color updates. Format: \033]1337;SetColors=key=rrggbb\007
+// color updates. Detects tmux and wraps in pass-through sequences automatically.
 func WriteItermEscapes(w io.Writer, theme *palette.Theme) {
+	inTmux := os.Getenv("TMUX") != ""
+
 	ansiKeys := []string{
 		"black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
 		"br_black", "br_red", "br_green", "br_yellow", "br_blue", "br_magenta", "br_cyan", "br_white",
@@ -82,7 +84,12 @@ func WriteItermEscapes(w io.Writer, theme *palette.Theme) {
 
 	writeEsc := func(key, hex string) {
 		hex = strings.TrimPrefix(hex, "#")
-		fmt.Fprintf(w, "\033]1337;SetColors=%s=%s\007", key, hex)
+		if inTmux {
+			// Wrap in tmux pass-through: \033Ptmux;\033 <seq> \033\\
+			fmt.Fprintf(w, "\033Ptmux;\033\033]1337;SetColors=%s=%s\007\033\\", key, hex)
+		} else {
+			fmt.Fprintf(w, "\033]1337;SetColors=%s=%s\007", key, hex)
+		}
 	}
 
 	writeEsc("bg", theme.Background)
