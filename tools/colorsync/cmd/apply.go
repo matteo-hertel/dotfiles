@@ -40,6 +40,11 @@ func runApply(args []string) error {
 
 	preview.Render(os.Stdout, theme)
 
+	// Start a new backup entry for this apply
+	if err := backup.BeginApply(); err != nil {
+		return fmt.Errorf("backup: %w", err)
+	}
+
 	targetSet := make(map[string]bool)
 	for _, t := range strings.Split(*targets, ",") {
 		targetSet[strings.TrimSpace(t)] = true

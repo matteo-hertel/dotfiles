@@ -10,17 +10,19 @@ import (
 func init() {
 	Register(Command{
 		Name: "undo",
-		Help: "Undo the last apply, restoring previous state",
+		Help: "Undo the last apply (use 'undo list' to see snapshots)",
 		Run:  runUndo,
 	})
 }
 
 func runUndo(args []string) error {
-	// Read manifest before restore (we need metadata for reactivation)
+	if len(args) > 0 && args[0] == "list" {
+		return runUndoList()
+	}
+
 	manifest := backup.GetManifest()
 	prevNvim := manifest.NvimPrevColorscheme
 
-	// Restore all files
 	actions, err := backup.Restore()
 	if err != nil {
 		return err
@@ -30,7 +32,6 @@ func runUndo(args []string) error {
 		fmt.Println(a)
 	}
 
-	// Reactivate previous nvim colorscheme in running instances
 	if prevNvim != "" {
 		count := sendToRunningNvim(prevNvim)
 		if count > 0 {
@@ -38,7 +39,6 @@ func runUndo(args []string) error {
 		}
 	}
 
-	// Reload tmux to pick up restored config
 	if isTmuxRunning() {
 		tmuxConf := findTmuxConf()
 		if tmuxConf != "" {
@@ -50,5 +50,34 @@ func runUndo(args []string) error {
 	}
 
 	fmt.Println("Undo complete.")
+	return nil
+}
+
+func runUndoList() error {
+	depth := backup.Depth()
+	if depth == 0 {
+		fmt.Println("No snapshots to undo.")
+		return nil
+	}
+
+	snapshots := backup.ListSnapshots()
+	fmt.Printf("%d snapshot(s) available:\n\n", depth)
+	for i, snap := range snapshots {
+		fmt.Printf("  %d. ", i+1)
+		if snap.NvimPrevColorscheme != "" {
+			fmt.Printf("previous colorscheme: %s", snap.NvimPrevColorscheme)
+		} else {
+			fmt.Printf("(initial state)")
+		}
+		fmt.Println()
+		for path, info := range snap.Files {
+			if info.Existed {
+				fmt.Printf("     restore: %s\n", path)
+			} else {
+				fmt.Printf("     remove:  %s\n", path)
+			}
+		}
+		fmt.Println()
+	}
 	return nil
 }

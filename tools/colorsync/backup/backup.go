@@ -5,25 +5,25 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 )
 
-// Manifest tracks what was backed up so undo can restore it
+// Manifest tracks one apply's backup state
 type Manifest struct {
-	// Map of original file path -> backup info
-	Files map[string]FileBackup `json:"files"`
-	// Previous nvim colorscheme name (for sending to running instances on undo)
-	NvimPrevColorscheme string `json:"nvim_prev_colorscheme,omitempty"`
-	// Whether we added the source-file line to .tmux.conf
-	TmuxSourceAdded bool `json:"tmux_source_added,omitempty"`
-	// Path to the .tmux.conf we modified
-	TmuxConfPath string `json:"tmux_conf_path,omitempty"`
+	Files               map[string]FileBackup `json:"files"`
+	NvimPrevColorscheme string                `json:"nvim_prev_colorscheme,omitempty"`
+	TmuxSourceAdded     bool                  `json:"tmux_source_added,omitempty"`
+	TmuxConfPath        string                `json:"tmux_conf_path,omitempty"`
 }
 
 type FileBackup struct {
-	// BackupPath is where the copy lives in the backup dir, empty if file didn't exist
 	BackupPath string `json:"backup_path,omitempty"`
-	// Existed indicates whether the file existed before apply
-	Existed bool `json:"existed"`
+	Existed    bool   `json:"existed"`
+}
+
+// Stack holds multiple manifests — one per apply
+type Stack struct {
+	Entries []Manifest `json:"entries"`
 }
 
 func BackupDir() string {
@@ -31,25 +31,43 @@ func BackupDir() string {
 	return filepath.Join(home, ".config", "colorsync", "backup")
 }
 
-func manifestPath() string {
-	return filepath.Join(BackupDir(), "manifest.json")
+func stackPath() string {
+	return filepath.Join(BackupDir(), "stack.json")
+}
+
+// BeginApply pushes a new empty manifest onto the stack.
+// Call this once at the start of each apply.
+func BeginApply() error {
+	if err := os.MkdirAll(BackupDir(), 0755); err != nil {
+		return err
+	}
+	s := loadStack()
+	s.Entries = append(s.Entries, Manifest{
+		Files: make(map[string]FileBackup),
+	})
+	return saveStack(s)
 }
 
 // SaveBackup copies the current file to the backup dir before it gets overwritten.
-// Call this for each file BEFORE writing the new version.
+// Must call BeginApply first.
 func SaveBackup(originalPath string) error {
-	dir := BackupDir()
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	s := loadStack()
+	if len(s.Entries) == 0 {
+		return fmt.Errorf("no active apply (call BeginApply first)")
+	}
+	current := &s.Entries[len(s.Entries)-1]
+	idx := len(s.Entries) - 1
+
+	// Create a subdirectory for this stack entry's backup files
+	entryDir := filepath.Join(BackupDir(), strconv.Itoa(idx))
+	if err := os.MkdirAll(entryDir, 0755); err != nil {
 		return err
 	}
 
-	manifest := loadManifest()
-
 	info, err := os.Stat(originalPath)
 	if os.IsNotExist(err) {
-		// File doesn't exist yet -- record that so undo can delete it
-		manifest.Files[originalPath] = FileBackup{Existed: false}
-		return saveManifest(manifest)
+		current.Files[originalPath] = FileBackup{Existed: false}
+		return saveStack(s)
 	}
 	if err != nil {
 		return err
@@ -58,9 +76,8 @@ func SaveBackup(originalPath string) error {
 		return fmt.Errorf("cannot backup directory: %s", originalPath)
 	}
 
-	// Copy file to backup dir with a safe name
 	backupName := safeFileName(originalPath)
-	backupPath := filepath.Join(dir, backupName)
+	backupPath := filepath.Join(entryDir, backupName)
 
 	data, err := os.ReadFile(originalPath)
 	if err != nil {
@@ -70,32 +87,34 @@ func SaveBackup(originalPath string) error {
 		return err
 	}
 
-	manifest.Files[originalPath] = FileBackup{
+	current.Files[originalPath] = FileBackup{
 		BackupPath: backupPath,
 		Existed:    true,
 	}
-	return saveManifest(manifest)
+	return saveStack(s)
 }
 
-// Restore puts everything back to the way it was before the last apply.
-// Returns the list of actions taken.
+// Restore pops the most recent apply and restores its files.
 func Restore() ([]string, error) {
-	manifest := loadManifest()
-	if len(manifest.Files) == 0 {
+	s := loadStack()
+	if len(s.Entries) == 0 {
 		return nil, fmt.Errorf("nothing to undo (no backup found)")
 	}
+
+	// Pop the last entry
+	idx := len(s.Entries) - 1
+	manifest := s.Entries[idx]
+	s.Entries = s.Entries[:idx]
 
 	var actions []string
 
 	for originalPath, info := range manifest.Files {
 		if !info.Existed {
-			// File was created by apply -- delete it
 			if err := os.Remove(originalPath); err != nil && !os.IsNotExist(err) {
 				return actions, fmt.Errorf("removing %s: %w", originalPath, err)
 			}
 			actions = append(actions, fmt.Sprintf("Removed %s (was newly created)", originalPath))
 		} else {
-			// File existed before -- restore the backup
 			data, err := os.ReadFile(info.BackupPath)
 			if err != nil {
 				return actions, fmt.Errorf("reading backup %s: %w", info.BackupPath, err)
@@ -110,59 +129,84 @@ func Restore() ([]string, error) {
 		}
 	}
 
-	// Clean up backup dir after successful restore
-	if err := os.RemoveAll(BackupDir()); err != nil {
-		return actions, fmt.Errorf("cleaning backup dir: %w", err)
+	// Clean up this entry's backup files
+	entryDir := filepath.Join(BackupDir(), strconv.Itoa(idx))
+	os.RemoveAll(entryDir)
+
+	// If stack is now empty, clean up everything
+	if len(s.Entries) == 0 {
+		os.RemoveAll(BackupDir())
+		actions = append(actions, "All backups cleared")
+	} else {
+		saveStack(s)
+		remaining := len(s.Entries)
+		actions = append(actions, fmt.Sprintf("%d more undo(s) available", remaining))
 	}
-	actions = append(actions, "Backup cleared")
 
 	return actions, nil
 }
 
-// SetNvimColorscheme records the previous nvim colorscheme for undo
+// Depth returns how many undos are available
+func Depth() int {
+	s := loadStack()
+	return len(s.Entries)
+}
+
+// ListSnapshots returns all manifests in the stack (oldest first)
+func ListSnapshots() []Manifest {
+	s := loadStack()
+	return s.Entries
+}
+
+// SetNvimColorscheme records the previous nvim colorscheme on the current entry
 func SetNvimColorscheme(name string) error {
-	m := loadManifest()
-	m.NvimPrevColorscheme = name
-	return saveManifest(m)
+	s := loadStack()
+	if len(s.Entries) == 0 {
+		return nil
+	}
+	s.Entries[len(s.Entries)-1].NvimPrevColorscheme = name
+	return saveStack(s)
 }
 
 // SetTmuxSourceAdded records that we added the source-file line
 func SetTmuxSourceAdded(confPath string) error {
-	m := loadManifest()
-	m.TmuxSourceAdded = true
-	m.TmuxConfPath = confPath
-	return saveManifest(m)
+	s := loadStack()
+	if len(s.Entries) == 0 {
+		return nil
+	}
+	s.Entries[len(s.Entries)-1].TmuxSourceAdded = true
+	s.Entries[len(s.Entries)-1].TmuxConfPath = confPath
+	return saveStack(s)
 }
 
-// GetManifest returns the current manifest (for undo logic)
+// GetManifest returns the most recent manifest (for undo logic)
 func GetManifest() *Manifest {
-	return loadManifest()
+	s := loadStack()
+	if len(s.Entries) == 0 {
+		return &Manifest{Files: make(map[string]FileBackup)}
+	}
+	return &s.Entries[len(s.Entries)-1]
 }
 
-func loadManifest() *Manifest {
-	m := &Manifest{Files: make(map[string]FileBackup)}
-	data, err := os.ReadFile(manifestPath())
+func loadStack() *Stack {
+	s := &Stack{}
+	data, err := os.ReadFile(stackPath())
 	if err != nil {
-		return m
+		return s
 	}
-	json.Unmarshal(data, m)
-	if m.Files == nil {
-		m.Files = make(map[string]FileBackup)
-	}
-	return m
+	json.Unmarshal(data, s)
+	return s
 }
 
-func saveManifest(m *Manifest) error {
-	data, err := json.MarshalIndent(m, "", "  ")
+func saveStack(s *Stack) error {
+	data, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(manifestPath(), data, 0644)
+	return os.WriteFile(stackPath(), data, 0644)
 }
 
-// safeFileName converts a path to a safe backup filename
 func safeFileName(path string) string {
-	// Replace path separators with underscores
 	safe := filepath.Base(path)
 	dir := filepath.Dir(path)
 	dirBase := filepath.Base(dir)
