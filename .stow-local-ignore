@@ -1,0 +1,15 @@
+# Git
+^/\.git
+^/\.gitignore
+
+# Repo files (not dotfiles)
+^/Readme\.md
+^/setup\.sh
+
+# Tools (built separately, not stowed)
+^/tools
+^/docs
+
+# Claude config (symlinked separately to avoid stow folding ~/.claude)
+^/\.claude
+

@@ -1,0 +1,24 @@
+{
+  "name": "frozen-tundra",
+  "background": "#0a1020",
+  "foreground": "#d4e5f7",
+  "cursor": "#7ec8e3",
+  "colors": [
+    "#111b2e",
+    "#8c4a5a",
+    "#5b9ea6",
+    "#8a9bb2",
+    "#4a7fb5",
+    "#7a6b9e",
+    "#5aafcc",
+    "#b8cde0",
+    "#2a3a54",
+    "#c4707e",
+    "#7ec8d0",
+    "#adbfda",
+    "#6da8e0",
+    "#a896c8",
+    "#82d4ef",
+    "#e8f0fa"
+  ]
+}

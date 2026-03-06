@@ -1,4 +1,13 @@
 bundle
 .netrwhist
-env.custom.sh.link
-.vim.link/view
+.vim/view
+
+# Per-machine env (API keys, workspace aliases)
+.env/env.custom.sh
+
+# Colorsync runtime (generated files, backups)
+.config/colorsync/output/
+.config/colorsync/backup/
+
+# Build artifacts
+tools/colorsync/colorsync
