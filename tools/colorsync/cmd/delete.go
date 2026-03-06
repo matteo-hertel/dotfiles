@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/mhdev/dotfiles/tools/colorsync/exporter"
 	"github.com/mhdev/dotfiles/tools/colorsync/palette"
 )
 
@@ -32,6 +33,15 @@ func runDelete(args []string) error {
 		}
 		if err := os.Remove(path); err != nil {
 			return fmt.Errorf("deleting %s: %w", name, err)
+		}
+		// Clean up generated artifacts
+		for _, artifact := range []string{
+			exporter.NeovimDefaultPath(name),
+			exporter.ItermDefaultPath(name),
+		} {
+			if err := os.Remove(artifact); err == nil {
+				fmt.Printf("  Removed %s\n", artifact)
+			}
 		}
 		deleted = append(deleted, name)
 	}
