@@ -7,7 +7,6 @@ A Go CLI tool that syncs color schemes across neovim, tmux, and iTerm2.
 ```bash
 # Build
 cd tools/colorsync && go build -o colorsync .
-cd tools/colorsync-ai && swift build  # Build AI helper (macOS 26+, Apple Intelligence)
 
 # Run tests
 cd tools/colorsync && go test ./... -v
@@ -17,7 +16,8 @@ cd tools/colorsync && go test ./... -v
 ./colorsync import catppuccin-mocha       # Import a built-in theme
 ./colorsync import ~/Downloads/theme.itermcolors  # Import from file
 ./colorsync generate                      # Create theme from bg/fg/accent
-./colorsync ai-generate "warm autumn"     # AI-generate from description (macOS 26+)
+./colorsync ai-generate "warm autumn"     # AI-generate from description (requires Ollama)
+./colorsync ai-generate --model gemma3:27b "ocean theme"  # Use a different model
 ./colorsync preview catppuccin-mocha      # Preview in terminal
 ./colorsync apply catppuccin-mocha        # Apply to all targets
 ./colorsync apply gruvbox-dark --target tmux,nvim  # Apply to specific targets
@@ -30,7 +30,7 @@ cd tools/colorsync && go test ./... -v
 - **Importers**: `importer/` - `builtin.go` has 6 hardcoded themes. `itermcolors.go` parses Apple plist XML.
 - **Exporters**: `exporter/` - `neovim.go` writes standalone Lua colorscheme. `tmux.go` writes theme.conf. `iterm.go` writes .itermcolors and sends live escape sequences.
 - **Preview**: `preview/preview.go` - Renders color swatches using 24-bit ANSI escapes.
-- **AI helper**: `../colorsync-ai/` - Swift CLI using Apple Foundation Models (on-device LLM) for AI theme generation. Go shells out to it via `cmd/ai_generate.go`.
+- **Ollama client**: `ollama/client.go` - Calls local Ollama REST API with JSON schema to generate themes via LLM. Used by `cmd/ai_generate.go`.
 - **CLI**: `cmd/` - Subcommands registered via `init()` functions. No cobra/viper, plain stdlib.
 
 ## Output Paths
@@ -59,6 +59,42 @@ Edit `importer/builtin.go` and add an entry to the `builtins` map:
     Colors: [16]string{ /* ansi 0-15 */ },
 },
 ```
+
+## AI Generate Setup
+
+The `ai-generate` command uses [Ollama](https://ollama.com) to run a local LLM for theme generation.
+
+### One-time setup
+
+1. Install Ollama:
+   ```bash
+   brew install ollama
+   ```
+
+2. Start the Ollama server (or use the Ollama desktop app):
+   ```bash
+   ollama serve
+   ```
+
+3. Pull the default model (~20GB download):
+   ```bash
+   ollama pull qwen3:32b
+   ```
+
+### Usage
+
+```bash
+colorsync ai-generate "a warm dark theme inspired by autumn forests"
+colorsync ai-generate --model gemma3:27b "cool blue cyberpunk theme"
+colorsync ai-generate --model llama3.1:8b "minimal grayscale theme"
+```
+
+Any Ollama model that supports structured output works. Larger models produce better color palettes. The default is `qwen3:32b`.
+
+### Flags
+
+- `--model <name>` — Ollama model to use (default: `qwen3:32b`)
+- `--url <url>` — Ollama API URL (default: `http://localhost:11434`)
 
 ## Adding a New Export Target
 
