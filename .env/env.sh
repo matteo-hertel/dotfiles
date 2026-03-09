@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-# ENV
-NVIM_APPNAME=astronvim
 
 # PATH
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mhdev/.cargo/bin:/Users/mhdev/Library/Android/sdk/platform-tools:$HOME/.local/bin:$PATH"
