@@ -21,10 +21,18 @@ cd "$DOTFILES_DIR"
 stow --target="$HOME" .
 
 # 3. Claude config (separate from stow to avoid folding ~/.claude)
+# CLAUDE.md is per-machine — create a default one if missing
 echo "Linking Claude config..."
 mkdir -p "$HOME/.claude"
-ln -sf "$DOTFILES_DIR/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_DIR/.claude/CLAUDE.shared.md" "$HOME/.claude/CLAUDE.shared.md"
+ln -sf "$DOTFILES_DIR/.claude/CLAUDE.work.md" "$HOME/.claude/CLAUDE.work.md"
+ln -sf "$DOTFILES_DIR/.claude/CLAUDE.personal.md" "$HOME/.claude/CLAUDE.personal.md"
 ln -sf "$DOTFILES_DIR/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+
+if [ ! -f "$HOME/.claude/CLAUDE.md" ]; then
+    echo "Creating default ~/.claude/CLAUDE.md..."
+    printf '@CLAUDE.shared.md\n@CLAUDE.work.md\n' > "$HOME/.claude/CLAUDE.md"
+fi
 
 # 4. Build and install colorsync
 echo "Building colorsync..."
