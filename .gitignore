@@ -11,3 +11,6 @@ bundle
 
 # Build artifacts
 tools/colorsync/colorsync
+
+# Per-machine Claude config (each machine has its own imports)
+.claude/CLAUDE.md
