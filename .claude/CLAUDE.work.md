@@ -8,6 +8,6 @@ Every PR must include the following in its description:
 
 If any of these are unknown, use `AskUserQuestion` to ask the user rather than assuming or omitting them.
 
-## Track learnings
+## Learnings file path
 
-When you feel like something should be preserved or learnt from for the future update add an entry in /Users/mhdev/mhdev/Obsidian/Main/Claude Memories.md. add some structure like date of the entry, the project, the condition and the actual entry. For now use this a lot and then we'll figure out how will this look like in the future
+Claude Memories path: `/Users/matteohertel/Documents/Main/Claude Memories.md`
