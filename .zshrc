@@ -65,6 +65,13 @@ source "$ZSH"/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 bindkey -v
 
+# Close tmux popup with `h (same as prefix+h to open)
+if [[ -n "$TMUX_POPUP" ]]; then
+  _close_tmux_popup() { exit 0 }
+  zle -N _close_tmux_popup
+  bindkey '`h' _close_tmux_popup
+fi
+
 bindkey -M viins 'jj' vi-cmd-mode
 bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search      # start typing + [Up-Arrow]
 bindkey "${terminfo[kcud1]}" down-line-or-beginning-search    # start typing + [Down-Arrow]
