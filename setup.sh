@@ -20,6 +20,14 @@ echo "Linking dotfiles with stow..."
 cd "$DOTFILES_DIR"
 stow --target="$HOME" .
 
+# 2.5 TPM (Tmux Plugin Manager)
+if [ ! -f "$HOME/.tmux/plugins/tpm/tpm" ]; then
+    echo "Installing TPM..."
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+echo "Installing tmux plugins..."
+"$HOME/.tmux/plugins/tpm/bin/install_plugins"
+
 # 3. Claude config (separate from stow to avoid folding ~/.claude)
 # CLAUDE.md is per-machine — create a default one if missing
 echo "Linking Claude config..."

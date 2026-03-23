@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Query resurrect's configured dir (falls back to its default)
+RESURRECT_DIR="$(tmux show-option -gqv @resurrect-dir 2>/dev/null)"
+RESURRECT_DIR="${RESURRECT_DIR:-$HOME/.local/share/tmux/resurrect}"
+LAST_LINK="$RESURRECT_DIR/last"
+RESTORE_SCRIPT="$HOME/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
+
+# Check prerequisites
+if [ ! -L "$LAST_LINK" ]; then
+    echo "No saved sessions found."
+    echo "Sessions are saved automatically every 15 minutes."
+    echo "You can also save manually with: prefix + Ctrl-s"
+    read -n 1 -s -r -p "Press any key to close..."
+    exit 0
+fi
+
+if [ ! -f "$RESTORE_SCRIPT" ]; then
+    echo "tmux-resurrect not installed. Run: prefix + I"
+    read -n 1 -s -r -p "Press any key to close..."
+    exit 1
+fi
+
+# Resolve the actual save file (last is a symlink)
+SAVE_FILE="$(readlink -f "$LAST_LINK")"
+
+if [ ! -f "$SAVE_FILE" ]; then
+    echo "Save file not found: $SAVE_FILE"
+    read -n 1 -s -r -p "Press any key to close..."
+    exit 1
+fi
+
+# Extract unique session names from pane lines (field 2, tab-separated)
+SESSIONS="$(grep '^pane' "$SAVE_FILE" | cut -f2 | sort -u)"
+
+if [ -z "$SESSIONS" ]; then
+    echo "No sessions found in save file."
+    read -n 1 -s -r -p "Press any key to close..."
+    exit 0
+fi
+
+# Present fzf picker (multi-select with tab, confirm with enter)
+SELECTED="$(echo "$SESSIONS" | fzf --multi \
+    --header="Select sessions to restore (TAB to multi-select, ENTER to confirm)" \
+    --preview="awk -F'\t' '\$1 ~ /^(pane|window)/ && \$2 == \"{}\" { print \"  window: \" \$4 }' '$SAVE_FILE' | sort -u" \
+    --preview-window=right:40%)" || exit 0
+
+# Build grep pattern from selected sessions
+PATTERN=""
+while IFS= read -r session; do
+    [ -z "$session" ] && continue
+    if [ -n "$PATTERN" ]; then
+        PATTERN="$PATTERN|"
+    fi
+    # Escape special regex chars in session name
+    escaped="$(printf '%s' "$session" | sed 's/[].[\\*^$()+?{|]/\\&/g')"
+    PATTERN="${PATTERN}${escaped}"
+done <<< "$SELECTED"
+
+# Filter save file: keep matching pane/window lines + all state lines
+TEMP_FILE="$(mktemp)"
+trap 'rm -f "$TEMP_FILE"' EXIT
+
+grep -E "^(pane|window)	(${PATTERN})	" "$SAVE_FILE" > "$TEMP_FILE"
+grep -E '^state' "$SAVE_FILE" >> "$TEMP_FILE" || true
+
+# Swap the last symlink to point at our filtered file
+ORIGINAL_TARGET="$(readlink "$LAST_LINK")"
+ln -sf "$TEMP_FILE" "$LAST_LINK"
+
+# Run resurrect restore (synchronous — blocks until restore completes)
+# Always restore the original symlink, even if restore fails
+bash "$RESTORE_SCRIPT" || true
+ln -sf "$ORIGINAL_TARGET" "$LAST_LINK"
+
+echo "Restored sessions: $(echo "$SELECTED" | tr '\n' ', ' | sed 's/,$//')"
+sleep 1
