@@ -7,7 +7,3 @@ Every PR must include the following in its description:
 3. **References** — A Linear ticket link or relevant documentation link.
 
 If any of these are unknown, use `AskUserQuestion` to ask the user rather than assuming or omitting them.
-
-## Learnings file path
-
-Claude Memories path: `/Users/matteohertel/Documents/Main/Claude Memories.md`
