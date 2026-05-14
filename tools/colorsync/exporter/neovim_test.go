@@ -35,6 +35,9 @@ func TestExportNeovim(t *testing.T) {
 
 	content := string(data)
 
+	if !strings.Contains(content, "vim.o.termguicolors = true") {
+		t.Error("missing vim.o.termguicolors = true")
+	}
 	if !strings.Contains(content, "vim.o.background") {
 		t.Error("missing vim.o.background")
 	}

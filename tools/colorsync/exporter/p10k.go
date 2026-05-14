@@ -27,7 +27,7 @@ func GenerateP10kBlock(theme *palette.Theme) string {
 	brBlack := theme.Colors[8]
 
 	var b strings.Builder
-	b.WriteString(p10kMarkerStart + "\n")
+	fmt.Fprintf(&b, "%s theme: %s\n", p10kMarkerStart, theme.Name)
 
 	// Custom user segment: accent (blue) bg, background fg
 	fmt.Fprintf(&b, "POWERLEVEL9K_CUSTOM_USER_BACKGROUND='%s'\n", blue)

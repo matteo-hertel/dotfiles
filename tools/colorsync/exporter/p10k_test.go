@@ -129,6 +129,9 @@ func TestGenerateP10kBlock(t *testing.T) {
 	if !strings.HasPrefix(block, "# --- colorsync theme start ---") {
 		t.Error("block does not start with start marker")
 	}
+	if !strings.Contains(block, "# --- colorsync theme start --- theme: test-theme\n") {
+		t.Error("start marker should embed theme name")
+	}
 	if !strings.HasSuffix(strings.TrimRight(block, "\n"), "# --- colorsync theme end ---") {
 		t.Error("block does not end with end marker")
 	}

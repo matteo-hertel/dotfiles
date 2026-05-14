@@ -1,6 +1,6 @@
 # colorsync
 
-A Go CLI tool that syncs color schemes across neovim, tmux, and iTerm2.
+A Go CLI tool that syncs color schemes across neovim, tmux, iTerm2, and Ghostty.
 
 ## Quick Reference
 
@@ -19,6 +19,7 @@ cd tools/colorsync && go test ./... -v
 ./colorsync ai-generate "warm autumn"     # AI-generate with 3 models in parallel
 ./colorsync preview catppuccin-mocha      # Preview in terminal
 ./colorsync apply catppuccin-mocha        # Apply to all targets
+./colorsync current                       # Show currently applied theme per target
 ./colorsync apply gruvbox-dark --target tmux,nvim  # Apply to specific targets
 ```
 
@@ -27,7 +28,7 @@ cd tools/colorsync && go test ./... -v
 - **Palette model**: `palette/palette.go` - `Theme` struct with 18 colors (bg, fg, cursor, 16 ANSI). JSON serialization. Themes stored in `~/.config/colorsync/themes/`.
 - **Color generation**: `palette/generate.go` - Derives 16 ANSI colors from bg/fg/accent using HSL manipulation.
 - **Importers**: `importer/` - `builtin.go` has 6 hardcoded themes. `itermcolors.go` parses Apple plist XML.
-- **Exporters**: `exporter/` - `neovim.go` writes standalone Lua colorscheme. `tmux.go` writes theme.conf. `iterm.go` writes .itermcolors and sends live escape sequences.
+- **Exporters**: `exporter/` - `neovim.go` writes standalone Lua colorscheme. `tmux.go` writes theme.conf. `iterm.go` writes .itermcolors and sends live escape sequences. `ghostty.go` writes a Ghostty include file and sends OSC 4/10/11/12 escapes (tmux-aware).
 - **Preview**: `preview/preview.go` - Renders color swatches using 24-bit ANSI escapes.
 - **AI Gateway client**: `aigw/client.go` - Calls Vercel AI Gateway (OpenAI-compatible REST API) with structured JSON output. Streams responses. Supports Claude Opus 4.6, GPT-5.4, Gemini 3.1 Pro. Used by `cmd/ai_generate.go`.
 - **CLI**: `cmd/` - Subcommands registered via `init()` functions. No cobra/viper, plain stdlib.
@@ -39,6 +40,7 @@ cd tools/colorsync && go test ./... -v
 | neovim | `~/.config/nvim/colors/<name>.lua` | `:colorscheme <name>` |
 | tmux | `~/.tmux/theme.conf` | `source-file ~/.tmux/theme.conf` in `.tmux.conf` |
 | iTerm | `~/.config/colorsync/output/<name>.itermcolors` + live escape sequences | Automatic for current session |
+| Ghostty | `~/.config/ghostty/theme.conf` (included from `config` via `config-file = ?theme.conf`) + live OSC escapes | Automatic for current session |
 
 ## Conventions
 

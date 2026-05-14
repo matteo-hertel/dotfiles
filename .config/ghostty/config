@@ -1,0 +1,20 @@
+# Ghostty config — kept minimal; theming handled by colorsync, layout by tmux.
+# Full reference: https://ghostty.org/docs/config/reference
+
+# Don't ask before closing a surface — tmux preserves state anyway.
+confirm-close-surface = false
+
+# Hide the mouse cursor while typing.
+mouse-hide-while-typing = true
+
+# Warn on multi-line paste (avoids surprise command execution).
+clipboard-paste-protection = true
+
+# Auto-copy selection to the system clipboard.
+# `clipboard` (not `true`) is the macOS-correct value — `true` writes only to
+# the X11 selection clipboard which doesn't exist here.
+copy-on-select = clipboard
+
+# Live colors written by `colorsync apply`. The leading `?` makes the include
+# optional so Ghostty still starts cleanly before the first colorsync run.
+config-file = ?theme.conf

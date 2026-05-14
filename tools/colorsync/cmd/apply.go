@@ -18,19 +18,19 @@ import (
 func init() {
 	Register(Command{
 		Name: "apply",
-		Help: "Apply a theme to neovim, tmux, iTerm, and p10k",
+		Help: "Apply a theme to neovim, tmux, iTerm, Ghostty, and p10k",
 		Run:  runApply,
 	})
 }
 
 func runApply(args []string) error {
 	fs := flag.NewFlagSet("apply", flag.ExitOnError)
-	targets := fs.String("target", "nvim,tmux,iterm,p10k", "Comma-separated targets: nvim,tmux,iterm,p10k")
+	targets := fs.String("target", "nvim,tmux,iterm,ghostty,p10k", "Comma-separated targets: nvim,tmux,iterm,ghostty,p10k")
 	fs.Parse(args)
 
 	remaining := fs.Args()
 	if len(remaining) < 1 {
-		return fmt.Errorf("usage: colorsync apply <theme> [--target nvim,tmux,iterm,p10k]")
+		return fmt.Errorf("usage: colorsync apply <theme> [--target nvim,tmux,iterm,ghostty,p10k]")
 	}
 
 	theme, err := resolveTheme(remaining[0])
@@ -65,6 +65,12 @@ func runApply(args []string) error {
 	if targetSet["iterm"] {
 		if err := applyIterm(theme); err != nil {
 			return fmt.Errorf("iterm: %w", err)
+		}
+	}
+
+	if targetSet["ghostty"] {
+		if err := applyGhostty(theme); err != nil {
+			return fmt.Errorf("ghostty: %w", err)
 		}
 	}
 
@@ -244,18 +250,20 @@ func ensureTmuxSourceLine(confPath, themePath string) (bool, error) {
 		return false, err
 	}
 
-	sourceLine := fmt.Sprintf("source-file %s", themePath)
-	if strings.Contains(string(data), sourceLine) {
-		return false, nil // already present
+	// Accept any existing reference to theme.conf — absolute path, tilde, or
+	// guarded `if-shell ... source-file ...` form. This prevents duplicate
+	// source lines on every apply.
+	if strings.Contains(string(data), "theme.conf") {
+		return false, nil
 	}
 
-	// Back up .tmux.conf before modifying
 	if err := backup.SaveBackup(confPath); err != nil {
 		return false, err
 	}
 
-	updated := string(data) + "\n# colorsync theme\n" + sourceLine + "\n"
-	if err := os.WriteFile(confPath, []byte(updated), 0644); err != nil {
+	block := "\n# colorsync theme (written by `colorsync apply`)\n" +
+		`if-shell "test -f ~/.tmux/theme.conf" "source-file ~/.tmux/theme.conf"` + "\n"
+	if err := os.WriteFile(confPath, []byte(string(data)+block), 0644); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -286,6 +294,30 @@ func applyIterm(theme *palette.Theme) error {
 	}
 	exporter.WriteItermEscapes(os.Stdout, theme)
 	fmt.Println("iTerm: live colors updated")
+
+	return nil
+}
+
+// --- Ghostty ---
+
+func applyGhostty(theme *palette.Theme) error {
+	// 1. Write theme.conf — main config includes it via `config-file = ?theme.conf`
+	path := exporter.GhosttyDefaultPath()
+	if err := backup.SaveBackup(path); err != nil {
+		return fmt.Errorf("backup ghostty: %w", err)
+	}
+	if err := exporter.ExportGhostty(theme, path); err != nil {
+		return err
+	}
+	fmt.Printf("Ghostty: wrote %s\n", path)
+
+	// 2. Live-update the running terminal via OSC escape sequences.
+	//    Inside tmux, ensure pass-through is on so escapes reach Ghostty.
+	if isTmuxRunning() {
+		exec.Command("tmux", "set", "-g", "allow-passthrough", "on").Run()
+	}
+	exporter.WriteGhosttyEscapes(os.Stdout, theme)
+	fmt.Println("Ghostty: live colors updated")
 
 	return nil
 }

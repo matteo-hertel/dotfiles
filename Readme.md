@@ -8,7 +8,7 @@ Years of fine tuning to achieve the perfect dev environment.
 - [oh-my-zsh](https://ohmyz.sh/)
 - [powerlevel10k](https://github.com/romkatv/powerlevel10k)
 - [Nerd Fonts](https://nerdfonts.com/)
-- [iTerm2](https://www.iterm2.com/)
+- [iTerm2](https://www.iterm2.com/) and/or [Ghostty](https://ghostty.org/) — `colorsync` exports themes for both.
 
 ## Installation
 
@@ -34,11 +34,12 @@ The repo mirrors your home directory structure. [GNU Stow](https://www.gnu.org/s
 
 ### colorsync
 
-CLI tool to sync color schemes across neovim, tmux, iTerm2, and powerlevel10k. Lives in `tools/colorsync/`. See its [CLAUDE.md](tools/colorsync/CLAUDE.md) for details.
+CLI tool to sync color schemes across neovim, tmux, iTerm2, Ghostty, and powerlevel10k. Lives in `tools/colorsync/`. See its [CLAUDE.md](tools/colorsync/CLAUDE.md) for details.
 
 ```bash
 colorsync list
 colorsync apply catppuccin-mocha
+colorsync current
 colorsync generate
 colorsync ai-generate "warm autumn theme"
 ```

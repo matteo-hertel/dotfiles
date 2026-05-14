@@ -9,6 +9,9 @@ bundle
 .config/colorsync/output/
 .config/colorsync/backup/
 
+# Ghostty live theme (written by colorsync apply)
+.config/ghostty/theme.conf
+
 # Build artifacts
 tools/colorsync/colorsync
 
