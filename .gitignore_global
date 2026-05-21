@@ -2,3 +2,5 @@
 *.swp
 lefthook.yml
 superpowers/
+.superpowers/
+.codesight/

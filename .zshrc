@@ -135,6 +135,9 @@ zstyle ':completion:*:*' ignored-patterns '*ORIG_HEAD'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# fzf history search → clipboard
+alias fh="history | fzf | awk '{\$1=\"\"; print substr(\$0,2)}' | pbcopy"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
