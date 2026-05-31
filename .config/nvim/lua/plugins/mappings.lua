@@ -26,8 +26,8 @@ return {
           desc = "New duck",
         },
         ["<leader>dk"] = {
-          "<cmd>lua require('duck').cook()<CR>",
-          desc = "Cook duck",
+          "<cmd>lua require('duck').cook_all()<CR>",
+          desc = "Cook all ducks",
         },
         [";"] = {
           "<cmd>lua require('telescope.builtin').buffers()<CR>",

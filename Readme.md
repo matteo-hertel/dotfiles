@@ -30,6 +30,46 @@ After setup, create `~/.env/env.custom.sh` for machine-specific config (API keys
 
 The repo mirrors your home directory structure. [GNU Stow](https://www.gnu.org/software/stow/) creates symlinks from `$HOME` pointing into this repo. Edits to dotfiles show up as uncommitted changes in git.
 
+## Maintenance
+
+### Refresh stow links
+
+Run Stow from the repo root and point the target at your home directory:
+
+```bash
+cd ~/mhdev/dotfiles
+stow --no --verbose=1 --target="$HOME" .
+stow --verbose=2 --target="$HOME" .
+```
+
+The package is `.` because this repo mirrors `$HOME` directly. `.stow-local-ignore` keeps repo-only paths such as `tools/`, `docs/`, `Readme.md`, and `.claude/` out of Stow.
+
+If Stow reports that an existing target is "not owned by stow", check it before removing anything:
+
+```bash
+readlink ~/.env/env.custom.sh
+realpath ~/.env/env.custom.sh
+```
+
+Only remove and recreate a link if it already resolves to the matching file in `~/mhdev/dotfiles`. Do not replace real files in `$HOME` without first copying their contents into the repo.
+
+`~/.env/env.custom.sh` is the machine-local secrets file for API keys and aliases. It is gitignored by `.gitignore`, but Stow still links it into place when the file exists locally.
+
+Claude config is linked separately by `setup.sh` because `.claude/` is excluded from Stow to avoid folding the whole live Claude directory into this repo.
+
+### Rebuild local binaries
+
+`setup.sh` builds `colorsync` into `~/.local/bin/colorsync`. If the source has changed and the installed command looks stale, rebuild it from the tool directory:
+
+```bash
+cd ~/mhdev/dotfiles/tools/colorsync
+go test ./...
+go build -o "$HOME/.local/bin/colorsync" .
+colorsync current
+```
+
+`colorsync current` shows the theme currently detected for each target.
+
 ## Tools
 
 ### colorsync
