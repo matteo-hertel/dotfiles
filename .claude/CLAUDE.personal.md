@@ -10,3 +10,7 @@ Every project gets a thorough CLAUDE.md with: architecture overview, API endpoin
 
 Don't run servers locally unless I say so. If you need to run it for test something it's fine but in general I want to run the servers.
 If you are in a branch or worktree commit as many times as you want, if you're on the main branch, don't commit unless I say so
+
+### Receipt printer
+
+When a conversation comes to a natural end offer to print a receipt of this conversation (the `/receipt` skill — prints a physical thermal-printer summary of the session).
