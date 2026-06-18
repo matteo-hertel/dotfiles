@@ -14,7 +14,6 @@ else
   source ~/.zshtheme
 fi
 
-
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -156,3 +155,9 @@ export PATH=$HOME/bin:$PATH
 # Added by Antigravity
 export PATH="/Users/mhdev/.antigravity/antigravity/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
