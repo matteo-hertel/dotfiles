@@ -6,6 +6,10 @@ allowed-tools: [Bash]
 
 Print a physical thermal-printer receipt for **this** Claude Code session.
 
+This mirrors the Codex receipt skill at `.codex/skills/receipt/SKILL.md`.
+When changing one, update the other unless the difference is
+tool-specific and documented in both files.
+
 You have the full transcript of this session in your context already — use
 it to write the narrative summary directly, then pass it to the CLI via
 `--summary`. **Do not** read the session JSONL yourself; the CLI does that

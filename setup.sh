@@ -42,7 +42,32 @@ if [ ! -f "$HOME/.claude/CLAUDE.md" ]; then
     printf '@CLAUDE.shared.md\n@CLAUDE.work.md\n' > "$HOME/.claude/CLAUDE.md"
 fi
 
-# 4. Build and install colorsync
+# 4. Codex config (separate from stow to avoid folding ~/.codex)
+echo "Linking Codex config..."
+mkdir -p "$HOME/.codex/skills"
+
+link_codex_path() {
+    local src="$1"
+    local dst="$2"
+    local backup
+
+    if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+        return
+    fi
+
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+        backup="${dst}.backup.$(date +%Y%m%d%H%M%S)"
+        mv "$dst" "$backup"
+        echo "  Backed up existing $dst to $backup"
+    fi
+
+    ln -s "$src" "$dst"
+}
+
+link_codex_path "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+link_codex_path "$DOTFILES_DIR/.codex/skills/receipt" "$HOME/.codex/skills/receipt"
+
+# 5. Build and install colorsync
 echo "Building colorsync..."
 mkdir -p "$HOME/.local/bin"
 cd "$DOTFILES_DIR/tools/colorsync"

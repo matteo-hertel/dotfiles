@@ -5,6 +5,7 @@
 # Repo files (not dotfiles)
 ^/Readme\.md
 ^/setup\.sh
+^/AGENTS\.md
 
 # Tools (built separately, not stowed)
 ^/tools
@@ -13,3 +14,5 @@
 # Claude config (symlinked separately to avoid stow folding ~/.claude)
 ^/\.claude
 
+# Codex config (symlinked separately to avoid stow folding ~/.codex)
+^/\.codex

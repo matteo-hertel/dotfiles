@@ -21,7 +21,7 @@ cd ~/mhdev/dotfiles
 This will:
 - Install `stow` and `go` via Homebrew
 - Symlink all dotfiles into `$HOME` using GNU Stow
-- Link Claude Code config files
+- Link Claude Code and Codex config files
 - Build and install `colorsync` to `~/.local/bin/`
 
 After setup, create `~/.env/env.custom.sh` for machine-specific config (API keys, workspace aliases). This file is gitignored.
@@ -42,7 +42,7 @@ stow --no --verbose=1 --target="$HOME" .
 stow --verbose=2 --target="$HOME" .
 ```
 
-The package is `.` because this repo mirrors `$HOME` directly. `.stow-local-ignore` keeps repo-only paths such as `tools/`, `docs/`, `Readme.md`, and `.claude/` out of Stow.
+The package is `.` because this repo mirrors `$HOME` directly. `.stow-local-ignore` keeps repo-only paths such as `tools/`, `docs/`, `Readme.md`, `AGENTS.md`, `.claude/`, and `.codex/` out of Stow.
 
 If Stow reports that an existing target is "not owned by stow", check it before removing anything:
 
@@ -55,7 +55,11 @@ Only remove and recreate a link if it already resolves to the matching file in `
 
 `~/.env/env.custom.sh` is the machine-local secrets file for API keys and aliases. It is gitignored by `.gitignore`, but Stow still links it into place when the file exists locally.
 
-Claude config is linked separately by `setup.sh` because `.claude/` is excluded from Stow to avoid folding the whole live Claude directory into this repo.
+Claude and Codex config are linked separately by `setup.sh` because `.claude/` and `.codex/` are excluded from Stow to avoid folding the whole live agent directories into this repo.
+
+### Agent guidance
+
+Claude guidance lives in `.claude/`. Codex guidance lives in `.codex/AGENTS.md`, with a repo-root `AGENTS.md` entrypoint for agents working inside this repo. Keep both sets of guidance in sync when updating working preferences or skills.
 
 ### Rebuild local binaries
 

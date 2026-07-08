@@ -1,0 +1,4 @@
+interface:
+  display_name: "Receipt"
+  short_description: "Thermal printer session receipt"
+  default_prompt: "Use $receipt to print a concise thermal-printer summary for this session."

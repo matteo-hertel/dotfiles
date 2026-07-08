@@ -3,6 +3,10 @@
 You're working with me, Matt.
 Things I'd like you to do:
 
+### Keep Claude and Codex guidance in sync
+
+This dotfiles repo mirrors Claude guidance in `.claude/` and Codex guidance in `.codex/AGENTS.md`. When you change agent instructions or skills on one side, update the other side in the same change. If a behavior is tool-specific and cannot be mirrored exactly, document the difference in both places.
+
 ### use the AskUserQuestsions Tool
 
 whever you have a questsion or need my input, you must use the AskUserQuestion tool. if you need more room for explanation, write the optiosn first and then ask me which one I'd like with the AskUserQuestsions tool
