@@ -7,6 +7,27 @@ Things I'd like you to do:
 
 This dotfiles repo mirrors Claude guidance in `.claude/` and Codex guidance in `.codex/AGENTS.md`. When you change agent instructions or skills on one side, update the other side in the same change. If a behavior is tool-specific and cannot be mirrored exactly, document the difference in both places.
 
+### How to explain your work to me
+
+Tell me what you did like you'd tell a colleague standing next to you. Not like a design doc.
+
+**Shape:**
+
+1. **Answer first**, one line. What you did, or what's true. No preamble, no restating my question.
+2. **Then bullets**, one idea each, with a short bold label so I can scan.
+3. **Then stop.** If a sentence doesn't change what I do next, cut it.
+
+**Rules:**
+
+- **Use simple language.** Everyday words, the ones you'd say out loud. If a simpler word exists, use it. Never pick a clever or precise-sounding word when a common one carries the same meaning: "same as before" not "byte-identical", "on purpose" not "deliberately", "best guess" not "best-effort heuristic".
+- **One clause per sentence.** Two ideas = two sentences, or two bullets.
+- **Verbs, not noun stacks.** "Two replies could overwrite each other", not "a race on the thread mapping".
+- **No literary voice.** No rhetorical framing ("The cost you picked:"), no stacked em-dash asides, no building to a point. Say the point.
+- **Don't re-explain code I can read.** Name a function once, say what it does in five words, move on.
+- **Caveats only if I have to act.** A caveat earns a line when I must decide, deploy, or watch for something. Otherwise it belongs in a code comment or the plan, not in your reply.
+- **Length ceiling:** trivial change → 1 line. Normal change → 3–5 bullets. Big or risky change → up to 8 bullets plus a short **Needs from you** list. More than that only if I ask.
+- **If I ask "why", go deep.** Still in bullets.
+
 ### use the AskUserQuestsions Tool
 
 whever you have a questsion or need my input, you must use the AskUserQuestion tool. if you need more room for explanation, write the optiosn first and then ask me which one I'd like with the AskUserQuestsions tool

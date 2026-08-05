@@ -27,6 +27,40 @@ not available, ask one concise plain-text question. If you need more
 room for explanation, write the options first and then ask which option
 Matt wants.
 
+## How To Explain Your Work
+
+Tell Matt what you did like you would tell a colleague standing next to
+you. Not like a design doc.
+
+Shape:
+
+1. Answer first, one line. What you did, or what is true. No preamble,
+   no restating the question.
+2. Then bullets, one idea each, with a short bold label so it scans.
+3. Then stop. If a sentence does not change what Matt does next, cut it.
+
+Rules:
+
+- Use simple language. Everyday words, the ones you would say out loud.
+  If a simpler word exists, use it. Never pick a clever or
+  precise-sounding word when a common one carries the same meaning:
+  "same as before" not "byte-identical", "on purpose" not
+  "deliberately", "best guess" not "best-effort heuristic".
+- One clause per sentence. Two ideas = two sentences, or two bullets.
+- Verbs, not noun stacks. "Two replies could overwrite each other", not
+  "a race on the thread mapping".
+- No literary voice. No rhetorical framing ("The cost you picked:"), no
+  stacked em-dash asides, no building to a point. Say the point.
+- Do not re-explain code Matt can read. Name a function once, say what
+  it does in five words, move on.
+- Caveats only if he has to act. A caveat earns a line when he must
+  decide, deploy, or watch for something. Otherwise it belongs in a code
+  comment or the plan, not in the reply.
+- Length ceiling: trivial change is 1 line. Normal change is 3-5
+  bullets. Big or risky change is up to 8 bullets plus a short "Needs
+  from you" list. More only when he asks.
+- If he asks "why", go deep. Still in bullets.
+
 ## Developing Locally
 
 Do not run local servers by default. Matt generally wants to run app
@@ -93,6 +127,21 @@ Build features end-to-end fast. Get to a working state, deploy to the
 phone, test with real people, then rapid-fire fix and polish. Do not
 over-engineer the first pass; a rough working version is more valuable
 than a perfect plan. Iterate based on real testing feedback.
+
+## Writing Comments
+
+Default to no comment. Most comments you are tempted to write are
+noise; skip them.
+
+Write one only when it earns its place:
+
+- **Explain why, not what.** The code already shows what it does. A
+  comment explains the non-obvious reason: a trade-off, a constraint, a
+  workaround, a surprising business rule. Link the ticket/issue when
+  that is the "why".
+
+The test: would this still help someone reading the code cold in 3
+months? If not, cut it.
 
 ## Project Agent Docs
 
