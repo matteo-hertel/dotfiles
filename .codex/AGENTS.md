@@ -172,6 +172,81 @@ Every PR description must include:
 If any of these are unknown, ask Matt rather than assuming or omitting
 them.
 
+### Announcing PRs In Slack
+
+Work only. Every PR raised in the `stampedeapp` GitHub org gets announced
+via the "FULL NOVA PRs" Slack workflow, right after the PR URL exists. Do
+it automatically — do not ask first. Never do this for personal repos.
+
+Run it with the `agent-slack` CLI:
+
+```bash
+agent-slack workflow run Ft0A2N2ZRJ6S \
+  --channel C0A2NJPNTPF \
+  --field "🔗 PR Link(s)=<full PR url>" \
+  --field "Notes=<one sentence saying what the PR does>
+
+<one sarcastic comment about it>"
+```
+
+- Notes is two lines. First a plain sentence on what the PR does. Then one
+  sarcastic comment about it. Aim the sarcasm at the code, the bug, or the
+  situation — never at a person.
+- Where it lands: `#nova-devs` (`C0A2NJPNTPF`), pinging `@nova-engineers`.
+- Fallback if the run fails: check `agent-slack auth list` shows the
+  `lets-dothis` browser credentials (form submission needs xoxc/xoxd), and
+  re-read the field titles with `agent-slack workflow get Ft0A2N2ZRJ6S`. If
+  it still fails, hand Matt the shortcut link plus the two lines ready to
+  paste:
+  <https://slack.com/shortcuts/Ft0A2N2ZRJ6S/0fc0a60851adf0ddf1f68af6918b5a08>
+- Include both the PR URL and the Slack permalink in the Resources block.
+
+### Raising A PR Is The Start Of The Job
+
+Never raise a PR and hand it back. Raising it starts a loop you own until it is
+mergeable.
+
+Before the PR exists, do all the cheap static work — a reviewer should never be
+the one to catch this:
+
+1. Rebase on latest `main`. Trunk is `main`; never push to `main` directly.
+   Stacks are GitHub-native — a dependent PR sets `--base` to its parent branch.
+   Do not use Graphite.
+2. Run codegen if it applies — any `.graphql` change needs root `yarn gen`.
+3. Format, lint, typecheck the packages you touched, filtered.
+4. Run the focused tests for those packages. Never run unfiltered `yarn test`
+   locally. If you changed behaviour nothing covers, write the test now.
+
+Then raise it ready for review, not as a draft, with Why/What/References — and
+announce it in Slack (see above).
+
+Then stay on it until it is mergeable: watch CI and reviewer comments as they land
+and answer every one. Fix what is right. Where a comment is wrong, post the
+refutation straight to the thread — evidence first, two or three sentences, civil,
+never the same comment twice, and never on something you only half understand.
+Where a comment is correct but belongs in another PR, say so on the thread and
+offer the follow-up. Stop and ask Matt when a comment asks for a redesign,
+contradicts an earlier decision, or touches schema, auth, or money paths.
+
+For CI: format and lint failures are deterministic, just fix them. Test failures
+get three attempts, then stop and report. Checks named `Resolve Approval & Scope`
+or `Report Required Tests` are gated on human approval — they are not yours to fix.
+
+Matt should never have to type "check the comments and fix or refute" or "the CI
+is failing". If he does, the loop failed — pick it up mid-flight, do not restart.
+
+Note on drafts: the backend repo's own `AGENTS.md` tells agents to always open
+drafts and never mark a PR ready. Matt has overridden that for his own PRs — that
+override is the "unless the user explicitly says so" case the repo rule allows. It
+costs more CI per PR (drafts defer build and preview E2E; system, web-unit and
+smoke run only after approval), which is the trade he chose. Do not raise ready
+PRs on anyone else's behalf.
+
+**Claude difference:** Claude does this through a dedicated `shepherd` skill
+(`~/.claude/skills/shepherd/`), auto-kicked by a `PostToolUse` hook, and uses its
+`Monitor` tool to wake on CI/comment changes instead of polling. Codex has no
+equivalent skill or hook, so follow the steps above inline with `gh`.
+
 ## Receipt Printer
 
 When a conversation comes to a natural end, offer to print a receipt of
