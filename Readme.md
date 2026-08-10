@@ -61,6 +61,10 @@ Claude and Codex config are linked separately by `setup.sh` because `.claude/` a
 
 Claude guidance lives in `.claude/`. Codex guidance lives in `.codex/AGENTS.md`, with a repo-root `AGENTS.md` entrypoint for agents working inside this repo. Keep both sets of guidance in sync when updating working preferences or skills.
 
+Agent skills are authored under `.claude/skills/` and `.codex/skills/`. `setup.sh`
+links Claude skills into `~/.claude/skills/` and Codex skills into
+`~/.agents/skills/`, which is Codex's user skill discovery folder.
+
 ### Rebuild local binaries
 
 `setup.sh` builds `colorsync` into `~/.local/bin/colorsync`. If the source has changed and the installed command looks stale, rebuild it from the tool directory:

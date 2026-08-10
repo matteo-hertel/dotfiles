@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shepherd"
+  short_description: "Raise PRs and drive them to mergeable"
+  default_prompt: "Use $shepherd to raise this pull request and drive it to mergeable."

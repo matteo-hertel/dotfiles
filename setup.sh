@@ -3,6 +3,24 @@ set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+link_agent_path() {
+    local src="$1"
+    local dst="$2"
+    local backup
+
+    if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+        return
+    fi
+
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+        backup="${dst}.backup.$(date +%Y%m%d%H%M%S)"
+        mv "$dst" "$backup"
+        echo "  Backed up existing $dst to $backup"
+    fi
+
+    ln -s "$src" "$dst"
+}
+
 echo "Setting up dotfiles from $DOTFILES_DIR"
 
 # 1. Homebrew
@@ -31,11 +49,12 @@ echo "Installing tmux plugins..."
 # 3. Claude config (separate from stow to avoid folding ~/.claude)
 # CLAUDE.md is per-machine — create a default one if missing
 echo "Linking Claude config..."
-mkdir -p "$HOME/.claude"
+mkdir -p "$HOME/.claude/skills"
 ln -sf "$DOTFILES_DIR/.claude/CLAUDE.shared.md" "$HOME/.claude/CLAUDE.shared.md"
 ln -sf "$DOTFILES_DIR/.claude/CLAUDE.work.md" "$HOME/.claude/CLAUDE.work.md"
 ln -sf "$DOTFILES_DIR/.claude/CLAUDE.personal.md" "$HOME/.claude/CLAUDE.personal.md"
 ln -sf "$DOTFILES_DIR/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+link_agent_path "$DOTFILES_DIR/.claude/skills/shepherd" "$HOME/.claude/skills/shepherd"
 
 if [ ! -f "$HOME/.claude/CLAUDE.md" ]; then
     echo "Creating default ~/.claude/CLAUDE.md..."
@@ -44,28 +63,10 @@ fi
 
 # 4. Codex config (separate from stow to avoid folding ~/.codex)
 echo "Linking Codex config..."
-mkdir -p "$HOME/.codex/skills"
-
-link_codex_path() {
-    local src="$1"
-    local dst="$2"
-    local backup
-
-    if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
-        return
-    fi
-
-    if [ -e "$dst" ] || [ -L "$dst" ]; then
-        backup="${dst}.backup.$(date +%Y%m%d%H%M%S)"
-        mv "$dst" "$backup"
-        echo "  Backed up existing $dst to $backup"
-    fi
-
-    ln -s "$src" "$dst"
-}
-
-link_codex_path "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
-link_codex_path "$DOTFILES_DIR/.codex/skills/receipt" "$HOME/.codex/skills/receipt"
+mkdir -p "$HOME/.codex/skills" "$HOME/.agents/skills"
+link_agent_path "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+link_agent_path "$DOTFILES_DIR/.codex/skills/receipt" "$HOME/.codex/skills/receipt"
+link_agent_path "$DOTFILES_DIR/.codex/skills/shepherd" "$HOME/.agents/skills/shepherd"
 
 # 5. Build and install colorsync
 echo "Building colorsync..."

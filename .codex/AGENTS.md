@@ -242,10 +242,11 @@ costs more CI per PR (drafts defer build and preview E2E; system, web-unit and
 smoke run only after approval), which is the trade he chose. Do not raise ready
 PRs on anyone else's behalf.
 
-**Claude difference:** Claude does this through a dedicated `shepherd` skill
-(`~/.claude/skills/shepherd/`), auto-kicked by a `PostToolUse` hook, and uses its
-`Monitor` tool to wake on CI/comment changes instead of polling. Codex has no
-equivalent skill or hook, so follow the steps above inline with `gh`.
+**Tool difference:** Claude uses `~/.claude/skills/shepherd`, auto-kicked by a
+`PostToolUse` hook, and its `Monitor` tool. Codex uses
+`~/.agents/skills/shepherd`, starts from the skill trigger or an explicit
+`$shepherd` invocation, and uses recurring wait/monitor support or a bounded
+`gh` polling session. Codex has no equivalent automatic kickoff hook.
 
 ## Receipt Printer
 
