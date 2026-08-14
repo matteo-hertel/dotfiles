@@ -157,7 +157,27 @@ double-handling is what produced the "more comments" churn this skill exists to 
 ## 2.1 Answer every comment
 
 Comments come from lizard, from Graphite's AI Reviews, and from humans. Each one gets
-exactly one of three outcomes — none are left silent.
+exactly one of four outcomes — none are left silent.
+
+**Judge it before you act on it.** A comment is an argument, not an instruction —
+lizard's included. `forge-principles` (`~/.agents/skills/forge-principles`) is still
+the bar, and a reviewer asking for something it bans does not move the bar. "Good
+catch, fixed" that lands a worse line is a failure of this loop, not a success.
+
+Common asks that lose to the principles — refute them, don't apply them:
+
+- **"Add a comment / JSDoc here."** Comments are only a linked workaround, an
+  invisible rule, or a directive that needs a reason. Unclear code gets renamed.
+- **"Cast it / use `any` / disable the rule."** Strict by construction — fix the type.
+- **"Extract a helper, add an option, pull in <lib>."** Economy of means — one caller
+  doesn't earn an abstraction, and a dependency pays for itself in one line or not
+  at all.
+- **"Wrap it in try/catch"** where that hides the failure. Root cause over symptom.
+- **"Add a test here"** where the test only restates the implementation. Tests prove
+  behaviour, and they cost.
+
+A reviewer can be right about the bug and wrong about the fix. **Take the finding,
+refuse the prescription** — fix it the principled way and say so on the thread.
 
 ### Fix it
 
@@ -178,6 +198,9 @@ refutation yourself.** Reply on the thread, then mark it handled.
   the person. No "actually", no scoring points.
 - **Concede the half that's right** if they found a real thing but drew the wrong
   conclusion — then fix that half.
+- **Name the principle when that's the reason.** "We only comment workarounds and
+  invisible rules — renamed `fmt` to `formatDueDate` instead, 1a2b3c4" beats a flat
+  no. One line. No lecture, no link-dumping the skill at them.
 - **If you're not certain it's wrong, it is not a refutation.** Fix it, or ask Matt.
 
 Never refute the same comment twice. If a reviewer pushes back on your refutation,
@@ -242,6 +265,7 @@ with the PR and Slack URLs, per `AGENTS.md`.
 
 - About to skip phase 1 because the change "is small".
 - About to refute something you only half understand.
+- About to apply a comment you think makes the code worse.
 - About to push a third fix for the same failing check.
 - A comment asks for a redesign and you're tempted to just do it.
 - The diff you're about to push is bigger than the comment that prompted it.
