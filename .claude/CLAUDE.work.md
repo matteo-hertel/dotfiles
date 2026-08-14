@@ -1,3 +1,42 @@
+## Writing Code
+
+`forge-principles` is the quality bar for every line — read the skill rather than
+guessing at it (`~/.claude/skills/forge-principles`). The ones that bite most:
+
+- **Economy of means.** Subtraction first. A new dependency, abstraction or config
+  surface is denied until it earns its place in one line.
+- **Strict by construction.** `any`, `@ts-ignore`, unchecked casts and lint disables
+  are banned, not discouraged. Fix the type instead.
+- **Root cause over symptom.** No fix before you can name the cause, and the
+  regression test is part of the fix.
+- **The edges are the work.** Empty, huge, malformed, double-submit, partial failure.
+  Anything that can run twice, will.
+- **Match the codebase.** New code reads like the code already around it.
+
+### Comments
+
+Default to none. Write a comment **only** in these three cases:
+
+1. **A workaround** — with a link to the upstream issue. No link, no comment.
+2. **A rule you can't see from the code** and would break by changing it: billing,
+   auth, legal, an external API's undocumented behaviour. Name the source.
+3. **A directive that demands a reason** — `eslint-disable`, `ts-expect-error`.
+
+Not on the list means no comment. There is nothing to weigh up, and "but this one
+explains why" is not an exception — it is the excuse that got us here. Every other
+why (the bug you chased, what you tried first, what changed) goes in the PR
+description, which is where it stays true.
+
+Three hard limits on the ones that do qualify:
+
+- **Two lines maximum.** Needs a paragraph? It was never one of the three.
+- **Never above a test.** The `describe`/`it` name is the comment. If the case needs
+  explaining, fix the name.
+- **Never longer than the code it sits on.** Seven lines of JSDoc over a five-line
+  regex means the regex needs a name, not a preface.
+
+Deleting noise you find in a file you're already touching is always welcome.
+
 ## Pull Request Requirements
 
 Every PR must include the following in its description:
@@ -39,52 +78,16 @@ agent-slack workflow run Ft0A2N2ZRJ6S \
 ## Raising a PR Is The Start Of The Job
 
 Never raise a PR and hand it back. Raising it starts a loop you own until it's
-mergeable.
+mergeable: the cheap static work before the PR exists, then CI and every comment
+after it, fixed or refuted, until it's green.
 
-**Before the PR exists**, do all the cheap static work — a reviewer should never
-be the one to catch this:
-
-1. **Rebase on latest `main`.** Trunk is `main`; never push to `main` directly.
-   Stacks are GitHub-native — a dependent PR sets `--base` to its parent branch.
-   Don't use Graphite.
-2. **Run codegen if it applies** — any `.graphql` change needs root `yarn gen`.
-3. **Format, lint, typecheck** the packages you touched, filtered.
-4. **Run the focused tests** for those packages. Never run unfiltered `yarn test`
-   locally. If you changed behaviour nothing covers, write the test now.
-
-**Then raise it ready for review**, not as a draft, with Why/What/References —
-and announce it in Slack (see above).
-
-**Then stay on it** until it's mergeable: watch CI and reviewer comments as they
-land and answer every one. Fix what's right. Post a refutation straight to the
-thread where a comment is wrong — evidence first, two or three sentences, civil,
-never the same comment twice, and never on something you only half understand.
-Flag scope creep on the thread and offer the follow-up. Stop and ask when a
-comment wants a redesign, contradicts an earlier decision, or touches schema,
-auth, or money paths.
+**`shepherd` is that loop.** Run the skill — don't improvise a worse version of it
+from memory. It holds the whole procedure and it is the only copy.
 
 Matt should never have to type "check the comments and fix or refute" or "the CI
 is failing". If he does, the loop failed — pick it up mid-flight, don't restart.
 
-**Note on drafts:** the backend repo's own `AGENTS.md` tells agents to always open
-drafts and never mark a PR ready. Matt has overridden that for his own PRs — that
-override is the "unless the user explicitly says so" case the repo rule allows. It
-costs more CI per PR (drafts defer build and preview E2E; system, web-unit and
-smoke run only after approval), which is the trade he chose. Don't raise ready PRs
-on anyone else's behalf.
-
 **Tool difference:** Claude uses `~/.claude/skills/shepherd`, auto-kicked by a
-`PostToolUse` hook, and its `Monitor` tool. Codex uses
-`~/.agents/skills/shepherd`, starts from the skill trigger or an explicit
-`$shepherd` invocation, and uses recurring wait/monitor support or a bounded
-`gh` polling session. Codex has no equivalent automatic kickoff hook.
-
-## Writing Comments
-
-Default to no comment. Most comments you're tempted to write are noise; skip them.
-
-Write one only when it earns its place:
-
-- **Explain why, not what.** The code already shows what it does. A comment explains the non-obvious reason: a trade-off, a constraint, a workaround, a surprising business rule. Link the ticket/issue when that's the "why".
-
-The test: would this still help someone reading the code cold in 3 months? If not, cut it.
+`PostToolUse` hook, plus its `Monitor` tool. Codex uses `~/.agents/skills/shepherd`,
+started by the skill trigger or an explicit `$shepherd`, and polls with `gh`. Codex
+has no automatic kickoff.

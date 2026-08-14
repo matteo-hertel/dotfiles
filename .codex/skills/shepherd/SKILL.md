@@ -111,6 +111,22 @@ jobs, and the system, web-unit and smoke suites only run after a human approves.
 ready PR runs all of that immediately. That's the trade Matt chose — faster signal,
 more CI. Don't re-litigate it, but don't raise ready PRs on someone else's behalf.
 
+## 1.8 Ping Paul's lizard
+
+Work PRs only — same rule as the Slack announce. `stampedeapp` org PRs get queued;
+personal repos never do.
+
+```bash
+curl -sS -X POST "https://paul-macbook-pro.taild42dc0.ts.net/api/queue" \
+  -H "Content-Type: application/json" \
+  -d "{\"url\":\"$PR_URL\"}"
+```
+
+Fire it right after the PR URL exists, alongside the Slack announce. Don't ask first.
+
+If it fails — Paul's machine asleep, tailnet unreachable — don't block. Note it in the
+final report and carry on to phase 2.
+
 Then **announce it in Slack** per `AGENTS.md`, and go to phase 2.
 
 ---
