@@ -234,8 +234,14 @@ agent-slack workflow run Ft0A2N2ZRJ6S \
 ### Raising A PR Is The Start Of The Job
 
 Never raise a PR and hand it back. Raising it starts a loop you own until it is
-mergeable: the cheap static work before the PR exists, then CI and every comment
-after it, fixed or refuted, until it is green.
+mergeable: rebase, lint, typecheck, focused tests and a **local `lizard` review of
+the branch before it is ever pushed**, then CI and every comment after it, fixed or
+refuted, until it is green.
+
+**Rounds are the enemy, not comments.** One answer per thread, resolve it in the same
+pass, batch replies into one submission, and after the first round ask the reviewer
+for every remaining blocker in one go. Three rounds is the budget; then bring the
+call to Matt.
 
 **`shepherd` is that loop.** Run the skill (`~/.agents/skills/shepherd`, or an
 explicit `$shepherd`) — do not improvise a worse version of it from memory. It

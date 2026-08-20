@@ -1,67 +1,59 @@
 ---
 name: shepherd
-description: Raises a PR properly and then drives it to mergeable without being nudged. Does the cheap static work first — rebase on main, format, lint, typecheck, focused tests — then opens a ready-for-review PR and watches it, fixing or refuting lizard and reviewer comments and fixing CI failures as they land. Use whenever a PR is about to be raised ("make a PR", "raise a PR", "open a PR", "submit it"), and whenever the user says "pull the comments and fix or refute", "check the comments and fix em", "check the CI comments", "more comments", "ci is failing", "fix the ci", "the formatting isn't passing", or asks to get a PR green, mergeable, or unblocked.
+description: Raises a PR properly and then drives it to mergeable without being nudged. Runs the cheap static work and a local lizard review before the PR exists, then opens it ready and answers every comment and CI failure until it merges. Use whenever a PR is about to be raised ("make a PR", "raise a PR", "open a PR", "submit it"), and whenever the user says "pull the comments and fix or refute", "check the comments and fix em", "check the CI comments", "more comments", "ci is failing", "fix the ci", "the formatting isn't passing", or asks to get a PR green, mergeable, or unblocked.
 ---
 
 # Shepherd
 
-The author-side counterpart to `lizard`. Lizard reviews other people's PRs; shepherd
-raises Matt's and answers everything that comes back.
+Raises Matt's PR and answers everything that comes back, until it merges.
 
-This mirrors the Codex skill at `.codex/skills/shepherd/SKILL.md`. Keep the
-workflows aligned. Document tool-specific differences in both files.
+Mirrors the Codex skill at `.codex/skills/shepherd/SKILL.md`. Keep both in sync, and
+document tool-specific differences in both.
 
-**The bar:** Matt should never have to type "check the comments and fix or refute" or
-"the CI is failing". If he does, the loop failed. Pick it up mid-flight, don't restart.
+**The bar:** Matt never types "check the comments" or "the CI is failing". If he does,
+the loop failed — pick it up mid-flight, don't restart.
+
+**The failure this exists to kill:** one PR, 32 replies across 16 threads, none
+resolved, 14 answered twice and two of those contradicting the first answer. Ten
+commits, no merge. **Rounds are the enemy, not comments.**
 
 **Announce at start:** "Shepherding — pre-flight." Then go quiet until you have a
-result or a real question. No narration.
+result or a real question.
 
-Two phases. **Never skip phase 1 to get to a PR faster** — every failure it catches
-would otherwise cost a full CI cycle, a reviewer's attention, and a nudge from Matt.
+Never skip phase 1 to reach a PR faster.
 
 ---
 
-# Phase 1 — Pre-flight, before the PR exists
+# Phase 1 — before anyone sees it
 
-Everything cheap, static and local happens here. The point is that the PR is already
-correct when a human first sees it.
+Everything cheap, static and local. The PR is correct and lizard-clean when a human
+first opens it.
 
-## 1.1 Rebase on latest main
+## 1.1 Rebase on main
 
 ```bash
-git fetch origin main
-git rebase origin/main
+git fetch origin main && git rebase origin/main
 ```
 
-Trunk is `main`, PRs target `main`, never push to `main` directly.
+Trunk is `main`; never push to it. Stacks are GitHub-native — a dependent PR sets its
+base to the parent's branch (`gh pr create --base <parent-branch>`), rebased bottom
+upward. No Graphite.
 
-**Stacks are GitHub-native** — a dependent PR just sets its base to the parent's
-branch (`gh pr create --base <parent-branch>`). Rebase the parent first, then each
-child onto its parent, bottom of the stack upward. Do not use Graphite; Matt doesn't.
-
-Conflicts in imports, lockfiles or formatting: resolve them. Conflicts in logic you
-and someone else both changed: stop and ask.
+Resolve conflicts in imports, lockfiles and formatting. Stop and ask on logic you and
+someone else both changed.
 
 ## 1.2 Work out what you touched
 
-Turbo filters use the `package.json` `name`, not the directory name:
+`git diff --name-only origin/main...HEAD`. Turbo filters use the `package.json` name:
+`services/graphql`→`graph-q-l`, `services/booking`→`booking-service`,
+`services/event`→`event-service`, `services/user`→`user-service`,
+`services/integration`→`integration-service`, `apps/web`→`@letsdothis/web`,
+`apps/gateway`→`gateway`.
 
-```bash
-git diff --name-only origin/main...HEAD
-```
+## 1.3 Codegen
 
-Common mappings (from the repo's `AGENTS.md`): `services/graphql` → `graph-q-l`,
-`services/booking` → `booking-service`, `services/event` → `event-service`,
-`services/user` → `user-service`, `services/integration` → `integration-service`,
-`apps/web` → `@letsdothis/web`, `apps/gateway` → `gateway`.
-
-## 1.3 Codegen, if it applies
-
-- Any `.graphql` change → root `yarn gen`. Not optional, and CI's `Generation Check`
-  will catch it if you skip it.
-- Protobuf or other non-GraphQL generated inputs → filtered `yarn turbo run gen`.
-- No generated inputs changed → no gen needed.
+`.graphql` changed → root `yarn gen`. Other generated inputs (protobuf) → filtered
+`yarn turbo run gen`. `Generation Check` catches it if you skip.
 
 ## 1.4 Format, lint, typecheck
 
@@ -70,8 +62,7 @@ yarn turbo run lint:fix --filter=<package-name>
 yarn turbo run lint typecheck --filter=<package-name> --only
 ```
 
-`Fast Format & Hygiene Checks` is the check that fails on Matt's PRs more than any
-other, and it is entirely deterministic. There is no excuse for it failing in CI.
+`Fast Format & Hygiene Checks` is deterministic. It failing in CI is inexcusable.
 
 ## 1.5 Focused tests
 
@@ -79,20 +70,27 @@ other, and it is entirely deterministic. There is no excuse for it failing in CI
 yarn turbo run test --filter=<package-name> --only
 ```
 
-**Never run unfiltered `yarn test` locally** — the repo says so explicitly and it
-takes forever. Run the tests for the packages you touched. Broaden only when you
-changed shared behaviour, and say so when you do.
+Never unfiltered `yarn test`. Broaden only for shared behaviour, and say so. Changed
+behaviour with no test covering it → write the test now.
 
-Tests co-locate with the code. If you changed behaviour and no test covers it, write
-one now — a reviewer asking for it later costs a whole round trip.
+## 1.6 Lizard the local branch
 
-## 1.6 Housekeeping
+Run the `lizard` skill against the working branch **before anything is pushed**. No PR
+exists: the diff is `origin/main...HEAD`, lizard reads the current checkout, nothing is
+posted. Same triage, same bar, findings land in the session.
 
-- New files or directories usually need `.github/CODEOWNERS` coverage. Follow nearby
-  entries.
-- Only stage what belongs to this change. Never `git add .`.
+Fix every critical and major; take trivial nits, drop the rest. A nit caught here costs
+one edit instead of a review round.
 
-## 1.7 Raise it ready
+This is the only lizard run you start — after the PR is up it arrives from Paul's queue
+(1.9). Never post a lizard review under Matt's account onto Matt's PR.
+
+## 1.7 Housekeeping
+
+New files and directories usually need `.github/CODEOWNERS` coverage — follow nearby
+entries. Stage only what belongs to this change. Never `git add .`.
+
+## 1.8 Raise it ready
 
 ```bash
 git push -u origin HEAD
@@ -100,148 +98,135 @@ gh pr create --title "<title>" --base <main-or-parent-branch> --body "..."
 gh pr ready <number>    # if anything opened it as a draft
 ```
 
-Body must carry **Why / What / References** per `CLAUDE.work.md`. If References
-can't be inferred from the branch name or commits, ask — don't omit it.
+Body carries **Why / What / References** per `CLAUDE.work.md`. References not
+inferable from the branch or commits → ask, don't omit.
 
-**Raise it ready for review, not as a draft.** The repo's `AGENTS.md` tells agents to
-always open drafts and never mark ready — Matt has overridden that for his own PRs.
-Honour the override, and know what it costs: drafts defer the build and preview-E2E
-jobs, and the system, web-unit and smoke suites only run after a human approves. A
-ready PR runs all of that immediately. That's the trade Matt chose — faster signal,
-more CI. Don't re-litigate it, but don't raise ready PRs on someone else's behalf.
+Ready, not draft — Matt overrode the repo's draft rule for his own PRs, buying full
+CI now instead of after approval. Don't re-litigate it, and don't raise ready PRs on
+anyone else's behalf.
 
-## 1.8 Ping Paul's lizard
+## 1.9 Queue and announce
 
-Work PRs only — same rule as the Slack announce. `stampedeapp` org PRs get queued;
-personal repos never do.
+Work PRs only — `stampedeapp` org, never personal repos. Fire this as soon as the URL
+exists, without asking:
 
 ```bash
 curl -sS -X POST "https://paul-macbook-pro.taild42dc0.ts.net/api/queue" \
-  -H "Content-Type: application/json" \
-  -d "{\"url\":\"$PR_URL\"}"
+  -H "Content-Type: application/json" -d "{\"url\":\"$PR_URL\"}"
 ```
 
-Fire it right after the PR URL exists, alongside the Slack announce. Don't ask first.
-
-If it fails — Paul's machine asleep, tailnet unreachable — don't block. Note it in the
-final report and carry on to phase 2.
-
-Then **announce it in Slack** per `CLAUDE.work.md`, and go to phase 2.
+If it fails — machine asleep, tailnet unreachable — note it in the report and carry
+on. Then announce in Slack per `CLAUDE.work.md`, and go to phase 2.
 
 ---
 
-# Phase 2 — Monitor until mergeable
+# Phase 2 — until mergeable
 
-Never `sleep`. Foreground sleep is blocked in this harness, and polling burns the
-session for the 30–60 minutes it takes a reviewer to arrive. Use `Monitor` so you're
-woken when something actually changes.
+Never `sleep`. Foreground sleep is blocked in this harness and polling burns the
+session for the 30–60 minutes a reviewer takes. Use `Monitor` so you're woken when
+something changes.
 
-Watch both signals:
+## 2.1 Read the state before you write a word
+
+Thread state on GitHub is the record of what's handled — not your memory, which dies
+with the session and is what produced the duplicate replies.
 
 ```bash
-gh pr checks <number>                                    # CI
-gh pr view <number> --json reviews,comments              # review bodies
-gh api repos/{owner}/{repo}/pulls/<number>/comments      # inline threads
+gh api graphql -f query='{repository(owner:"<owner>",name:"<repo>"){pullRequest(number:<n>){
+  reviewThreads(first:100){nodes{id isResolved isOutdated
+    comments(last:20){nodes{id author{login} body createdAt}}}}}}}'
+gh pr checks <number>
+gh pr view <number> --json reviews,comments
 ```
 
-Keep a `handled` set of comment IDs for the whole loop. Never process an ID twice —
-double-handling is what produced the "more comments" churn this skill exists to kill.
+Skip a thread when it is resolved, or when your reply is newer than the last reviewer
+comment on it.
 
-## 2.1 Answer every comment
+**One answer per thread, ever.** Never a second reply, and never one that contradicts
+the first — if you fixed it, you cannot later refute it.
 
-Comments come from lizard, from Graphite's AI Reviews, and from humans. Each one gets
-exactly one of four outcomes — none are left silent.
+## 2.2 Judge it, then answer it
 
-**Judge it before you act on it.** A comment is an argument, not an instruction —
-lizard's included. `forge-principles` (`~/.claude/skills/forge-principles`) is still
-the bar, and a reviewer asking for something it bans does not move the bar. "Good
-catch, fixed" that lands a worse line is a failure of this loop, not a success.
+A comment is an argument, not an instruction — lizard's included. `forge-principles`
+(`~/.claude/skills/forge-principles`) is the bar and a reviewer asking for something it
+bans does not move it. "Good catch, fixed" that lands a worse line is a failure.
 
-Common asks that lose to the principles — refute them, don't apply them:
+Refute these, don't apply them: **"add a comment / JSDoc"** (rename the code instead),
+**"cast it / use `any` / disable the rule"** (fix the type), **"extract a helper, add
+an option, pull in `<lib>`"** (one caller earns no abstraction), **"wrap it in
+try/catch"** where that hides the failure, **"add a test"** that restates the
+implementation.
 
-- **"Add a comment / JSDoc here."** Comments are only a linked workaround, an
-  invisible rule, or a directive that needs a reason. Unclear code gets renamed.
-- **"Cast it / use `any` / disable the rule."** Strict by construction — fix the type.
-- **"Extract a helper, add an option, pull in <lib>."** Economy of means — one caller
-  doesn't earn an abstraction, and a dependency pays for itself in one line or not
-  at all.
-- **"Wrap it in try/catch"** where that hides the failure. Root cause over symptom.
-- **"Add a test here"** where the test only restates the implementation. Tests prove
-  behaviour, and they cost.
+A reviewer can be right about the bug and wrong about the fix. Take the finding, refuse
+the prescription, say so on the thread.
 
-A reviewer can be right about the bug and wrong about the fix. **Take the finding,
-refuse the prescription** — fix it the principled way and say so on the thread.
+**Generalise every finding before you push.** Same class elsewhere in the diff → fix
+it in the same commit. Next round's comments are usually this round's finding one file
+over, and that round is avoidable.
 
-### Fix it
+Four outcomes, none silent:
 
-The comment is right. Make the smallest change that satisfies it. Re-run the focused
-checks from 1.4 and 1.5 for the affected package before pushing — the same bar as
-phase 1, every time. Then reply on the thread with what changed and the commit SHA.
-Batch: one push per wake-up, not one per comment.
+**Fix it** — smallest change that satisfies it, re-run 1.4 and 1.5 for the package,
+reply with what changed and the SHA, resolve the thread.
 
-### Refute it
+**Refute it** — lead with the file:line, the test, the behaviour that makes it not
+apply. Concede the half that's right and fix that half. Not certain it's wrong → not a
+refutation: fix it or ask Matt. Reply, resolve. Reviewer pushes back on a refutation →
+stop and bring it to Matt; two rounds of argument is a judgement call, not a loop.
 
-The comment is wrong, or right in general but not true of this code. **Post the
-refutation yourself.** Reply on the thread, then mark it handled.
+**Out of scope** — correct, worth doing, not this PR's job. One line, offer the
+follow-up, link it if one is already open. Resolve.
 
-- **Lead with evidence** — the file and line, the test that already covers it, the
-  behaviour that makes the concern not apply. Not "I don't think so."
-- **Two or three sentences.** No essay.
-- **Plain and civil.** These are Matt's colleagues. Disagree with the claim, never
-  the person. No "actually", no scoring points.
-- **Concede the half that's right** if they found a real thing but drew the wrong
-  conclusion — then fix that half.
-- **Name the principle when that's the reason.** "We only comment workarounds and
-  invisible rules — renamed `fmt` to `formatDueDate` instead, 1a2b3c4" beats a flat
-  no. One line. No lecture, no link-dumping the skill at them.
-- **If you're not certain it's wrong, it is not a refutation.** Fix it, or ask Matt.
+**Bring it to Matt** — `AskUserQuestion` when a comment asks for a different design or
+a rewrite, contradicts something Matt decided, touches schema, migrations, auth or
+money, or when you'd be refuting on taste rather than evidence.
 
-Never refute the same comment twice. If a reviewer pushes back on your refutation,
-stop and bring it to Matt — two rounds of argument is a judgement call, not a loop.
+## 2.3 How to post
 
-### Flag it as out of scope
+- **Two sentences, 300 characters.** What changed plus the SHA, or the evidence plus
+  why it doesn't apply. No praising the catch, no narrating what you nearly did — every
+  extra sentence is another thing to argue with.
+- **One review submission per wake-up**, batching every reply. Thirty-two separate
+  submissions is thirty-two pings at a colleague.
+- **Resolve every thread you answer** in the same wake-up (`resolveReviewThread`).
+  Answered-but-open reads as unhandled and buys another round.
+- **One push per wake-up**, and **nits never get their own push** — a P3 / 💅 / nit
+  rides along in the next real commit or gets declined.
+- **Plain and civil.** Disagree with the claim, never the person.
 
-Correct, worth doing, not this PR's job. Say so on the thread in one line and offer
-the follow-up. Matt asks for this by name — "if scope creep flag it", "tell the
-lizard so". Lizard's `references/scope.md` sets the same bar from the other side.
+## 2.4 After round one, ask for the whole list
 
-If a follow-up PR is already open for this work, put it there and link it.
+Once round one is answered and resolved, post one comment asking the reviewer for a
+complete pass: give the head SHA, say all threads are answered, ask for every remaining
+blocker in one go. Progressive disclosure — three findings, then three more, then one —
+is what turns a PR into a week. Ask once, and don't repeat the ask.
 
-### Bring it to Matt
-
-Stop and ask with `AskUserQuestion` when a comment asks for a different design or a
-rewrite, contradicts something Matt decided earlier, touches schema, migrations, auth
-or money paths, or when you'd be refuting on taste rather than evidence.
-
-## 2.2 Fix CI
+## 2.5 Fix CI
 
 | Check | Treat as |
 |---|---|
-| `Fast Format & Hygiene Checks`, `Lint (Scoped)`, `Code Quality` | Deterministic — fix it. Should never fail if phase 1 ran |
+| `Fast Format & Hygiene Checks`, `Lint (Scoped)`, `Code Quality` | Deterministic — fix. Shouldn't fail if phase 1 ran |
 | `Typecheck (Scoped)`, `Build (Scoped, Non-web)`, `Generation Check` | Build — fix. `Generation Check` means you skipped `yarn gen` |
 | `Unit Tests`, `System Tests`, `Smoke Tests`, `AI evals` | Test — root-cause it, 3 attempts max |
-| `Resolve Approval & Scope`, `Report Required Tests` | **Not yours.** Gated on human approval — needs a person, not a fix |
-| `Mongo Unique Index Data Preflight`, `Configuration Validation` | Read the log first — usually a real data or config problem |
+| `Resolve Approval & Scope`, `Report Required Tests` | **Not yours** — gated on a human. Check the *latest* run; older runs stay red forever |
+| `Mongo Unique Index Data Preflight`, `Configuration Validation` | Read the log — usually a real data or config problem |
 
-- **Read the whole failed log** (`gh run view <id> --log-failed`), not the first line.
-  Failures cascade and the first error is often a symptom.
-- **Reproduce locally before pushing.** A guessed fix costs another full CI cycle.
-- **Three test-fix attempts, hard.** Then stop and report. Don't rationalise one more.
-- **Flake vs bug:** if it passes on re-run and touches nothing you changed, re-run
-  once and say you did. Twice is a bug.
-- **Stayed behind main?** Rebase as in 1.1 and force-push with `--force-with-lease`.
+- **Read the whole failed log** (`gh run view <id> --log-failed`) — failures cascade
+  and the first error is usually a symptom. Reproduce locally before pushing.
+- **Flake vs bug:** passes on re-run and touches nothing you changed → re-run once and
+  say you did. Twice is a bug.
+- **Behind main?** Rebase as in 1.1, force-push with `--force-with-lease`.
 
-## 2.3 Stop conditions
+## 2.6 Budgets and stop conditions
 
-Report and end the loop when:
+- **Three review rounds.** Then stop pushing, summarise on the PR, and bring Matt the
+  call with `AskUserQuestion`: split it, merge as-is, or escalate to the reviewer.
+- **Three test-fix attempts**, or the same check failing three times → stop and report.
+- **90 minutes with no change** → report where it stalled.
 
-- **Green and answered** — checks pass (bar the approval-gated ones) and every comment
-  is fixed, refuted or flagged. Re-read `gh pr checks` before claiming this.
-- **Waiting on a human** — approval-gated checks, or a refutation awaiting a reply.
-  Say whose move it is.
-- **A budget ran out** — 3 test retries, or the same check failing 3 times running.
-- **A judgement call landed** — anything from "bring it to Matt".
-- **90 minutes with no change** — say where it stalled.
+Report and end when it's green and answered — re-read `gh pr checks` before claiming
+that, and approval-gated checks don't count against you — or when it's waiting on a
+human and you've said whose move it is.
 
 Never end silently, and never claim green you haven't verified.
 
@@ -249,16 +234,13 @@ Never end silently, and never claim green you haven't verified.
 
 ## Reporting
 
-At the end: what you fixed, what you refuted and the reasoning you posted, what you
-flagged as out of scope, what's left and whose move it is. Then the Resources block
-with the PR URL, per `CLAUDE.shared.md`.
+What you fixed, what you refuted and why, what you flagged as out of scope, what's left
+and whose move it is. Then the Resources block with the PR URL, per `CLAUDE.shared.md`.
 
-## Red flags — stop, don't push through
+## Stop, don't push through
 
-- About to skip phase 1 because the change "is small".
-- About to refute something you only half understand.
-- About to apply a comment you think makes the code worse.
-- About to push a third fix for the same failing check.
-- A comment asks for a redesign and you're tempted to just do it.
-- The diff you're about to push is bigger than the comment that prompted it.
-- About to `git add .`.
+- Skipping phase 1 because the change "is small".
+- A second answer on a thread you already answered.
+- Refuting something you only half understand, or applying one that makes the code worse.
+- A third fix for the same failing check.
+- A diff bigger than the comment that prompted it, or `git add .`.
