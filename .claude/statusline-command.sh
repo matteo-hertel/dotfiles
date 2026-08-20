@@ -101,6 +101,13 @@ eval "$(printf '%s' "$input" | jq -r '{
     d7_reset:     (.rate_limits.seven_day.resets_at // 0)
 } | to_entries | map("\(.key)=\(.value | tostring | @sh)") | .[]')"
 
+# Headroom feed — maximum-effort's pool pick and its scripts/usage.sh read ~/.claude/rate-limits.json.
+if [ "$d7_pct" -ge 0 ] 2>/dev/null; then
+    rl_tmp="${HOME}/.claude/rate-limits.json.$$"
+    printf '%s' "$input" | jq -c --argjson ts "$now_epoch" '{ts: $ts, model: .model.display_name, effort: .effort.level, five_hour: .rate_limits.five_hour, seven_day: .rate_limits.seven_day}' > "$rl_tmp" 2>/dev/null \
+        && mv -f "$rl_tmp" "${HOME}/.claude/rate-limits.json"
+fi
+
 current=$(( in_tok + cache_create + cache_read ))
 used_tokens=$(format_tokens $current)
 total_tokens=$(format_tokens $size)
