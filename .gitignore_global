@@ -4,3 +4,5 @@ lefthook.yml
 superpowers/
 .superpowers/
 .codesight/
+
+**/.claude/settings.local.json
