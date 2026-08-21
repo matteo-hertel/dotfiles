@@ -40,14 +40,6 @@ When creatin html file always open it instead of telling me to open it. Instead 
 
 When spinning up something locally application or small servers for html file don't use the local ip but use the tailscale ip or dns and always report a clear list of the running urls ready for me
 
-### Every conversation runs through maximum-effort
-
-Run the `maximum-effort` skill at the first ask that changes anything, in every
-conversation — don't wait for the task to look big. It triages first; S-size work stays
-on the main thread, so the cost of always running it is one five-line brief. Then the
-cheapest lane that clears the bar, and a lane moves up only on a named failure. A model
-or effort I picked by hand always wins over it.
-
 ### Committing
 
 This is a permissive rule, **not** a "don't commit" rule. Default to committing freely.

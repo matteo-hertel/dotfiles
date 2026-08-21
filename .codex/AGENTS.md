@@ -77,15 +77,6 @@ telling Matt to open the file.
 When reporting a local app or server URL, use the Tailscale host/DNS or
 Tailscale IP. Do not present `localhost` or `127.0.0.1` as the usable URL.
 
-## Every Conversation Runs Through Maximum Effort
-
-Run the `maximum-effort` skill (`~/.agents/skills/maximum-effort`, or an explicit
-`$maximum-effort`) at the first ask that changes anything, in every conversation —
-do not wait for the task to look big. It triages first; S-size work stays on the
-main thread, so the cost of always running it is one five-line brief. Then the
-cheapest lane that clears the bar, and a lane moves up only on a named failure. A
-model or effort Matt picked by hand always wins over it.
-
 ## Committing
 
 This is a permissive rule, not a "don't commit" rule. Default to
