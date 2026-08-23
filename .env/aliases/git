@@ -231,7 +231,7 @@ gtreemerge() {
 }
 
 
-# gtmux: Create git worktrees with tmux sessions (neovim + claude)
+# gtmux: Create git worktrees with tmux sessions (claude + shell)
 #
 # Usage: gtmux branch1 branch2 ...
 #
@@ -239,7 +239,7 @@ gtreemerge() {
 #   1. Creates new branches from your current branch if they don't exist
 #   2. Creates worktrees for each specified branch under ~/work/code/<repo-name>-<branch>
 #   3. Runs yarn in each worktree
-#   4. Creates a tmux session with two splits: neovim (left) and claude (right)
+#   4. Creates a tmux session with two splits: claude (left, 80%) and an empty shell (right, 20%)
 #
 # Example:
 #   gtmux feature-1 feature-2     # Creates two worktrees with tmux sessions
@@ -297,20 +297,20 @@ gtmux() {
       echo "Warning: yarn failed in '${worktree_path}'."
     fi
 
-    # Create tmux session with neovim and claude
+    # Create tmux session with claude and an empty shell
     local session_name="${repo_name}-${branch}"
-    echo "Creating tmux session '${session_name}' with neovim and claude..."
-    
+    echo "Creating tmux session '${session_name}' with claude and a shell..."
+
     # Kill existing session if it exists
     tmux kill-session -t "${session_name}" 2>/dev/null || true
-    
-    # Create new session with neovim
-    tmux new-session -d -s "${session_name}" -c "${worktree_path}" 'nvim'
-    
-    # Split window vertically and run claude in the right pane
-    tmux split-window -h -t "${session_name}" -c "${worktree_path}" 'claude'
-    
-    # Select the left pane (neovim) by default
+
+    # Create new session with claude in the left pane (80%)
+    tmux new-session -d -s "${session_name}" -c "${worktree_path}" 'claude'
+
+    # Split window vertically, empty shell in the right pane (20%)
+    tmux split-window -h -l 20% -t "${session_name}" -c "${worktree_path}"
+
+    # Select the left pane (claude) by default
     tmux select-pane -t "${session_name}:0.0"
     
     echo "Tmux session '${session_name}' created successfully."
@@ -343,13 +343,13 @@ gtmuxhere() {
   # Kill existing session if it exists
   tmux kill-session -t "${session_name}" 2>/dev/null || true
 
-  # Create new session with neovim
-  tmux new-session -d -s "${session_name}" -c "$(pwd)" 'nvim'
+  # Create new session with claude in the left pane (80%)
+  tmux new-session -d -s "${session_name}" -c "$(pwd)" 'claude'
 
-  # Split window vertically and run claude in the right pane
-  tmux split-window -h -t "${session_name}" -c "$(pwd)" 'claude'
+  # Split window vertically, empty shell in the right pane (20%)
+  tmux split-window -h -l 20% -t "${session_name}" -c "$(pwd)"
 
-  # Select the left pane (neovim) by default
+  # Select the left pane (claude) by default
   tmux select-pane -t "${session_name}:0.0"
 
   echo "Tmux session '${session_name}' created successfully."

@@ -1,9 +1,12 @@
-singlevim(){
-  tmux has-session -t "$WORKSPACE_SESSION_NAME"
+# Workspace tmux layouts.
+# Layout: claude in the left pane (80%), empty shell in the right pane (20%).
+
+single(){
+  tmux has-session -t "$WORKSPACE_SESSION_NAME" 2>/dev/null
   if [ $? != 0 ]
   then
-    tmux new-session -d -s "$WORKSPACE_SESSION_NAME" 
-    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0 "cd $WORKSPACE_PATH;nvim" C-m 
+    tmux new-session -d -s "$WORKSPACE_SESSION_NAME" -c "$WORKSPACE_PATH"
+    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0 "claude" C-m
   fi
   if [ "$TMUX" = "" ]
   then
@@ -11,16 +14,16 @@ singlevim(){
   fi
     tmux switch -t "$WORKSPACE_SESSION_NAME"
 }
+alias singlevim=single
 
 twosplit(){
-  tmux has-session -t "$WORKSPACE_SESSION_NAME"
+  tmux has-session -t "$WORKSPACE_SESSION_NAME" 2>/dev/null
   if [ $? != 0 ]
   then
-    tmux new-session -d -s "$WORKSPACE_SESSION_NAME"
-    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0 "cd $WORKSPACE_PATH;nvim" C-m 
-    tmux splitw -t "$WORKSPACE_SESSION_NAME":0 -hl 35 
-    tmux selectp -t "$WORKSPACE_SESSION_NAME":0
-    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0.1 "cd $WORKSPACE_PATH" C-m 
+    tmux new-session -d -s "$WORKSPACE_SESSION_NAME" -c "$WORKSPACE_PATH"
+    tmux splitw -t "$WORKSPACE_SESSION_NAME":0 -h -l 20% -c "$WORKSPACE_PATH"
+    tmux selectp -t "$WORKSPACE_SESSION_NAME":0.0
+    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0.0 "claude" C-m
   fi
   if [ "$TMUX" = "" ]
   then
@@ -29,15 +32,14 @@ twosplit(){
     tmux switch -t "$WORKSPACE_SESSION_NAME"
 }
 
+# Same 80/20 split, both panes empty shells.
 twosplitNoEditor(){
-  tmux has-session -t "$WORKSPACE_SESSION_NAME"
+  tmux has-session -t "$WORKSPACE_SESSION_NAME" 2>/dev/null
   if [ $? != 0 ]
   then
-    tmux new-session -d -s "$WORKSPACE_SESSION_NAME" -n nvim
-    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0 "cd $WORKSPACE_PATH" C-m 
-    tmux splitw -t "$WORKSPACE_SESSION_NAME":0 -h -p 35 
-    tmux selectp -t "$WORKSPACE_SESSION_NAME":0
-    tmux send-keys -t "$WORKSPACE_SESSION_NAME":0.1 "cd $WORKSPACE_PATH" C-m 
+    tmux new-session -d -s "$WORKSPACE_SESSION_NAME" -c "$WORKSPACE_PATH"
+    tmux splitw -t "$WORKSPACE_SESSION_NAME":0 -h -l 20% -c "$WORKSPACE_PATH"
+    tmux selectp -t "$WORKSPACE_SESSION_NAME":0.0
   fi
   if [ "$TMUX" = "" ]
   then
@@ -45,5 +47,6 @@ twosplitNoEditor(){
   fi
     tmux switch -t "$WORKSPACE_SESSION_NAME"
 }
+alias twosplitNoClaude=twosplitNoEditor
 
 alias dotfiles="WORKSPACE_SESSION_NAME=dotfiles;WORKSPACE_PATH=~/mhdev/dotfiles;twosplit"
