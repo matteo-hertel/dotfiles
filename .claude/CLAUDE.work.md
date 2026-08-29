@@ -47,6 +47,16 @@ Every PR must include the following in its description:
 
 If any of these are unknown, use `AskUserQuestion` to ask the user rather than assuming or omitting them.
 
+## Never File a Ticket Without Asking
+
+Do not create Linear issues on your own. Not as a follow-up, not for an out-of-scope
+review comment, not for a bug you spotted in passing. Spotting the work and filing it
+are two different decisions and only the second one is mine.
+
+If something is worth tracking, say so in one line and ask with `AskUserQuestion`.
+Run `lin issue new` only after I say yes. Reading, searching, and commenting on
+existing tickets stays fine.
+
 ## Announcing PRs in Slack
 
 Work only. Every PR raised in the `stampedeapp` GitHub org gets announced via the

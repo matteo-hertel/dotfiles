@@ -265,6 +265,16 @@ PRs on anyone else's behalf.
 `$shepherd` invocation, and uses recurring wait/monitor support or a bounded
 `gh` polling session. Codex has no equivalent automatic kickoff hook.
 
+## Never File a Ticket Without Asking
+
+Do not create Linear issues on your own. Not as a follow-up, not for an out-of-scope
+review comment, not for a bug you spotted in passing. Spotting the work and filing it
+are two different decisions and only the second one is mine.
+
+If something is worth tracking, say so in one line and ask with your structured
+user-input tool. Run `lin issue new` only after I say yes. Reading, searching, and
+commenting on existing tickets stays fine.
+
 ## Receipt Printer
 
 When a conversation comes to a natural end, offer to print a receipt of

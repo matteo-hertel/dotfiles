@@ -174,8 +174,10 @@ apply. Concede the half that's right and fix that half. Not certain it's wrong �
 refutation: fix it or ask Matt. Reply, resolve. Reviewer pushes back on a refutation →
 stop and bring it to Matt; two rounds of argument is a judgement call, not a loop.
 
-**Out of scope** — correct, worth doing, not this PR's job. One line, offer the
-follow-up, link it if one is already open. Resolve.
+**Out of scope** — correct, worth doing, not this PR's job. One line saying so, link
+an existing ticket if one is already open. Resolve. **Never create a Linear ticket.**
+Filing one is Matt's call: if the follow-up is worth tracking, ask him with
+`AskUserQuestion` and only run `lin issue new` after he says yes.
 
 **Bring it to Matt** — `AskUserQuestion` when a comment asks for a different design or
 a rewrite, contradicts something Matt decided, touches schema, migrations, auth or
