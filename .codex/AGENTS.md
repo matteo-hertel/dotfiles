@@ -205,14 +205,14 @@ them.
 ### Announcing PRs In Slack
 
 Work only. Every PR raised in the `stampedeapp` GitHub org gets announced
-via the "FULL NOVA PRs" Slack workflow, right after the PR URL exists. Do
+via the "Check this PR out" Slack workflow, right after the PR URL exists. Do
 it automatically — do not ask first. Never do this for personal repos.
 
 Run it with the `agent-slack` CLI:
 
 ```bash
-agent-slack workflow run Ft0A2N2ZRJ6S \
-  --channel C0A2NJPNTPF \
+agent-slack workflow run Ft0C17QFND41 \
+  --channel C01BYKUTE5Q \
   --field "🔗 PR Link(s)=<full PR url>" \
   --field "Notes=<one sentence saying what the PR does>
 
@@ -222,13 +222,13 @@ agent-slack workflow run Ft0A2N2ZRJ6S \
 - Notes is two lines. First a plain sentence on what the PR does. Then one
   sarcastic comment about it. Aim the sarcasm at the code, the bug, or the
   situation — never at a person.
-- Where it lands: `#nova-devs` (`C0A2NJPNTPF`), pinging `@nova-engineers`.
+- Where it lands: `#rp-checkout-devs` (`C01BYKUTE5Q`). No group ping on purpose.
 - Fallback if the run fails: check `agent-slack auth list` shows the
   `lets-dothis` browser credentials (form submission needs xoxc/xoxd), and
-  re-read the field titles with `agent-slack workflow get Ft0A2N2ZRJ6S`. If
+  re-read the field titles with `agent-slack workflow get Ft0C17QFND41`. If
   it still fails, hand Matt the shortcut link plus the two lines ready to
   paste:
-  <https://slack.com/shortcuts/Ft0A2N2ZRJ6S/0fc0a60851adf0ddf1f68af6918b5a08>
+  <https://slack.com/shortcuts/Ft0C17QFND41/4020d6fc9430b6d8b988caeafbb5135b>
 - Include both the PR URL and the Slack permalink in the Resources block.
 
 ### Raising A PR Is The Start Of The Job
