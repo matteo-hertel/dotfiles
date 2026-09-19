@@ -6,25 +6,14 @@ return {
     event = "BufRead",
     config = function() require("lsp_signature").setup() end,
   },
-  { "package-info.nvim", enabled = false },
-  { "windwp/nvim-autopairs", enabled = false },
-  { "windwp/nvim-ts-autotag", enabled = false },
+  { "package-info.nvim",       enabled = false },
+  { "windwp/nvim-autopairs",   enabled = false },
+  { "windwp/nvim-ts-autotag",  enabled = false },
   { "stevearc/resession.nvim", enabled = false },
 
   { "ralismark/opsort.vim" },
   {
     "tamton-aquib/duck.nvim",
-    event = "VimEnter",
-    config = function()
-      math.randomseed(os.time() + vim.fn.getpid())
-
-      vim.defer_fn(function()
-        local duck = require "duck"
-        for _ = 1, math.random(15, 50) do
-          duck.hatch()
-        end
-      end, 500)
-    end,
   },
   {
     "princejoogie/dir-telescope.nvim",
