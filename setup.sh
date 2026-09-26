@@ -47,7 +47,9 @@ echo "Installing tmux plugins..."
 "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 # 3. Claude config (separate from stow to avoid folding ~/.claude)
-# CLAUDE.md is per-machine — create a default one if missing
+# CLAUDE.md is per-machine — create a default one if missing.
+# Work rules (CLAUDE.work.md / .codex/AGENTS.work.md) are opt-in per machine:
+# add @CLAUDE.work.md to ~/.claude/CLAUDE.md and see .codex/AGENTS.work.md for Codex.
 echo "Linking Claude config..."
 mkdir -p "$HOME/.claude/skills"
 ln -sf "$DOTFILES_DIR/.claude/CLAUDE.shared.md" "$HOME/.claude/CLAUDE.shared.md"
@@ -55,10 +57,11 @@ ln -sf "$DOTFILES_DIR/.claude/CLAUDE.work.md" "$HOME/.claude/CLAUDE.work.md"
 ln -sf "$DOTFILES_DIR/.claude/CLAUDE.personal.md" "$HOME/.claude/CLAUDE.personal.md"
 ln -sf "$DOTFILES_DIR/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 link_agent_path "$DOTFILES_DIR/.claude/skills/shepherd" "$HOME/.claude/skills/shepherd"
+link_agent_path "$DOTFILES_DIR/.claude/skills/receipt" "$HOME/.claude/skills/receipt"
 
 if [ ! -f "$HOME/.claude/CLAUDE.md" ]; then
     echo "Creating default ~/.claude/CLAUDE.md..."
-    printf '@CLAUDE.shared.md\n@CLAUDE.work.md\n' > "$HOME/.claude/CLAUDE.md"
+    printf '@CLAUDE.shared.md\n@CLAUDE.personal.md\n' > "$HOME/.claude/CLAUDE.md"
 fi
 
 # 4. Codex config (separate from stow to avoid folding ~/.codex)

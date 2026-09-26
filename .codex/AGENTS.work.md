@@ -1,7 +1,15 @@
+# Codex Work Guidance
+
+Mirror of `.claude/CLAUDE.work.md`: the Let's Do This work rules. Not loaded on
+Matt's personal Mac. Codex reads one global file, so on a work machine replace the
+`~/.codex/AGENTS.md` symlink with both files joined:
+`cat .codex/AGENTS.md .codex/AGENTS.work.md > ~/.codex/AGENTS.md`.
+Keep it in sync with the Claude copy.
+
 ## Writing Code
 
 `forge-principles` is the quality bar for every line — read the skill rather than
-guessing at it (`~/.claude/skills/forge-principles`). The ones that bite most:
+guessing at it (`~/.agents/skills/forge-principles`). The ones that bite most:
 
 - **Economy of means.** Subtraction first. A new dependency, abstraction or config
   surface is denied until it earns its place in one line.
@@ -45,7 +53,7 @@ Every PR must include the following in its description:
 2. **What** — What has been done? Summarize the changes made.
 3. **References** — A Linear ticket link or relevant documentation link.
 
-If any of these are unknown, use `AskUserQuestion` to ask the user rather than assuming or omitting them.
+If any of these are unknown, ask Matt with the structured user-input tool rather than assuming or omitting them.
 
 ## Never File a Ticket Without Asking
 
@@ -53,7 +61,7 @@ Do not create Linear issues on your own. Not as a follow-up, not for an out-of-s
 review comment, not for a bug you spotted in passing. Spotting the work and filing it
 are two different decisions and only the second one is mine.
 
-If something is worth tracking, say so in one line and ask with `AskUserQuestion`.
+If something is worth tracking, say so in one line and ask with the structured user-input tool.
 Run `lin issue new` only after I say yes. Reading, searching, and commenting on
 existing tickets stays fine.
 
