@@ -1,104 +1,53 @@
 # Codex Guidance
 
-This is the Codex equivalent of the Claude guidance in `.claude/`. Keep
-the Claude and Codex instructions aligned so both agents follow the same
-working preferences.
+Codex mirror of `.claude/CLAUDE.shared.md` plus `.claude/CLAUDE.personal.md`. Both sides say the same things; the only differences are listed under Tool differences.
 
-## Keep Agent Guidance In Sync
+## Working with Matt
 
-When changing agent instructions, update both sides in the same change:
+### Keep Claude and Codex guidance in sync
 
-- Claude: `.claude/CLAUDE.shared.md`, `.claude/CLAUDE.work.md`,
-  `.claude/CLAUDE.personal.md`, and any relevant
-  `.claude/skills/*/SKILL.md`.
-- Codex: `.codex/AGENTS.md` and any relevant
-  `.codex/skills/*/SKILL.md`.
+This repo keeps Claude guidance in `.claude/` and Codex guidance in `.codex/`. Change both sides in the same commit so both agents behave the same. Tool differences are listed at the end of this file; add any new one there.
 
-If a behavior is tool-specific and cannot be mirrored exactly, document
-the difference in both places rather than silently dropping it.
+`.codex/AGENTS.work.md` (Claude: `CLAUDE.work.md`) holds the Let's Do This work rules. Only a work machine loads it; my personal Mac doesn't.
 
-## Working With Matt
+### How to explain your work to me
 
-You're working with Matt.
+Tell me what you did like you'd tell a colleague standing next to you. Not like a design doc.
 
-When you have a question or need input, use Codex's structured
-user-input tool when it is available in the active mode. If the tool is
-not available, ask one concise plain-text question. If you need more
-room for explanation, write the options first and then ask which option
-Matt wants.
+1. **Answer first**, one line. What you did, or what's true. No preamble, no restating my question.
+2. **Then bullets**, one idea each, with a short bold label so I can scan.
+3. **Then stop.** If a sentence doesn't change what I do next, cut it.
 
-## How To Explain Your Work
+- **Use simple language.** The words you'd say out loud: "same as before" not "byte-identical", "on purpose" not "deliberately", "best guess" not "best-effort heuristic".
+- **One clause per sentence.** Two ideas = two sentences, or two bullets.
+- **Verbs, not noun stacks.** "Two replies could overwrite each other", not "a race on the thread mapping".
+- **No literary voice.** No rhetorical framing ("The cost you picked:"), no stacked em-dash asides, no building to a point. Say the point.
+- **Don't re-explain code I can read.** Name a function once, say what it does in five words, move on.
+- **Caveats only if I have to act**: decide, deploy, or watch for something. Other caveats go in a code comment or the plan.
+- **Length ceiling:** trivial change → 1 line. Normal change → 3–5 bullets. Big or risky change → up to 8 bullets plus a short **Needs from you** list. More only if I ask.
+- **If I ask "why", go deep.** Still in bullets.
 
-Tell Matt what you did like you would tell a colleague standing next to
-you. Not like a design doc.
+### Asking me questions
 
-Shape:
+Use the structured user-input tool so I can answer in one click. If you need room to explain, write the options out first, then ask. When the tool isn't available in the current mode, ask one short plain-text question instead.
 
-1. Answer first, one line. What you did, or what is true. No preamble,
-   no restating the question.
-2. Then bullets, one idea each, with a short bold label so it scans.
-3. Then stop. If a sentence does not change what Matt does next, cut it.
+### HTML files and local servers
 
-Rules:
+- **App servers:** don't start them unless I ask; I usually run them myself. A brief run to check your own work is fine.
+- **HTML files:** put them under `tmp/` in the current folder unless I say otherwise, so the working tree stays clean. Serve the file with a small local server and open it for me with the browser tools.
+- **URLs:** use the Tailscale host name or IP, never `localhost`, so I can open it from my other devices. List every running URL.
 
-- Use simple language. Everyday words, the ones you would say out loud.
-  If a simpler word exists, use it. Never pick a clever or
-  precise-sounding word when a common one carries the same meaning:
-  "same as before" not "byte-identical", "on purpose" not
-  "deliberately", "best guess" not "best-effort heuristic".
-- One clause per sentence. Two ideas = two sentences, or two bullets.
-- Verbs, not noun stacks. "Two replies could overwrite each other", not
-  "a race on the thread mapping".
-- No literary voice. No rhetorical framing ("The cost you picked:"), no
-  stacked em-dash asides, no building to a point. Say the point.
-- Do not re-explain code Matt can read. Name a function once, say what
-  it does in five words, move on.
-- Caveats only if he has to act. A caveat earns a line when he must
-  decide, deploy, or watch for something. Otherwise it belongs in a code
-  comment or the plan, not in the reply.
-- Length ceiling: trivial change is 1 line. Normal change is 3-5
-  bullets. Big or risky change is up to 8 bullets plus a short "Needs
-  from you" list. More only when he asks.
-- If he asks "why", go deep. Still in bullets.
+### Committing
 
-## Developing Locally
+On any non-default branch or worktree, commit as often as you like without asking. That's the normal case. On `main`/`master`, don't commit unless I tell you to; offer a branch instead. The main-branch rule is narrow on purpose.
 
-Do not run local servers by default. Matt generally wants to run app
-servers himself. It is fine to run a server when he explicitly asks, when
-verification requires it, or when creating a standalone HTML file.
+### Getting a PR to green
 
-When asked to create an HTML file, put it under `tmp/` unless otherwise
-instructed.
+When a PR needs to reach mergeable (CI failing, review comments, a rebase), run the `shepherd` skill rather than improvising the loop.
 
-When creating a standalone HTML file, serve it with a small local server
-and open it with the available browser/computer tools instead of only
-telling Matt to open the file.
+### Presenting resources back to me
 
-When reporting a local app or server URL, use the Tailscale host/DNS or
-Tailscale IP. Do not present `localhost` or `127.0.0.1` as the usable URL.
-
-## Committing
-
-This is a permissive rule, not a "don't commit" rule. Default to
-committing freely.
-
-- On any non-main branch or worktree: commit as many times as needed,
-  without asking first. This is the normal case.
-- Only on the `main`/`master` default branch: do not commit unless Matt
-  explicitly asks. Offer to create a branch instead.
-
-Never generalize the main-branch restriction into "I can't commit" or
-"I'll commit nothing." The restriction applies only on the default
-branch. On a feature branch, committing without asking is expected.
-
-## Presenting Resources
-
-Whenever a reply hands Matt something actionable, end the message with a
-Resources block as the very last thing so the link is easy to find.
-Actionable resources include generated or edited files, PRs, issues,
-locally running servers/apps, deploy URLs, and build artifacts.
-
-Use this exact shape:
+When a reply hands me something actionable (a file, a PR or issue, a running server, a deploy URL), end with a **Resources** block as the very last thing, so I never scroll for the link. Skip it when there's no resource.
 
 ```text
 ───────────────────────────
@@ -108,180 +57,29 @@ Use this exact shape:
 🌐 Local → <url>
 ```
 
-Rules:
+- **PRs and issues are full URLs**, never a bare `#42`. Resolve a number with `gh` first.
+- **Files are absolute paths**, with `:line` for a specific spot.
+- **Local URLs use the Tailscale host.**
+- One line per resource, grouped by type: 🔗 PR/issue, 📄 file, 🌐 local URL, 🚀 deploy/live URL, 📦 build artifact.
 
-- Always last in the message, after any prose, tests, or explanation.
-- Only include the block when there is an actual resource.
-- PRs and issues are always full URLs, never bare numbers. If you only
-  have a number, run `gh` to resolve the URL before answering.
-- Files are absolute paths. Add `:line` when pointing at a specific spot.
-- Local servers/apps use the Tailscale host or DNS, never
-  `localhost`/`127.0.0.1`.
-- Use the matching icon per type: 🔗 PR/issue, 📄 file, 🌐 local URL,
-  🚀 deploy/live URL, 📦 build artifact. One line per resource; group by
-  type if there are several.
+## Personal
 
-## Prototype First, Polish Later
+### Prototype first, polish later
 
-Build features end-to-end fast. Get to a working state, deploy to the
-phone, test with real people, then rapid-fire fix and polish. Do not
-over-engineer the first pass; a rough working version is more valuable
-than a perfect plan. Iterate based on real testing feedback.
+Build features end to end fast. Get to a working state, deploy to the phone, test with real people, then fix and polish in quick rounds. A rough working version teaches more than a perfect plan.
 
-## Writing Code
+### Project agent docs
 
-`forge-principles` is the quality bar for every line - read the skill
-rather than guessing at it (`~/.agents/skills/forge-principles`). The
-ones that bite most:
+Every project gets a `CLAUDE.md` and an `AGENTS.md`; keep both updated. When a repo has both, make `CLAUDE.md` a one-line `@AGENTS.md`. Cover architecture, API endpoints, structure, dev and deploy commands, and hard-won gotchas. Keep it under about 200 lines and link longer docs, because it loads on every turn.
 
-- **Economy of means.** Subtraction first. A new dependency, abstraction
-  or config surface is denied until it earns its place in one line.
-- **Strict by construction.** `any`, `@ts-ignore`, unchecked casts and
-  lint disables are banned, not discouraged. Fix the type instead.
-- **Root cause over symptom.** No fix before you can name the cause, and
-  the regression test is part of the fix.
-- **The edges are the work.** Empty, huge, malformed, double-submit,
-  partial failure. Anything that can run twice, will.
-- **Match the codebase.** New code reads like the code already around it.
+### Receipt printer
 
-### Comments
+When a conversation comes to a natural end, offer to print a receipt with the `receipt` skill.
 
-Default to none. Write a comment **only** in these three cases:
+## Tool differences
 
-1. **A workaround** - with a link to the upstream issue. No link, no
-   comment.
-2. **A rule you cannot see from the code** and would break by changing
-   it: billing, auth, legal, an external API's undocumented behaviour.
-   Name the source.
-3. **A directive that demands a reason** - `eslint-disable`,
-   `ts-expect-error`.
-
-Not on the list means no comment. There is nothing to weigh up, and "but
-this one explains why" is not an exception - it is the excuse that got us
-here. Every other why (the bug you chased, what you tried first, what
-changed) goes in the PR description, which is where it stays true.
-
-Three hard limits on the ones that do qualify:
-
-- **Two lines maximum.** Needs a paragraph? It was never one of the
-  three.
-- **Never above a test.** The `describe`/`it` name is the comment. If the
-  case needs explaining, fix the name.
-- **Never longer than the code it sits on.** Seven lines of JSDoc over a
-  five-line regex means the regex needs a name, not a preface.
-
-Deleting noise you find in a file you are already touching is always
-welcome.
-
-## Project Agent Docs
-
-Every project gets thorough agent documentation. For Claude this is
-`CLAUDE.md`; for Codex this is `AGENTS.md`. Keep both updated when a
-project uses both.
-
-Include:
-
-- Architecture overview
-- API endpoints table
-- Project structure tree
-- Development and deploy commands
-- Hard-won gotchas
-
-Treat the agent docs as the canonical reference and keep them updated as
-the project evolves.
-
-## Pull Requests
-
-Every PR description must include:
-
-1. **Why** - Why is this code change needed? What problem does it solve
-   or what value does it add?
-2. **What** - What has been done? Summarize the changes made.
-3. **References** - A Linear ticket link or relevant documentation link.
-
-If any of these are unknown, ask Matt rather than assuming or omitting
-them.
-
-### Announcing PRs In Slack
-
-Work only. Every PR raised in the `stampedeapp` GitHub org gets announced
-via the "Check this PR out" Slack workflow, right after the PR URL exists. Do
-it automatically — do not ask first. Never do this for personal repos.
-
-Run it with the `agent-slack` CLI:
-
-```bash
-agent-slack workflow run Ft0C17QFND41 \
-  --channel C01BYKUTE5Q \
-  --field "🔗 PR Link(s)=<full PR url>" \
-  --field "Notes=<one sentence saying what the PR does>
-
-<one sarcastic comment about it>"
-```
-
-- Notes is two lines. First a plain sentence on what the PR does. Then one
-  sarcastic comment about it. Aim the sarcasm at the code, the bug, or the
-  situation — never at a person.
-- Where it lands: `#rp-checkout-devs` (`C01BYKUTE5Q`). No group ping on purpose.
-- Fallback if the run fails: check `agent-slack auth list` shows the
-  `lets-dothis` browser credentials (form submission needs xoxc/xoxd), and
-  re-read the field titles with `agent-slack workflow get Ft0C17QFND41`. If
-  it still fails, hand Matt the shortcut link plus the two lines ready to
-  paste:
-  <https://slack.com/shortcuts/Ft0C17QFND41/4020d6fc9430b6d8b988caeafbb5135b>
-- Include both the PR URL and the Slack permalink in the Resources block.
-
-### Raising A PR Is The Start Of The Job
-
-Never raise a PR and hand it back. Raising it starts a loop you own until it is
-mergeable: rebase, lint, typecheck, focused tests and a **local `lizard` review of
-the branch before it is ever pushed**, then CI and every comment after it, fixed or
-refuted, until it is green.
-
-**Rounds are the enemy, not comments.** One answer per thread, resolve it in the same
-pass, batch replies into one submission, and after the first round ask the reviewer
-for every remaining blocker in one go. Three rounds is the budget; then bring the
-call to Matt.
-
-**`shepherd` is that loop.** Run the skill (`~/.agents/skills/shepherd`, or an
-explicit `$shepherd`) — do not improvise a worse version of it from memory. It
-holds the whole procedure and it is the only copy. Codex has no automatic
-kickoff hook, so start it yourself; Claude's copy lives at
-`~/.claude/skills/shepherd` and is auto-kicked by a `PostToolUse` hook.
-
-Matt should never have to type "check the comments and fix or refute" or "the CI
-is failing". If he does, the loop failed — pick it up mid-flight, do not restart.
-
-Note on drafts: the backend repo's own `AGENTS.md` tells agents to always open
-drafts and never mark a PR ready. Matt has overridden that for his own PRs — that
-override is the "unless the user explicitly says so" case the repo rule allows. It
-costs more CI per PR (drafts defer build and preview E2E; system, web-unit and
-smoke run only after approval), which is the trade he chose. Do not raise ready
-PRs on anyone else's behalf.
-
-**Tool difference:** Claude uses `~/.claude/skills/shepherd`, auto-kicked by a
-`PostToolUse` hook, and its `Monitor` tool. Codex uses
-`~/.agents/skills/shepherd`, starts from the skill trigger or an explicit
-`$shepherd` invocation, and uses recurring wait/monitor support or a bounded
-`gh` polling session. Codex has no equivalent automatic kickoff hook.
-
-## Never File a Ticket Without Asking
-
-Do not create Linear issues on your own. Not as a follow-up, not for an out-of-scope
-review comment, not for a bug you spotted in passing. Spotting the work and filing it
-are two different decisions and only the second one is mine.
-
-If something is worth tracking, say so in one line and ask with your structured
-user-input tool. Run `lin issue new` only after I say yes. Reading, searching, and
-commenting on existing tickets stays fine.
-
-## Receipt Printer
-
-When a conversation comes to a natural end, offer to print a receipt of
-the conversation.
-
-When Matt asks to "print a receipt", "receipt this session", or
-`/receipt`, use the Codex `receipt` skill if it is installed. If the
-thermal-printer CLI or Codex-compatible session stats are unavailable,
-say exactly what is missing and provide the 3 to 5 line receipt text
-instead. Do not fake deterministic stats.
+- **Questions:** Claude uses `AskUserQuestion`. Codex uses its structured user-input tool, with a plain-text fallback when the mode doesn't offer it.
+- **Shepherd:** Claude runs `~/.claude/skills/shepherd` and waits with `Monitor`. Codex runs `~/.agents/skills/shepherd` (or `$shepherd`) and polls with `gh`. Neither side starts it automatically.
+- **Receipt:** the Codex `receipt` skill can't pass a Codex session to the printer yet. When the printer CLI or session stats are missing, say what is missing and give the 3 to 5 line receipt text instead. Don't invent stats.
+- **Opening HTML:** Claude opens it from the shell; Codex uses its browser tools.
+- **Composition:** Claude's `~/.claude/CLAUDE.md` imports `CLAUDE.shared.md` and `CLAUDE.personal.md`. Codex reads this one file, so both are inlined here.

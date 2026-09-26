@@ -59,7 +59,7 @@ Claude and Codex config are linked separately by `setup.sh` because `.claude/` a
 
 ### Agent guidance
 
-Claude guidance lives in `.claude/`. Codex guidance lives in `.codex/AGENTS.md`, with a repo-root `AGENTS.md` entrypoint for agents working inside this repo. Keep both sets of guidance in sync when updating working preferences or skills.
+Claude guidance lives in `.claude/`. Codex guidance lives in `.codex/AGENTS.md` (work rules in `.codex/AGENTS.work.md`, opt-in per machine like `CLAUDE.work.md`), with a repo-root `AGENTS.md` entrypoint for agents working inside this repo. Keep both sets of guidance in sync when updating working preferences or skills.
 
 Agent skills are authored under `.claude/skills/` and `.codex/skills/`. `setup.sh`
 links Claude skills into `~/.claude/skills/` and Codex skills into
