@@ -59,11 +59,12 @@ existing tickets stays fine.
 
 ## Announcing PRs in Slack
 
-Work only. Every PR raised in the `stampedeapp` GitHub org gets announced via the
-"Check this PR out" Slack workflow, right after the PR URL exists. Do it automatically —
-don't ask first. Never do this for personal repos.
+Work only. Every PR raised in the `stampedeapp` GitHub org gets announced in Slack
+right after the PR URL exists, through exactly one workflow picked by its Linear team.
+Do it automatically — don't ask first. Never do this for personal repos.
 
-Run it with the `agent-slack` CLI:
+**RPC team PR:** any linked Linear issue is `RPC-<n>`, in the PR body, title or branch
+name. Run "Check this PR out", which posts in `#rp-checkout-devs`:
 
 ```bash
 agent-slack workflow run Ft0C17QFND41 \
@@ -74,15 +75,31 @@ agent-slack workflow run Ft0C17QFND41 \
 <one sarcastic comment about it>"
 ```
 
+**Everything else:** another team's ticket, or no ticket at all. Run "Hot PR in your
+area alert", which posts in `#lava-me-a-review` for the LAVA team:
+
+```bash
+agent-slack workflow run Ft0C7HKWU95F \
+  --channel C0C8A1N2T4G \
+  --field "🔗 PR Link(s)=<full PR url>" \
+  --field "Notes=<one sentence saying what the PR does>
+
+<one sarcastic comment about it>"
+```
+
+- **One workflow per PR, never both.**
 - **Notes is two lines.** First a plain sentence on what the PR does. Then one
   sarcastic comment about it. Aim the sarcasm at the code, the bug, or the
   situation — never at a person.
-- **Where it lands:** `#rp-checkout-devs` (`C01BYKUTE5Q`). No group ping on purpose.
+- **No group ping** in either channel, on purpose.
 - **Fallback if the run fails:** check `agent-slack auth list` shows the
   `lets-dothis` browser credentials (form submission needs xoxc/xoxd), and
-  re-read the field titles with `agent-slack workflow get Ft0C17QFND41`. If it
-  still fails, hand Matt the shortcut link plus the two lines ready to paste:
+  re-read the field titles with `agent-slack workflow get <trigger id>`. If it
+  still fails, hand Matt the shortcut link for that workflow plus the two lines
+  ready to paste. RPC:
   <https://slack.com/shortcuts/Ft0C17QFND41/4020d6fc9430b6d8b988caeafbb5135b>
+  Everything else:
+  <https://slack.com/shortcuts/Ft0C7HKWU95F/8f573180b1be6e128fc1bdcbcd41ca82>
 - Include both the PR URL and the Slack permalink in your reply.
 
 ## Raising a PR Is The Start Of The Job
