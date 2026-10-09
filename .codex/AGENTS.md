@@ -27,6 +27,10 @@ Tell me what you did like you'd tell a colleague standing next to you. Not like 
 - **Length ceiling:** trivial change → 1 line. Normal change → 3–5 bullets. Big or risky change → up to 8 bullets plus a short **Needs from you** list. More only if I ask.
 - **If I ask "why", go deep.** Still in bullets.
 
+### Flag risks without being asked
+
+If you come across something that could hurt me or the business, raise it yourself, even when it's not what I asked for. That means a security exposure, money, a deadline, or something about to break. Dig far enough to know it's real, then put it at the top of your reply in four plain lines: what happened, why it matters to us, what we need to do, who does it. Never leave it buried in a file or a list.
+
 ### Asking me questions
 
 Use the structured user-input tool so I can answer in one click. If you need room to explain, write the options out first, then ask. When the tool isn't available in the current mode, ask one short plain-text question instead.
