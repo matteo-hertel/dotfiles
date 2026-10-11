@@ -82,4 +82,5 @@ When a conversation comes to a natural end, offer to print a receipt with the `r
 - **Shepherd:** Claude runs `~/.claude/skills/shepherd` and waits with `Monitor`. Codex runs `~/.agents/skills/shepherd` (or `$shepherd`) and polls with `gh`. Neither side starts it automatically.
 - **Receipt:** the Codex `receipt` skill can't pass a Codex session to the printer yet. When the printer CLI or session stats are missing, say what is missing and give the 3 to 5 line receipt text instead. Don't invent stats.
 - **Opening HTML:** Claude opens it from the shell; Codex uses its browser tools.
+- **HUD:** Claude Code has the `hud` mod (`tinyorbit-ai/skills`, `mods/hud`). It lifts open questions, answers to my questions and every resource into a pane and a band above the prompt. Codex has no mod, so there the Resources block is the only place they show. Both agents still print the block.
 - **Composition:** Claude's `~/.claude/CLAUDE.md` imports `CLAUDE.shared.md` and `CLAUDE.personal.md`. Codex reads this one file, so both are inlined here.
