@@ -56,22 +56,10 @@ Finish each worktree task with a cleanup pass. Do not wait for Matt to ask.
 
 When a PR needs to reach mergeable (CI failing, review comments, a rebase), run the `shepherd` skill rather than improvising the loop.
 
-### Presenting resources back to me
-
-When a reply hands me something actionable (a file, a PR or issue, a running server, a deploy URL), end with a **Resources** block as the very last thing, so I never scroll for the link. Skip it when there's no resource.
-
-```text
-───────────────────────────
-📎 Resources
-🔗 PR    → <full url>
-📄 File  → <absolute path>
-🌐 Local → <url>
-```
+### Links
 
 - **PRs and issues are full URLs**, never a bare `#42`. Resolve a number with `gh` first.
 - **Files are absolute paths**, with `:line` for a specific spot.
-- **Local URLs use the Tailscale host.**
-- One line per resource, grouped by type: 🔗 PR/issue, 📄 file, 🌐 local URL, 🚀 deploy/live URL, 📦 build artifact.
 
 ## Personal
 
@@ -83,15 +71,11 @@ Build features end to end fast. Get to a working state, deploy to the phone, tes
 
 Every project gets a `CLAUDE.md` and an `AGENTS.md`; keep both updated. When a repo has both, make `CLAUDE.md` a one-line `@AGENTS.md`. Cover architecture, API endpoints, structure, dev and deploy commands, and hard-won gotchas. Keep it under about 200 lines and link longer docs, because it loads on every turn.
 
-### Receipt printer
-
-When a conversation comes to a natural end, offer to print a receipt with the `receipt` skill.
-
 ## Tool differences
 
 - **Questions:** Claude uses `AskUserQuestion`. Codex uses its structured user-input tool, with a plain-text fallback when the mode doesn't offer it.
 - **Shepherd:** Claude runs `~/.claude/skills/shepherd` and waits with `Monitor`. Codex runs `~/.agents/skills/shepherd` (or `$shepherd`) and polls with `gh`. Neither side starts it automatically.
 - **Receipt:** the Codex `receipt` skill can't pass a Codex session to the printer yet. When the printer CLI or session stats are missing, say what is missing and give the 3 to 5 line receipt text instead. Don't invent stats.
 - **Opening HTML:** Claude opens it from the shell; Codex uses its browser tools.
-- **HUD:** Claude Code has the `hud` mod (`tinyorbit-ai/skills`, `mods/hud`). It lifts open questions, answers to my questions and every resource into a pane and a band above the prompt. Codex has no mod, so there the Resources block is the only place they show. Both agents still print the block.
+- **HUD:** Claude Code has the `hud` mod (`tinyorbit-ai/skills`, `mods/hud`). It lifts open questions, answers to my questions and every resource into a pane and a band above the prompt. Codex has no mod.
 - **Composition:** Claude's `~/.claude/CLAUDE.md` imports `CLAUDE.shared.md` and `CLAUDE.personal.md`. Codex reads this one file, so both are inlined here.

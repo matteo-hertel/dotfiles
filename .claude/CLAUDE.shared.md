@@ -52,19 +52,7 @@ Finish each worktree task with a cleanup pass. Do not wait for Matt to ask.
 
 When a PR needs to reach mergeable (CI failing, review comments, a rebase), run the `shepherd` skill rather than improvising the loop.
 
-### Presenting resources back to me
-
-When a reply hands me something actionable (a file, a PR or issue, a running server, a deploy URL), end with a **Resources** block as the very last thing, so I never scroll for the link. Skip it when there's no resource.
-
-```
-───────────────────────────
-📎 Resources
-🔗 PR    → <full url>
-📄 File  → <absolute path>
-🌐 Local → <url>
-```
+### Links
 
 - **PRs and issues are full URLs**, never a bare `#42`. Resolve a number with `gh` first.
 - **Files are absolute paths**, with `:line` for a specific spot.
-- **Local URLs use the Tailscale host.**
-- One line per resource, grouped by type: 🔗 PR/issue, 📄 file, 🌐 local URL, 🚀 deploy/live URL, 📦 build artifact.

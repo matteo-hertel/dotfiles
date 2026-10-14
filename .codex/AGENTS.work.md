@@ -91,7 +91,7 @@ agent-slack workflow run Ft0C17QFND41 \
   re-read the field titles with `agent-slack workflow get Ft0C17QFND41`. If it
   still fails, hand Matt the shortcut link plus the two lines ready to paste:
   <https://slack.com/shortcuts/Ft0C17QFND41/4020d6fc9430b6d8b988caeafbb5135b>
-- Include both the PR URL and the Slack permalink in the Resources block.
+- Include both the PR URL and the Slack permalink in your reply.
 
 ## Raising a PR Is The Start Of The Job
 
