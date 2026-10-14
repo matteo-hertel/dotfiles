@@ -37,6 +37,17 @@ Use the `AskUserQuestion` tool so I can answer in one click. If you need room to
 
 On any non-default branch or worktree, commit as often as you like without asking. That's the normal case. On `main`/`master`, don't commit unless I tell you to; offer a branch instead. The main-branch rule is narrow on purpose.
 
+### Clean up finished worktrees
+
+Finish each worktree task with a cleanup pass. Do not wait for Matt to ask.
+
+- A worktree is finished only after its work is merged or explicitly abandoned. Keep it while a PR, review, QA run, worker lease or follow-up still needs it.
+- Before cleanup, check the owning app or factory, running processes and open files. Protect live ActionWorker, Framewright, Arnold and Desk services, their current worktrees, data, browser profiles and shared dependencies. Never stop a live service to reclaim space.
+- Check tracked changes, untracked files, ignored files and commits that are not safely preserved elsewhere. Save useful deliverables outside the worktree. Preserve unique work and required evidence in a verified archive before removing local copies. Never treat a folder named `tmp` or a clean Git status as proof that everything is disposable.
+- Remove rebuildable dependencies, build output and temporary files belonging only to the finished task. Do not follow symlinks into shared folders or clear global caches used by running jobs.
+- Use the owner to remove managed worktrees: Codex's archive tool for Codex-managed worktrees, and the factory's cleanup workflow for factory-managed worktrees. For ordinary Git worktrees, leave the directory and use `git worktree remove <exact-path>`. Do not force-remove a worktree or delete branches with unpreserved commits.
+- Verify that the worktree is gone and the live services still work. Report space reclaimed, archive locations and anything retained with its reason. If ownership or activity cannot be established, keep that worktree and clean the independently safe items.
+
 ### Getting a PR to green
 
 When a PR needs to reach mergeable (CI failing, review comments, a rebase), run the `shepherd` skill rather than improvising the loop.
