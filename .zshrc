@@ -20,7 +20,7 @@ fi
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
-plugins=(git colored-man-pages colorize github pip python macos yarn)
+plugins=(git colored-man-pages colorize gh pip python macos yarn)
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
