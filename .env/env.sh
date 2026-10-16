@@ -19,6 +19,10 @@ function getIp(){
 #mkdir and cd
 function mkcd() { mkdir -p "$@" && cd "$_"; }
 
+# Claude for untrusted repos: no shell, web, MCP servers, settings or hooks.
+# Reads the current folder; can write only inside ./notes. Skills: /secure:unfamiliar-codebase, /secure:codebase-walkthrough, /secure:codebase-audit
+alias secure-claude='claude --restricted --strict-mcp-config --plugin-dir ~/mhdev/dotfiles/claude-plugins/secure --permission-mode dontAsk --allowedTools "Read,Glob,Grep,Edit(./notes/**)" --disallowedTools Agent'
+
 #Android
 export ANDROID_HOME=$HOME/Library/Android/sdk
 

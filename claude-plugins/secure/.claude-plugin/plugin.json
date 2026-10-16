@@ -1,0 +1,5 @@
+{
+  "name": "secure",
+  "version": "0.1.0",
+  "description": "Read-only skills for unfamiliar repos: safety scan, walkthrough, audit. Loaded by the secure-claude alias, because --restricted skips user skills."
+}
