@@ -91,12 +91,15 @@ agent-slack workflow run Ft0C7HKWU95F \
 - **Notes is two lines.** First a plain sentence on what the PR does. Then one
   sarcastic comment about it. Aim the sarcasm at the code, the bug, or the
   situation — never at a person.
+- **Scopey work gets a third line.** When the linked Linear issue has the
+  `scoping-pilot` label, end Notes with `:scopey: <full Linear issue url>`.
+  Ad-hoc work has no third line, so the team can tell the two apart.
 - **No group ping** in either channel, on purpose.
 - **Fallback if the run fails:** check `agent-slack auth list` shows the
   `lets-dothis` browser credentials (form submission needs xoxc/xoxd), and
   re-read the field titles with `agent-slack workflow get <trigger id>`. If it
-  still fails, hand Matt the shortcut link for that workflow plus the two lines
-  ready to paste. RPC:
+  still fails, hand Matt the shortcut link for that workflow plus the Notes
+  lines ready to paste. RPC:
   <https://slack.com/shortcuts/Ft0C17QFND41/4020d6fc9430b6d8b988caeafbb5135b>
   Everything else:
   <https://slack.com/shortcuts/Ft0C7HKWU95F/8f573180b1be6e128fc1bdcbcd41ca82>
