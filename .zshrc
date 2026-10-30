@@ -76,6 +76,7 @@ bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search      # start typing + [
 bindkey "${terminfo[kcud1]}" down-line-or-beginning-search    # start typing + [Down-Arrow]
 
 #export KEYTIMEOUT=1
+[ "$(uname)" = Linux ] && export PATH="$HOME/.local/bin:$HOME/.local/node/bin:$HOME/.local/go/bin:$HOME/.bun/bin:$PATH"
 source ~/.env/env.sh
 source ~/.env/loader.sh
 
@@ -161,6 +162,3 @@ export PATH="$HOME/.grok/bin:$PATH"
 fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
-
-# Linux host: tools installed under ~/.local
-[ "$(uname)" = Linux ] && export PATH="$HOME/.local/bin:$HOME/.local/node/bin:$HOME/.local/go/bin:$HOME/.bun/bin:$PATH"
