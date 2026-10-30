@@ -23,15 +23,25 @@ link_agent_path() {
 
 echo "Setting up dotfiles from $DOTFILES_DIR"
 
-# 1. Homebrew
-if ! command -v brew &>/dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+# 1. Packages: Homebrew on macOS; on Linux they come from apt and ~/.local
+if [ "$(uname)" = Linux ]; then
+    export PATH="$HOME/.local/bin:$HOME/.local/go/bin:$PATH"
+    for tool in stow go zsh tmux git; do
+        command -v "$tool" &>/dev/null || { echo "Missing $tool. Install it first (sudo apt-get install -y stow zsh tmux git; Go into ~/.local/go)."; exit 1; }
+    done
+    [ -d "$HOME/.oh-my-zsh" ] || git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+    p10k="$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+    [ -d "$p10k" ] || git clone --depth 1 https://github.com/romkatv/powerlevel10k.git "$p10k"
+else
+    if ! command -v brew &>/dev/null; then
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
 
-echo "Installing packages from Brewfile..."
-brew bundle --file="$DOTFILES_DIR/Brewfile" || echo "WARNING: some Brewfile items failed to install, see above. Carrying on."
+    echo "Installing packages from Brewfile..."
+    brew bundle --file="$DOTFILES_DIR/Brewfile" || echo "WARNING: some Brewfile items failed to install, see above. Carrying on."
+fi
 
 # 1.5 Shell, runtimes and global CLIs
 if [ ! -d "$HOME/.oh-my-zsh" ]; then

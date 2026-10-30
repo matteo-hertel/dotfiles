@@ -127,7 +127,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Load homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Misc
 zstyle ':completion:*:*' ignored-patterns '*ORIG_HEAD'
@@ -145,7 +145,7 @@ export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
 export PATH=$PATH:$HOME/.maestro/bin
 
 # bun completions
-[ -s "/Users/mhdev/.bun/_bun" ] && source "/Users/mhdev/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -161,3 +161,6 @@ export PATH="$HOME/.grok/bin:$PATH"
 fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
+
+# Linux host: tools installed under ~/.local
+[ "$(uname)" = Linux ] && export PATH="$HOME/.local/bin:$HOME/.local/node/bin:$HOME/.local/go/bin:$HOME/.bun/bin:$PATH"
