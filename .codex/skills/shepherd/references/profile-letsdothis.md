@@ -33,6 +33,9 @@ curl -sS -X POST "https://paul-macbook-pro.taild42dc0.ts.net/api/queue" \
   -H "Content-Type: application/json" -d "{\"url\":\"$PR_URL\"}"
 ```
 
+Run it exactly as written, as its own command. The permission allow rule matches this
+prefix, so an extra flag (`-m 20`) or a chained command makes Matt approve it by hand.
+
 If it fails (machine asleep, tailnet unreachable), note it in the report and carry on.
 Then announce in Slack per the work rules.
 
