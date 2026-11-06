@@ -30,12 +30,42 @@ if ! command -v brew &>/dev/null; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-echo "Installing packages..."
-brew install stow go
+echo "Installing packages from Brewfile..."
+brew bundle --file="$DOTFILES_DIR/Brewfile" || echo "WARNING: some Brewfile items failed to install, see above. Carrying on."
+
+# 1.5 Shell, runtimes and global CLIs
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing oh-my-zsh..."
+    RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+if [ ! -s "$HOME/.nvm/nvm.sh" ]; then
+    echo "Installing nvm..."
+    PROFILE=/dev/null bash -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh)"
+fi
+export NVM_DIR="$HOME/.nvm"
+. "$NVM_DIR/nvm.sh"
+nvm install 24 >/dev/null
+nvm install 22 >/dev/null
+nvm alias default 22 >/dev/null
+nvm use default >/dev/null
+npm install -g @openai/codex @google/gemini-cli
+
+command -v claude &>/dev/null || curl -fsSL https://claude.ai/install.sh | bash
+command -v bun &>/dev/null || curl -fsSL https://bun.sh/install | bash
+
+go install github.com/kevindutra/crit/cmd/crit@v0.2.1
+go install github.com/matteo-hertel/tmux-super-powers/cmd/tsp@latest
 
 # 2. Stow dotfiles
 echo "Linking dotfiles with stow..."
 cd "$DOTFILES_DIR"
+for f in .zshrc .gitconfig .gitignore_global .tmux.conf .zshtheme .tmux-super-powers.yaml; do
+    if [ -f "$HOME/$f" ] && [ ! -L "$HOME/$f" ]; then
+        mv "$HOME/$f" "$HOME/$f.backup.$(date +%Y%m%d%H%M%S)"
+        echo "  Backed up existing ~/$f"
+    fi
+done
 stow --target="$HOME" .
 
 # 2.5 TPM (Tmux Plugin Manager)
@@ -58,6 +88,7 @@ ln -sf "$DOTFILES_DIR/.claude/CLAUDE.personal.md" "$HOME/.claude/CLAUDE.personal
 ln -sf "$DOTFILES_DIR/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 link_agent_path "$DOTFILES_DIR/.claude/skills/shepherd" "$HOME/.claude/skills/shepherd"
 link_agent_path "$DOTFILES_DIR/.claude/skills/receipt" "$HOME/.claude/skills/receipt"
+[ -e "$DOTFILES_DIR/.claude/skills/becky" ] && link_agent_path "$DOTFILES_DIR/.claude/skills/becky" "$HOME/.claude/skills/becky"
 
 if [ ! -f "$HOME/.claude/CLAUDE.md" ]; then
     echo "Creating default ~/.claude/CLAUDE.md..."
@@ -70,6 +101,7 @@ mkdir -p "$HOME/.codex/skills" "$HOME/.agents/skills"
 link_agent_path "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link_agent_path "$DOTFILES_DIR/.codex/skills/receipt" "$HOME/.codex/skills/receipt"
 link_agent_path "$DOTFILES_DIR/.codex/skills/shepherd" "$HOME/.agents/skills/shepherd"
+[ -e "$DOTFILES_DIR/.codex/skills/becky" ] && link_agent_path "$DOTFILES_DIR/.codex/skills/becky" "$HOME/.agents/skills/becky"
 
 # 5. Build and install colorsync
 echo "Building colorsync..."

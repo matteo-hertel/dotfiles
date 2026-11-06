@@ -6,6 +6,9 @@
 ^/Readme\.md
 ^/setup\.sh
 ^/AGENTS\.md
+^/Brewfile
+^/agent-skills\.sh
+^/migrate
 
 # Tools (built separately, not stowed)
 ^/tools
@@ -16,3 +19,4 @@
 
 # Codex config (symlinked separately to avoid stow folding ~/.codex)
 ^/\.codex
+^/tmp

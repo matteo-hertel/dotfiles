@@ -26,6 +26,27 @@ This will:
 
 After setup, create `~/.env/env.custom.sh` for machine-specific config (API keys, workspace aliases). This file is gitignored.
 
+`setup.sh` installs everything in `Brewfile`, oh-my-zsh, nvm with Node 22 and 24, the Codex and Gemini CLIs, Claude Code, bun, crit and tsp. `agent-skills.sh` reinstalls the agent skills by hand (`DOTFILES_WORK=1` adds the Let's Do This ones).
+
+## Moving to a new Mac
+
+On the old Mac:
+
+```bash
+migrate/export.sh            # asks yes/no per group, then a passphrase
+migrate/export.sh --all --to <tailscale device>
+```
+
+It packs what you pick into one encrypted disk image, always with this repo inside, and can send it with Taildrop. The groups come from `migrate/manifest.local.sh` (gitignored, yours) or `migrate/manifest.example.sh`.
+
+On the new Mac:
+
+```bash
+hdiutil attach ~/Downloads/migrate-*.sparseimage && /Volumes/migrate/import.sh
+```
+
+It copies the dotfiles, offers to run `setup.sh`, then unpacks files, Keychain logins and env files, clones missing repos, and checks your logins. Use the same username on both Macs.
+
 ## How it works
 
 The repo mirrors your home directory structure. [GNU Stow](https://www.gnu.org/software/stow/) creates symlinks from `$HOME` pointing into this repo. Edits to dotfiles show up as uncommitted changes in git.

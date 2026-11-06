@@ -1,0 +1,12 @@
+directories:
+  - /Users/matteohertel/work/code/sandbox/*
+  - /Users/matteohertel/work/code/**
+  - /Users/matteohertel/work/code/web-fix/*
+  - /Users/matteohertel/work/code/backend-ai/*
+  - /Users/matteohertel/work/code/backend-feat/*
+  - /Users/matteohertel/work/code/backend-kaizen/*
+sandbox:
+  path: /Users/matteohertel/work/code/sandbox/
+projects:
+  path: /Users/matteohertel/work/code/
+editor: nvim

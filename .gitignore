@@ -17,3 +17,9 @@ tools/colorsync/colorsync
 
 # Per-machine Claude config (each machine has its own imports)
 .claude/CLAUDE.md
+tmp/
+
+# Private: travels in the migrate image, never in this public repo
+migrate/manifest.local.sh
+.claude/skills/becky/
+.codex/skills/becky
