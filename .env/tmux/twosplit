@@ -12,7 +12,7 @@ single(){
   then
     tmux attach -t "$WORKSPACE_SESSION_NAME"
   fi
-    tmux switch -t "$WORKSPACE_SESSION_NAME"
+    tmux switch-client -t "$WORKSPACE_SESSION_NAME"
 }
 alias singlevim=single
 
@@ -29,7 +29,7 @@ twosplit(){
   then
     tmux attach -t "$WORKSPACE_SESSION_NAME"
   fi
-    tmux switch -t "$WORKSPACE_SESSION_NAME"
+    tmux switch-client -t "$WORKSPACE_SESSION_NAME"
 }
 
 # Same 80/20 split, both panes empty shells.
@@ -45,7 +45,7 @@ twosplitNoEditor(){
   then
     tmux attach -t "$WORKSPACE_SESSION_NAME"
   fi
-    tmux switch -t "$WORKSPACE_SESSION_NAME"
+    tmux switch-client -t "$WORKSPACE_SESSION_NAME"
 }
 alias twosplitNoClaude=twosplitNoEditor
 
